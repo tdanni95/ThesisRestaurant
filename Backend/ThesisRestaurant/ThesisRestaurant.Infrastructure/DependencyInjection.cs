@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -8,8 +9,11 @@ using ThesisRestaurant.Application.Common.Interfaces.Authentication;
 using ThesisRestaurant.Application.Common.Interfaces.Persistence;
 using ThesisRestaurant.Application.Common.Services;
 using ThesisRestaurant.Infrastructure.Authentication;
+using ThesisRestaurant.Infrastructure.Persistence;
 using ThesisRestaurant.Infrastructure.Persistence.Repositories;
 using ThesisRestaurant.Infrastructure.Services;
+
+//dotnet ef migrations add InitialCreate --project .\ThesisRestaurant.Infrastructure\ --startup-project .\ThesisRestaurant\
 
 namespace ThesisRestaurant.Infrastructure
 {
@@ -27,9 +31,10 @@ namespace ThesisRestaurant.Infrastructure
 
         public static IServiceCollection AddPersistence(this IServiceCollection services, ConfigurationManager configuration)
         {
-            //services.AddDbContext<BuberDinnerDbContext>(options => options.UseSqlServer("Server=localhost;Database=BuberDinner;User Id=sa;Password=Admin123!;TrustServerCertificate=true"));
+            var connectionString = configuration.GetConnectionString("MySQLDatabase");
+            //services.AddDbContext<ThesisRestaurantDbContext>(options => options.);
+            services.AddDbContext<ThesisRestaurantDbContext>(x => x.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
             services.AddScoped<IUserRepository, UserRepository>();
-            //services.AddScoped<IMenuRepository, MenuRepository>();
             return services;
         }
 
