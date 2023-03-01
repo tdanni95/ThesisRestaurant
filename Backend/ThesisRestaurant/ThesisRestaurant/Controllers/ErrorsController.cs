@@ -9,7 +9,7 @@ namespace ThesisRestaurant.Api.Controllers
     public class ErrorsController : ControllerBase
     {
         [Route("/error")]
-        internal IActionResult Error()
+        public IActionResult Error()
         {
             var exception = HttpContext.Features.Get<IExceptionHandlerFeature>()?.Error;
             return Problem();

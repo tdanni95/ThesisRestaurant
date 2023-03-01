@@ -10,7 +10,7 @@ using ThesisRestaurant.Contracts.Authentication;
 
 namespace ThesisRestaurant.Api.Controllers
 {
-    [Route("auth")]
+    [Route("authentication")]
     [AllowAnonymous]
     public class AuthenticationController : ApiController
     {

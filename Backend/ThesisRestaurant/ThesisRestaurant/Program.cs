@@ -14,9 +14,11 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services
-    .AddPresentation()
+    .AddPresentation(builder.Configuration)
     .AddApplication()
     .AddInfrastructure(builder.Configuration);
+
+
 
 var app = builder.Build();
 app.UseExceptionHandler("/error");
@@ -28,6 +30,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseCors(builder.Configuration.GetValue<string>("corsname")!);
 app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();
