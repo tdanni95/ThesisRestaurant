@@ -32,7 +32,6 @@ namespace ThesisRestaurant.Infrastructure
         public static IServiceCollection AddPersistence(this IServiceCollection services, ConfigurationManager configuration)
         {
             var connectionString = configuration.GetConnectionString("MySQLDatabase");
-            //services.AddDbContext<ThesisRestaurantDbContext>(options => options.);
             services.AddDbContext<ThesisRestaurantDbContext>(x => x.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
             services.AddScoped<IUserRepository, UserRepository>();
             return services;
