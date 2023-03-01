@@ -1,0 +1,28 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>6293ec5f-087e-4d54-9452-d123f4a310a4</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Mapster" Version="7.3.0" />
+    <PackageReference Include="Mapster.DependencyInjection" Version="1.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.2" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.2">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="7.0.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ThesisRestaurant.Application\ThesisRestaurant.Application.csproj" />
+    <ProjectReference Include="..\ThesisRestaurant.Contracts\ThesisRestaurant.Contracts.csproj" />
+    <ProjectReference Include="..\ThesisRestaurant.Infrastructure\ThesisRestaurant.Infrastructure.csproj" />
+  </ItemGroup>
+
+</Project>
