@@ -37,6 +37,8 @@ namespace ThesisRestaurant.Infrastructure
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IIngredientTypeRepository, IngredientTypeRepository>();
             services.AddScoped<IIngredientRepository, IngredientRepository>();
+            services.AddScoped<IFoodTypeRepository, FoodTypeRepository>();
+            services.AddScoped<IFoodSizeRepository, FoodSizeRepository>();
 
             return services;
         }

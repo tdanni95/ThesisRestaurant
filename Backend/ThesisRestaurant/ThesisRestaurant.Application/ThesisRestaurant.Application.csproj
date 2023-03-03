@@ -21,11 +21,7 @@
   <ItemGroup>
     <Folder Include="FoodSizes\Commands\Delete\" />
     <Folder Include="FoodSizes\Commands\Update\" />
-    <Folder Include="FoodSizes\Common\" />
     <Folder Include="FoodSizes\Queries\" />
-    <Folder Include="FoodTypes\Commands\" />
-    <Folder Include="FoodTypes\Common\" />
-    <Folder Include="FoodTypes\Queries\" />
   </ItemGroup>
 
 </Project>

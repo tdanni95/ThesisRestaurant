@@ -7,10 +7,9 @@ namespace ThesisRestaurant.Application.Common.Interfaces.Persistence
     {
         Task<ErrorOr<FoodType>> GetById(int id);
         Task<ErrorOr<List<FoodType>>> GetAll();
-        Task<ErrorOr<List<FoodType>>> GetAllByIngredientType(int ingredientTypeId);
 
-        Task<ErrorOr<Created>> Add(FoodType ingredient);
-        Task<ErrorOr<Updated>> Update(FoodType ingredient);
+        Task<ErrorOr<Created>> Add(FoodType foodType);
+        Task<ErrorOr<Updated>> Update(FoodType foodType);
         Task<ErrorOr<Deleted>> Delete(int id);
     }
 }

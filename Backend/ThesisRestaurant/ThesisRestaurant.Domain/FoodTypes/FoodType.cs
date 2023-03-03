@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 using ThesisRestaurant.Domain.FoodTypes.FoodSizes;
 
 namespace ThesisRestaurant.Domain.FoodTypes
@@ -14,6 +9,22 @@ namespace ThesisRestaurant.Domain.FoodTypes
         [MaxLength(255)]
         public string Name { get; private set; }
 
-        public List<FoodSize> FoodSizes { get; private set; }
+        public List<FoodSize> FoodSizes { get; private set; } = new();
+
+        private FoodType(string name, int id = 0)
+        {
+            Name = name;
+            Id = id;
+        }
+
+        public static FoodType Create(string name, int id = 0)
+        {
+            return new(name, id);
+        }
+
+        public void Update(FoodType foodType)
+        {
+            this.Name = foodType.Name;
+        }
     }
 }
