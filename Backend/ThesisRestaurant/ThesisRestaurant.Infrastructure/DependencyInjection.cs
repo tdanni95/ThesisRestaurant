@@ -33,7 +33,10 @@ namespace ThesisRestaurant.Infrastructure
         {
             var connectionString = configuration.GetConnectionString("MySQLDatabase");
             services.AddDbContext<ThesisRestaurantDbContext>(x => x.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
+
             services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IIngredientTypeRepository, IngredientTypeRepository>();
+
             return services;
         }
 

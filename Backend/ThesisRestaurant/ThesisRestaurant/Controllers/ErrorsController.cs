@@ -4,8 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ThesisRestaurant.Api.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
+    [ApiExplorerSettings(IgnoreApi =true)]
     public class ErrorsController : ControllerBase
     {
         [Route("/error")]

@@ -1,0 +1,9 @@
+@host=https://localhost:7068
+
+PUT {{host}}/ingredienttype
+Content-Type: application/json
+
+{
+    "id" : 7,
+    "name": "Pizzább szósz"
+}
