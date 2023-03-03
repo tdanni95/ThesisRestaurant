@@ -8,6 +8,8 @@ namespace ThesisRestaurant.Domain.Ingredients.IngredientTypes
         [MaxLength(255)]
         public string Name { get; private set; }
 
+        public List<Ingredient> ingredients { get; private set; }
+
         private IngredientType(string Name, int Id = 0)
         {
             this.Id = Id;

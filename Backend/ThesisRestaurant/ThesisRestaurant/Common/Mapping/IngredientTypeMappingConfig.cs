@@ -12,6 +12,11 @@ namespace ThesisRestaurant.Api.Common.Mapping
         public void Register(TypeAdapterConfig config)
         {
             config.NewConfig<CreateIngredientTypeRequest, CreateIngredientTypeCommand>();
+
+            config.NewConfig<IngredientType, IngredientTypeIngredientsResult >()
+                .Map(dest => dest.Ingredients, src => src.ingredients)
+                .Map(dest => dest, src => src);
+
             config.NewConfig<IngredientType, IngredientTypeResult>();
 
             config.NewConfig<UpdateIngredientTypeRequest, UpdateIngredientTypeCommand>();

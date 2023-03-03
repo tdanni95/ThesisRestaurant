@@ -12,6 +12,7 @@ namespace ThesisRestaurant.Domain.Common.Errors
         public static class IngredientTypes
         {
             public static Error NotFound => Error.NotFound(code: "IngredientType.NotFound", description: "Ingredient type with given id does not exists");
+            public static Error NameTaken => Error.Conflict(code: "IngredientType.NameTaken", description: "Ingredient type with given name already exists");
         }
     }
 }

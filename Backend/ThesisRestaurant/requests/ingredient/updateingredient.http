@@ -1,0 +1,11 @@
+@host=https://localhost:7068
+
+PUT {{host}}/ingredient
+Content-Type: application/json
+
+{
+  "id": 1,
+  "name": "Paradicsom szósz",
+  "price": 120,
+  "ingredientTypeId": 7
+}

@@ -22,7 +22,10 @@ namespace ThesisRestaurant.Application.IngredientTypes.Commands.Update
         {
             var type = IngredientType.Create(request.Name, request.Id);
 
-            return await _repository.Update(type);
+            var result = await _repository.Update(type);
+            if (result.IsError) return result.Errors;
+
+            return type;
         }
     }
 }

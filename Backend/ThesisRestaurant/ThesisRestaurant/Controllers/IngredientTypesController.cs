@@ -9,6 +9,7 @@ using ThesisRestaurant.Application.IngredientTypes.Commands.Update;
 using ThesisRestaurant.Application.IngredientTypes.Common;
 using ThesisRestaurant.Application.IngredientTypes.Queries.GetTypeById;
 using ThesisRestaurant.Application.IngredientTypes.Queries.GetTypes;
+using ThesisRestaurant.Application.IngredientTypes.Queries.GetWithIngredients;
 using ThesisRestaurant.Contracts.IngredientTypes;
 
 namespace ThesisRestaurant.Api.Controllers
@@ -39,7 +40,7 @@ namespace ThesisRestaurant.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetIngredients()
+        public async Task<IActionResult> GetIngredientTypes()
         {
             var query = new GetIngredientTypesQuery();
             var result = await _meaditor.Send(query);
@@ -47,6 +48,17 @@ namespace ThesisRestaurant.Api.Controllers
             return result.Match(
                     ingredientTypes => Ok(ingredientTypes.Adapt<IngredientTypeResult[]>()),
                     error => Problem(error));
+        }
+
+        [HttpGet("ingredients")]
+        public async Task<IActionResult> GetTypesWithIngredients()
+        {
+            var query = new GetWithIngredientsQuery();
+            var result = await _meaditor.Send(query);
+
+            return result.Match(
+              ingredientTypes => Ok(ingredientTypes.Adapt<IngredientTypeIngredientsResult[]>()),
+              error => Problem(error));
         }
 
         [HttpGet("{id:int}")]
@@ -60,7 +72,7 @@ namespace ThesisRestaurant.Api.Controllers
                     );
         }
         [HttpDelete("{id:int}")]
-        public async Task<IActionResult> DeleteIngredient(int id)
+        public async Task<IActionResult> DeleteIngredientType(int id)
         {
             var query = new DeleteIngredientTypeCommand(id);
             var result = await _meaditor.Send(query);
@@ -71,7 +83,7 @@ namespace ThesisRestaurant.Api.Controllers
         }
 
         [HttpPut]
-        public async Task<IActionResult> UpdateIngredient(UpdateIngredientTypeRequest request)
+        public async Task<IActionResult> UpdateIngredientType(UpdateIngredientTypeRequest request)
         {
             var command = _mapper.Map<UpdateIngredientTypeCommand>(request);
             var result = await _meaditor.Send(command);

@@ -18,6 +18,8 @@ namespace ThesisRestaurant.Infrastructure.Persistence.Repositories
 
         public async Task<ErrorOr<Created>> Add(IngredientType ingredient)
         {
+            bool isTaken = await IsNameTaken(ingredient.Name);
+            if (isTaken) return Errors.IngredientTypes.NameTaken;
             await _dbContext.IngredientTypes.AddAsync(ingredient);
             await _dbContext.SaveChangesAsync();
             return Result.Created;
@@ -37,7 +39,10 @@ namespace ThesisRestaurant.Infrastructure.Persistence.Repositories
 
         public async Task<ErrorOr<List<IngredientType>>> GetAll()
         {
-            var types = await _dbContext.IngredientTypes.ToListAsync();
+
+            //var ids = new List<int>() { 5, 6, 7, 8 };
+            //var types = await _dbContext.IngredientTypes.Where(x => ids.Contains(x.Id)).ToListAsync();
+            var types = await _dbContext.IngredientTypes.Include(x => x.ingredients).ToListAsync();
             return types;
         }
 
@@ -51,14 +56,30 @@ namespace ThesisRestaurant.Infrastructure.Persistence.Repositories
             return type;
         }
 
-        public async Task<ErrorOr<IngredientType>> Update(IngredientType ingredient)
+        private async Task<bool> IsNameTaken(string name)
+        {
+            var type = await _dbContext.IngredientTypes.Where(it => it.Name == name).FirstOrDefaultAsync();
+            return type is not null;
+        }
+
+        public async Task<ErrorOr<Updated>> Update(IngredientType ingredient)
         {
             var result = await GetById(ingredient.Id);
-            if (result.IsError) return result;
+            if (result.IsError) return result.Errors;
+
+            bool isTaken = await IsNameTaken(ingredient.Name);
+            if (isTaken) return Errors.IngredientTypes.NameTaken;
+
             var type = result.Value;
             type.Update(ingredient);
             await _dbContext.SaveChangesAsync();
-            return type;
+            return Result.Updated;
+        }
+
+        public async Task<ErrorOr<List<IngredientType>>> GetAllWithIngredient()
+        {
+            var types = await _dbContext.IngredientTypes.Include(x => x.ingredients).ToListAsync();
+            return types;
         }
     }
 }

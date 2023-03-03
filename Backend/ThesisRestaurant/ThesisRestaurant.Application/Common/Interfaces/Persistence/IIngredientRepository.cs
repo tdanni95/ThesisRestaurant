@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ErrorOr;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,13 +10,13 @@ namespace ThesisRestaurant.Application.Common.Interfaces.Persistence
 {
     public interface IIngredientRepository
     {
-        Ingredient? GetById(int id);
-        List<Ingredient> GetAll();
-        List<Ingredient> GetAllByIngredientType(int ingredientTypeId);
+        Task<ErrorOr<Ingredient>> GetById(int id);
+        Task<ErrorOr<List<Ingredient>>> GetAll();
+        Task<ErrorOr<List<Ingredient>>> GetAllByIngredientType(int ingredientTypeId);
 
-        void Add(Ingredient ingredient);
-        void Update(Ingredient ingredient);
-        void Delete(int id);
+        Task<ErrorOr<Created>> Add(Ingredient ingredient);
+        Task<ErrorOr<Updated>> Update(Ingredient ingredient);
+        Task<ErrorOr<Deleted>> Delete(int id);
 
     }
 }

@@ -23,7 +23,9 @@ namespace ThesisRestaurant.Application.IngredientTypes.Commands.Create
         {
             var ingredientType = IngredientType.Create(request.Name);
 
-            await _repository.Add(ingredientType);
+            var result = await _repository.Add(ingredientType);
+
+            if (result.IsError) return result.Errors;
 
             return ingredientType;
         }

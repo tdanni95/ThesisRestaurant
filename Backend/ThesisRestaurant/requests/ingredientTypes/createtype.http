@@ -4,5 +4,5 @@ POST {{host}}/ingredienttype
 Content-Type: application/json
 
 {
-    "name": "Köret"
+    "name": "Feri"
 }
