@@ -4,11 +4,11 @@ namespace ThesisRestaurant.Domain.FoodTypes.FoodSizes
 {
     public class FoodSize
     {
-        public int Id { get; set; }
+        public int Id { get; private set; }
         [MaxLength(255)]
-        public string Name { get; set; }
-        public double Multiplier { get; set; } = 1.0;
-        public FoodType FoodType { get; set; }
+        public string Name { get; private set; }
+        public double Multiplier { get; private set; } = 1.0;
+        public FoodType FoodType { get; private set; }
 
         private FoodSize(string name, double multiplier, int id = 0)
         {
@@ -25,16 +25,16 @@ namespace ThesisRestaurant.Domain.FoodTypes.FoodSizes
             FoodType = foodType;
         }
 
-        public void Update(string name, double multiplier, FoodType foodType)
+        public void Update(FoodSize foodSize)
         {
-            Name = name;
-            Multiplier = multiplier;
-            FoodType = foodType;
+            Name = foodSize.Name;
+            Multiplier = foodSize.Multiplier;
+            FoodType = foodSize.FoodType;
         }
 
-        public static FoodSize Create(string name, double multiplier, FoodType foodType)
+        public static FoodSize Create(string name, double multiplier, FoodType foodType, int id = 0)
         {
-            return new(name, multiplier, foodType);
+            return new(name, multiplier, foodType, id);
         }
     }
 }

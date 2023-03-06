@@ -1,44 +1,64 @@
 ﻿using ErrorOr;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ThesisRestaurant.Application.Common.Interfaces.Persistence;
+using ThesisRestaurant.Domain.Common.Errors;
 using ThesisRestaurant.Domain.FoodTypes.FoodSizes;
 
 namespace ThesisRestaurant.Infrastructure.Persistence.Repositories
 {
     public class FoodSizeRepository : IFoodSizeRepository
     {
-        public Task<ErrorOr<Created>> Add(FoodSize ingredient)
+        private readonly ThesisRestaurantDbContext _context;
+
+        public FoodSizeRepository(ThesisRestaurantDbContext context)
         {
-            throw new NotImplementedException();
+            _context = context;
         }
 
-        public Task<ErrorOr<Deleted>> Delete(int id)
+        public async Task<ErrorOr<Created>> Add(FoodSize foodSize)
         {
-            throw new NotImplementedException();
+            _context.FoodSizes.Add(foodSize);
+            await _context.SaveChangesAsync();
+            return Result.Created;
         }
 
-        public Task<ErrorOr<List<FoodSize>>> GetAll()
+        public async Task<ErrorOr<Deleted>> Delete(int id)
         {
-            throw new NotImplementedException();
+            var foodSize = await GetById(id);
+            if (foodSize.IsError) return foodSize.Errors;
+            _context.FoodSizes.Remove(foodSize.Value);
+            await _context.SaveChangesAsync();
+            return Result.Deleted;
         }
 
-        public Task<ErrorOr<List<FoodSize>>> GetAllWithIngredient()
+        public async Task<ErrorOr<List<FoodSize>>> GetAll()
         {
-            throw new NotImplementedException();
+            return await _context.FoodSizes.ToListAsync();
         }
 
-        public Task<ErrorOr<FoodSize>> GetById(int id)
+
+        public async Task<ErrorOr<FoodSize>> GetById(int id)
         {
-            throw new NotImplementedException();
+            var foodSize = await _context.FoodSizes.FindAsync(id);
+            if(foodSize == null)
+            {
+                return Errors.FoodSizes.NotFound;
+            }
+            return foodSize;
         }
 
-        public Task<ErrorOr<Updated>> Update(FoodSize ingredient)
+        public async Task<ErrorOr<Updated>> Update(FoodSize foodSize)
         {
-            throw new NotImplementedException();
+            var dbFoodSize = await GetById(foodSize.Id);
+            if (dbFoodSize.IsError) return dbFoodSize.Errors;
+            dbFoodSize.Value.Update(foodSize);
+            await _context.SaveChangesAsync();
+            return Result.Updated;
         }
     }
 }

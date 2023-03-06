@@ -12,7 +12,7 @@ namespace ThesisRestaurant.Application.FoodSizes.Commands.Create
         public CreateFoodSizeCommandValidator()
         {
             RuleFor(c => c.Name).NotEmpty();
-            RuleFor(c => c.multiplier).NotEmpty().GreaterThan(0.0);
+            RuleFor(c => c.multiplier).NotEmpty().GreaterThanOrEqualTo(1.0);
             RuleFor(c => c.foodTypeId).NotEmpty().GreaterThan(0);
         }
     }

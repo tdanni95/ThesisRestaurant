@@ -1,0 +1,11 @@
+@host=https://localhost:7068
+
+PUT {{host}}/foodsize
+Content-Type: application/json
+
+{
+    "id": 3,
+    "name": "Istentelen",
+    "multiplier": 1.55,
+    "foodTypeId": 2
+}

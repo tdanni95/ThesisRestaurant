@@ -1,0 +1,10 @@
+@host=https://localhost:7068
+
+POST {{host}}/foodsize
+Content-Type: application/json
+
+{
+    "name": "Extra",
+    "multiplier": 1.75,
+    "foodTypeId": 2
+}

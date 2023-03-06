@@ -20,7 +20,6 @@
 
   <ItemGroup>
     <Folder Include="FoodSizes\Commands\Delete\" />
-    <Folder Include="FoodSizes\Commands\Update\" />
     <Folder Include="FoodSizes\Queries\" />
   </ItemGroup>
 

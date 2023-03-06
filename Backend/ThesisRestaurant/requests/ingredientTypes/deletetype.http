@@ -1,3 +1,3 @@
 @host=https://localhost:7068
 
-DELETE  {{host}}/ingredienttype/6
+DELETE  {{host}}/ingredienttype/12

@@ -1,8 +1,9 @@
 @host=https://localhost:7068
 
-POST {{host}}/ingredienttype
+PUT {{host}}/foodtype
 Content-Type: application/json
 
 {
-    "name": "Szósz"
+    "id": 2,
+    "name": "Frissensült"
 }
