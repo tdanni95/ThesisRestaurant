@@ -4,7 +4,7 @@ POST {{host}}/foodsize
 Content-Type: application/json
 
 {
-    "name": "Extra",
+    "name": "Családi",
     "multiplier": 1.75,
-    "foodTypeId": 2
+    "foodTypeId": 4
 }

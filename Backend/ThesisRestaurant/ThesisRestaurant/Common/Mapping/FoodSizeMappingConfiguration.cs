@@ -12,11 +12,7 @@ namespace ThesisRestaurant.Api.Common.Mapping
         public void Register(TypeAdapterConfig config)
         {
             config.NewConfig<CreateFoodSizeRequest, CreateFoodSizeCommand>();
-            config.NewConfig<UpdateFoodSizeRequest, UpdateFoodSizeCommand>()
-                .Map(dest => dest.Name, src =>src.Name)
-                .Map(dest => dest.FoodTypeId, src => src.FoodTypeId)
-                .Map(dest => dest.Multiplier, src => src.Multiplier)
-                .Map(dest => dest.Id, src => src.Id);
+            config.NewConfig<UpdateFoodSizeRequest, UpdateFoodSizeCommand>();
             config.NewConfig<FoodSize, FoodSizeResult>();
         }
     }

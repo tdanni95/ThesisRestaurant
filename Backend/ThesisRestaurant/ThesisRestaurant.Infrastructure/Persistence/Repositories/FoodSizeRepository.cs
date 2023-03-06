@@ -38,13 +38,13 @@ namespace ThesisRestaurant.Infrastructure.Persistence.Repositories
 
         public async Task<ErrorOr<List<FoodSize>>> GetAll()
         {
-            return await _context.FoodSizes.ToListAsync();
+            return await _context.FoodSizes.Include(f => f.FoodType).ToListAsync();
         }
 
 
         public async Task<ErrorOr<FoodSize>> GetById(int id)
         {
-            var foodSize = await _context.FoodSizes.FindAsync(id);
+            var foodSize = await _context.FoodSizes.Where(f => f.Id == id).Include(f => f.FoodType).FirstOrDefaultAsync();
             if(foodSize == null)
             {
                 return Errors.FoodSizes.NotFound;

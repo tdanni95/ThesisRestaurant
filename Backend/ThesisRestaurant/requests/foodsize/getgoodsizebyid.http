@@ -1,0 +1,4 @@
+@host=https://localhost:7068
+
+GET  {{host}}/foodsize/4
+Content-Type: application/json
