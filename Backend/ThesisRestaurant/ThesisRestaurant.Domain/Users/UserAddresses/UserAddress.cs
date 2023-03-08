@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.IO;
 using System.Linq;
+using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
 using ThesisRestaurant.Domain.Orders;
@@ -35,9 +37,20 @@ namespace ThesisRestaurant.Domain.Users.UserAddresses
             return new(id, zipCode, city, street, houseNumber);
         }
 
+        public void Update(UserAddress address)
+        {
+            this.Id = address.Id;
+            this.ZipCode = address.ZipCode;
+            this.City = address.City;
+            this.Street = address.Street;
+            this.HouseNumber = address.HouseNumber;
+        }
+
         public string GetFullAddress()
         {
             return $"{ZipCode}, {City} {Street} {HouseNumber}";
         }
+
+
     }
 }

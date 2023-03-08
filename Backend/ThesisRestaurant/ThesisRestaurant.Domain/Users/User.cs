@@ -52,5 +52,40 @@ namespace ThesisRestaurant.Domain.Users
         {
             return new(id, firstName, lastName, email, password, phoneNumber, authToken, level, userAddresses);
         }
+
+        public static User Create(string firstName, string lastName, string email, string phoneNumber, int id = 0)
+        {
+            return new User(id, firstName, lastName, email, "", phoneNumber, "", 1);
+        }
+
+        public void Update(User user)
+        {
+            this.FirstName = user.FirstName;
+            this.LastName = user.LastName;
+            this.Email = user.Email;
+            this.Password = user.Password;
+            this.PhoneNumber = user.PhoneNumber;
+            this.AuthToken = user.AuthToken;
+            this.Level = user.Level;
+            this.UserAddresses = user.UserAddresses;
+        }
+
+        public void UpdateBaseFields(string firstName, string lastname, string email, string phoneNumber)
+        {
+            FirstName = firstName;
+            LastName = lastname;
+            Email = email;
+            PhoneNumber = phoneNumber;
+        }
+
+        public void SetLevel(byte level)
+        {
+            this.Level = level;
+        }
+
+        public void SetPassword(string password)
+        {
+            this.Password = password;
+        }
     }
 }

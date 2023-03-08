@@ -18,4 +18,10 @@
     <ProjectReference Include="..\ThesisRestaurant.Domain\ThesisRestaurant.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Users\Commands\Delete\" />
+    <Folder Include="Users\Common\" />
+    <Folder Include="Users\Queries\" />
+  </ItemGroup>
+
 </Project>

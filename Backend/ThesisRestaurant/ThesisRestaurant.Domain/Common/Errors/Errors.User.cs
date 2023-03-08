@@ -11,6 +11,8 @@ namespace ThesisRestaurant.Domain.Common.Errors
                                                                  description: "Email is already in use");
 
             public static Error NotFound => Error.NotFound(code: "User.NotFound", description: "User not found");
+
+            public static Error  AddressNotFound => Error.NotFound(code: "UserAddress.NotFound", description: "Address not found")
         }
     }
 }
