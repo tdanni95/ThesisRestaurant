@@ -1,12 +1,10 @@
 ﻿using Mapster;
 using ThesisRestaurant.Application.Ingredients.Commands.Create;
 using ThesisRestaurant.Application.Ingredients.Commands.Update;
-using ThesisRestaurant.Application.Ingredients.Common;
 using ThesisRestaurant.Application.IngredientTypes.Common;
 using ThesisRestaurant.Contracts.Ingredient;
 using ThesisRestaurant.Contracts.IngredientTypes;
 using ThesisRestaurant.Domain.Ingredients;
-using ThesisRestaurant.Domain.Ingredients.IngredientTypes;
 
 namespace ThesisRestaurant.Api.Common.Mapping
 {
@@ -22,8 +20,8 @@ namespace ThesisRestaurant.Api.Common.Mapping
             config.NewConfig<UpdateIngredientRequest, UpdateIngredientCommand>();
 
 
-            config.NewConfig<Ingredient, IngredientResult>()
-                .Map(dest => dest.IngredientTypeResult, src => src.IngredientType)
+            config.NewConfig<Ingredient, IngredientResponse>()
+                .Map(dest => dest.IngredientType, src => src.IngredientType)
                 .Map(dest => dest, src => src);
         }
     }

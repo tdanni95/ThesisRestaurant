@@ -7,5 +7,5 @@ Content-Type: application/json
 {
   "name": "BBQ alap",
   "price": 100,
-  "ingredientTypeId": 12
+  "ingredientTypeId": 8
 }

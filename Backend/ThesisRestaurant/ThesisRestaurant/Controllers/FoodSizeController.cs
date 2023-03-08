@@ -35,7 +35,7 @@ namespace ThesisRestaurant.Api.Controllers
             var result = await _meaditor.Send(command);
 
             return result.Match(
-                    foodSize => Ok(_mapper.Map<FoodSizeResult>(foodSize)),
+                    foodSize => Ok(_mapper.Map<FoodSizeResponse>(foodSize)),
                     error => Problem(error)
                     );
         }
@@ -46,7 +46,7 @@ namespace ThesisRestaurant.Api.Controllers
             var command = _mapper.Map<UpdateFoodSizeCommand>(request);
             var result = await _meaditor.Send(command);
             return result.Match(
-                    foodSize => Ok(_mapper.Map<FoodSizeResult>(foodSize)),
+                    foodSize => Ok(_mapper.Map<FoodSizeResponse>(foodSize)),
                     error => Problem(error)
                     );
         }
@@ -70,7 +70,7 @@ namespace ThesisRestaurant.Api.Controllers
             var result = await _meaditor.Send(query);
 
             return result.Match(
-                    sizes => Ok(sizes.Adapt<FoodSizeResult[]>()),
+                    sizes => Ok(sizes.Adapt<FoodSizeResponse[]>()),
                     errors => Problem(errors)
                 );
         }
@@ -82,7 +82,7 @@ namespace ThesisRestaurant.Api.Controllers
             var result = await _meaditor.Send(query);
 
             return result.Match(
-                    foodSize => Ok(_mapper.Map<FoodSizeResult>(foodSize)),
+                    foodSize => Ok(_mapper.Map<FoodSizeResponse>(foodSize)),
                     error => Problem(error)
                     );
         }

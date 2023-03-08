@@ -13,11 +13,11 @@ namespace ThesisRestaurant.Api.Common.Mapping
         {
             config.NewConfig<CreateIngredientTypeRequest, CreateIngredientTypeCommand>();
 
-            config.NewConfig<IngredientType, IngredientTypeIngredientsResult >()
+            config.NewConfig<IngredientType, IngredientTypeIngredientsResponse >()
                 .Map(dest => dest.Ingredients, src => src.ingredients)
                 .Map(dest => dest, src => src);
 
-            config.NewConfig<IngredientType, IngredientTypeResult>();
+            config.NewConfig<IngredientType, IngredientTypeResponse>();
 
             config.NewConfig<UpdateIngredientTypeRequest, UpdateIngredientTypeCommand>();
         }

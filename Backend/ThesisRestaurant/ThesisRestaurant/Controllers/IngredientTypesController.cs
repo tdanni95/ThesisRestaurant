@@ -34,7 +34,7 @@ namespace ThesisRestaurant.Api.Controllers
             var createIngredientTypeResult = await _meaditor.Send(command);
 
             return createIngredientTypeResult.Match(
-                    type => Ok(_mapper.Map<IngredientTypeResult>(type)),
+                    type => Ok(_mapper.Map<IngredientTypeResponse>(type)),
                     error => Problem(error)
                     );
         }
@@ -46,7 +46,7 @@ namespace ThesisRestaurant.Api.Controllers
             var result = await _meaditor.Send(query);
 
             return result.Match(
-                    ingredientTypes => Ok(ingredientTypes.Adapt<IngredientTypeResult[]>()),
+                    ingredientTypes => Ok(ingredientTypes.Adapt<IngredientTypeResponse[]>()),
                     error => Problem(error));
         }
 
@@ -57,7 +57,7 @@ namespace ThesisRestaurant.Api.Controllers
             var result = await _meaditor.Send(query);
 
             return result.Match(
-              ingredientTypes => Ok(ingredientTypes.Adapt<IngredientTypeIngredientsResult[]>()),
+              ingredientTypes => Ok(ingredientTypes.Adapt<IngredientTypeIngredientsResponse[]>()),
               error => Problem(error));
         }
 
@@ -67,7 +67,7 @@ namespace ThesisRestaurant.Api.Controllers
             var query = new GetIngredientTypeByIdQuery(id);
             var result = await _meaditor.Send(query);
             return result.Match(
-                    type => Ok(_mapper.Map<IngredientTypeResult>(type)),
+                    type => Ok(_mapper.Map<IngredientTypeResponse>(type)),
                     error => Problem(error)
                     );
         }
@@ -89,7 +89,7 @@ namespace ThesisRestaurant.Api.Controllers
             var result = await _meaditor.Send(command);
 
             return result.Match(
-              type => Ok(_mapper.Map<IngredientTypeResult>(type)),
+              type => Ok(_mapper.Map<IngredientTypeResponse>(type)),
               error => Problem(error)
               );
         }

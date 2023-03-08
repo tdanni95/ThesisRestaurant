@@ -1,4 +1,4 @@
 @host=https://localhost:7068
 
-GET  {{host}}/foodsize/4
+GET  {{host}}/foodsize/5
 Content-Type: application/json

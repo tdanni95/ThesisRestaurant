@@ -18,9 +18,4 @@
     <ProjectReference Include="..\ThesisRestaurant.Domain\ThesisRestaurant.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="FoodSizes\Commands\Delete\" />
-    <Folder Include="FoodSizes\Queries\" />
-  </ItemGroup>
-
 </Project>

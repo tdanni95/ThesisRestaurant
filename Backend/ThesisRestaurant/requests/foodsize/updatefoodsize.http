@@ -4,7 +4,7 @@ PUT {{host}}/foodsize
 Content-Type: application/json
 
 {
-    "id": 3,
+    "id": 5,
     "name": "Istentelen",
     "multiplier": 1.55,
     "foodTypeId": 2

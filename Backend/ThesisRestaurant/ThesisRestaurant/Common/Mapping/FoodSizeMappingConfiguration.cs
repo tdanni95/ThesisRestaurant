@@ -13,7 +13,7 @@ namespace ThesisRestaurant.Api.Common.Mapping
         {
             config.NewConfig<CreateFoodSizeRequest, CreateFoodSizeCommand>();
             config.NewConfig<UpdateFoodSizeRequest, UpdateFoodSizeCommand>();
-            config.NewConfig<FoodSize, FoodSizeResult>();
+            config.NewConfig<FoodSize, FoodSizeResponse>();
         }
     }
 }
