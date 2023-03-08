@@ -26,6 +26,7 @@ namespace ThesisRestaurant.Infrastructure
                 .AddPersistence(configuration);
 
             services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
+            services.AddSingleton<IPasswordHandler, PasswordHandler>();
             return services;
         }
 

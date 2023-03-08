@@ -11,10 +11,12 @@ namespace ThesisRestaurant.Application.Authentication.Commands.Register
     {
         private readonly IJwtTokenGenerator jwtTokenGenerator;
         private readonly IUserRepository userRepository;
+        private readonly IPasswordHandler passwordHandler;
 
-        public RegisterCommandHandler(IJwtTokenGenerator jwtTokenGenerator, IUserRepository userRepository)
+        public RegisterCommandHandler(IJwtTokenGenerator jwtTokenGenerator, IPasswordHandler passwordHandler, IUserRepository userRepository)
         {
             this.jwtTokenGenerator = jwtTokenGenerator;
+            this.passwordHandler = passwordHandler;
             this.userRepository = userRepository;
         }
 
@@ -26,7 +28,8 @@ namespace ThesisRestaurant.Application.Authentication.Commands.Register
             {
                 return Domain.Common.Errors.Errors.User.DuplicateEmail;
             }
-            var user = new User { FirstName = command.FirstName, LastName = command.LastName, Email = command.Email, Password = command.Password };
+            string hashedPassword = passwordHandler.HashPassword(command.Password);
+            var user = new User { FirstName = command.FirstName, LastName = command.LastName, Email = command.Email, Password = hashedPassword };
 
             userRepository.Add(user);
 

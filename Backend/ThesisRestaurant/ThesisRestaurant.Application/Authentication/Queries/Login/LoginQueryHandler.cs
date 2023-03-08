@@ -11,11 +11,13 @@ namespace ThesisRestaurant.Application.Authentication.Queries.Login
     public class LoginQueryHandler : IRequestHandler<LoginQuery, ErrorOr<AuthenticationResult>>
     {
         private readonly IJwtTokenGenerator _jwtTokenGenerator;
+        private readonly IPasswordHandler _passowrdHandler;
         private readonly IUserRepository _userRepository;
 
-        public LoginQueryHandler(IJwtTokenGenerator jwtTokenGenerator, IUserRepository userRepository)
+        public LoginQueryHandler(IJwtTokenGenerator jwtTokenGenerator, IPasswordHandler passwordHandler, IUserRepository userRepository)
         {
             _jwtTokenGenerator = jwtTokenGenerator;
+            _passowrdHandler = passwordHandler;
             _userRepository = userRepository;
         }
 
@@ -27,8 +29,9 @@ namespace ThesisRestaurant.Application.Authentication.Queries.Login
             {
                 return Errors.Authentication.InvalidCredentials;
             }
+            bool isValidPassowrd = _passowrdHandler.VerifyPassword(query.Password, user.Password);
             //pw correct
-            if (user.Password != query.Password)
+            if (!isValidPassowrd)
             {
                 return new[] { Errors.Authentication.InvalidCredentials };
             }
