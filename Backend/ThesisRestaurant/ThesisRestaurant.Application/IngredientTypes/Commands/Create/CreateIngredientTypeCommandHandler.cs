@@ -21,7 +21,7 @@ namespace ThesisRestaurant.Application.IngredientTypes.Commands.Create
 
         public async Task<ErrorOr<IngredientType>> Handle(CreateIngredientTypeCommand request, CancellationToken cancellationToken)
         {
-            var ingredientType = IngredientType.Create(request.Name);
+            var ingredientType = IngredientType.Create(request.Name, request.MinOption, request.MaxOption);
 
             var result = await _repository.Add(ingredientType);
 

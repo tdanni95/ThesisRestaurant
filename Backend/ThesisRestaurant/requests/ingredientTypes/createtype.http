@@ -2,7 +2,8 @@
 
 POST {{host}}/ingredienttype
 Content-Type: application/json
-
 {
-    "name": "Szósz"
+    "name": "Szósz",
+    "MinOption": 2,
+    "MaxOption": 3
 }

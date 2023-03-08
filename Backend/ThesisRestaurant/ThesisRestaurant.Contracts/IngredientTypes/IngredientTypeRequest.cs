@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ThesisRestaurant.Contracts.IngredientTypes
+﻿namespace ThesisRestaurant.Contracts.IngredientTypes
 {
-    public record IngredientTypeRequest(int Id, string Name);
+    public record IngredientTypeRequest(int Id, int MinOption, int MaxOption, string Name);
 }

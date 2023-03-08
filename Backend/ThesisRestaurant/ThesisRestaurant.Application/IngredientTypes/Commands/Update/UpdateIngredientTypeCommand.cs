@@ -9,6 +9,6 @@ using ThesisRestaurant.Domain.Ingredients.IngredientTypes;
 
 namespace ThesisRestaurant.Application.IngredientTypes.Commands.Update
 {
-    public record UpdateIngredientTypeCommand(int Id, string Name) : IRequest<ErrorOr<IngredientType>>;
+    public record UpdateIngredientTypeCommand(int Id, int MinOption, int MaxOption, string Name) : IRequest<ErrorOr<IngredientType>>;
     
 }

@@ -7,9 +7,9 @@ namespace ThesisRestaurant.Application.IngredientTypes.Commands.Update
         public UpdateIngredientTypeCommandValidator()
         {
             RuleFor(x => x.Name).NotEmpty();
-            RuleFor(x => x.Id).NotEmpty();
-            RuleFor(x => x.Id).GreaterThan(0);
-
+            RuleFor(x => x.Id).NotEmpty().GreaterThan(0);
+            RuleFor(c => c.MinOption).NotEmpty().GreaterThan(0);
+            RuleFor(c => c.MaxOption).NotEmpty().GreaterThanOrEqualTo(x => x.MinOption);
         }
     }
 }
