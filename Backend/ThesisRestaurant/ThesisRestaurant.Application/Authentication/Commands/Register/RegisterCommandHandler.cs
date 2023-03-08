@@ -3,7 +3,8 @@ using MediatR;
 using ThesisRestaurant.Application.Authentication.Common;
 using ThesisRestaurant.Application.Common.Interfaces.Authentication;
 using ThesisRestaurant.Application.Common.Interfaces.Persistence;
-using ThesisRestaurant.Domain.Entities;
+using ThesisRestaurant.Domain.Users;
+using ThesisRestaurant.Domain.Users.UserAddresses;
 
 namespace ThesisRestaurant.Application.Authentication.Commands.Register
 {
@@ -22,20 +23,29 @@ namespace ThesisRestaurant.Application.Authentication.Commands.Register
 
         public async Task<ErrorOr<AuthenticationResult>> Handle(RegisterCommand command, CancellationToken cancellationToken)
         {
-            await Task.CompletedTask;
             //Validate the user doesnt exist
-            if (userRepository.GetUserByEmail(command.Email) is not null)
+            var isUser = await userRepository.GetUserByEmail(command.Email);
+            if (isUser.IsError)
             {
-                return Domain.Common.Errors.Errors.User.DuplicateEmail;
+                return isUser.Errors;
             }
             string hashedPassword = passwordHandler.HashPassword(command.Password);
-            var user = new User { FirstName = command.FirstName, LastName = command.LastName, Email = command.Email, Password = hashedPassword };
+            var user = User.Create(
+                    command.FirstName,
+                    command.LastName,
+                    command.Email,
+                    hashedPassword,
+                    command.PhoneNumber,
+                    string.Empty,
+                    1,
+                    command.Addresses.ConvertAll(address => UserAddress.Create(address.ZipCode, address.City, address.Street, address.HouseNumber))
+                );
+            var token = jwtTokenGenerator.GenerateToken(user);
 
-            userRepository.Add(user);
+            await userRepository.Add(user);
 
             //Create user (generate unique id)
             //Create JWT token
-            var token = jwtTokenGenerator.GenerateToken(user);
             return new AuthenticationResult(user, token);
         }
     }

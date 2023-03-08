@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ThesisRestaurant.Domain.Entities;
+﻿using ThesisRestaurant.Domain.Users;
 
 namespace ThesisRestaurant.Application.Authentication.Common
 {

@@ -3,7 +3,7 @@ using MediatR;
 using ThesisRestaurant.Application.Authentication.Common;
 using ThesisRestaurant.Application.Common.Interfaces.Authentication;
 using ThesisRestaurant.Application.Common.Interfaces.Persistence;
-using ThesisRestaurant.Domain.Entities;
+using ThesisRestaurant.Domain.Users;
 using ThesisRestaurant.Domain.Common.Errors;
 
 namespace ThesisRestaurant.Application.Authentication.Queries.Login
@@ -24,11 +24,13 @@ namespace ThesisRestaurant.Application.Authentication.Queries.Login
         public async Task<ErrorOr<AuthenticationResult>> Handle(LoginQuery query, CancellationToken cancellationToken)
         {
             await Task.CompletedTask;
+            var isUser = await _userRepository.GetUserByEmail(query.Email);
             //user exists
-            if (_userRepository.GetUserByEmail(query.Email) is not User user)
+            if (isUser.IsError)
             {
                 return Errors.Authentication.InvalidCredentials;
             }
+            var user = isUser.Value;
             bool isValidPassowrd = _passowrdHandler.VerifyPassword(query.Password, user.Password);
             //pw correct
             if (!isValidPassowrd)

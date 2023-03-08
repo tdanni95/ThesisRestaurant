@@ -20,5 +20,24 @@ namespace ThesisRestaurant.Domain.Users.UserAddresses
         public string HouseNumber { get; set; }
 
         public List<Order> Orders { get; set; } = new();
+
+        private UserAddress(int id, int zipCode, string city, string street, string houseNumber)
+        {
+            Id = id;
+            ZipCode = zipCode;
+            City = city;
+            Street = street;
+            HouseNumber = houseNumber;
+        }
+
+        public static UserAddress Create(int zipCode, string city, string street, string houseNumber, int id = 0)
+        {
+            return new(id, zipCode, city, street, houseNumber);
+        }
+
+        public string GetFullAddress()
+        {
+            return $"{ZipCode}, {City} {Street} {HouseNumber}";
+        }
     }
 }

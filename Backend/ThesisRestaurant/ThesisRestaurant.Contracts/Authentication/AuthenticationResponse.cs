@@ -7,10 +7,11 @@ using System.Threading.Tasks;
 namespace ThesisRestaurant.Contracts.Authentication
 {
     public record AuthenticationResponse(
-     Guid Id,
-     string FirstName,
-     string LastName,
-     string Email,
-     string Token
+        int Id,
+        string FirstName,
+        string LastName,
+        string Email,
+        string PhoneNumber,
+        string Token
      );
 }

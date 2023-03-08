@@ -5,7 +5,7 @@ using System.Security.Claims;
 using System.Text;
 using ThesisRestaurant.Application.Common.Interfaces.Authentication;
 using ThesisRestaurant.Application.Common.Services;
-using ThesisRestaurant.Domain.Entities;
+using ThesisRestaurant.Domain.Users;
 
 namespace ThesisRestaurant.Infrastructure.Authentication
 {

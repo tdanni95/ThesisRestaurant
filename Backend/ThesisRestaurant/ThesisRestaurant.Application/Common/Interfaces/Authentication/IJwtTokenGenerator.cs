@@ -1,4 +1,4 @@
-﻿using ThesisRestaurant.Domain.Entities;
+﻿using ThesisRestaurant.Domain.Users;
 
 namespace ThesisRestaurant.Application.Common.Interfaces.Authentication
 {
