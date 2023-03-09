@@ -20,7 +20,7 @@ namespace ThesisRestaurant.Application.FoodTypes.Commands.Update
 
         public async Task<ErrorOr<FoodType>> Handle(UpdateFoodTypeCommand request, CancellationToken cancellationToken)
         {
-            var type = FoodType.Create(request.Name, request.Id);
+            var type = FoodType.Create(request.Name, request.Price, request.Id);
             var result = await _foodTypeRepository.Update(type);
             if (result.IsError) return result.Errors;
             return type;

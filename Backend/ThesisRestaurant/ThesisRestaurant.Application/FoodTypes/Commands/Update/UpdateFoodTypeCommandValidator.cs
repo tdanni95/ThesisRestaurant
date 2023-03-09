@@ -12,6 +12,7 @@ namespace ThesisRestaurant.Application.FoodTypes.Commands.Update
         public UpdateFoodTypeCommandValidator()
         {
             RuleFor(x => x.Name).NotEmpty();
+            RuleFor(x => x.Price).NotEmpty().GreaterThan(0);
             RuleFor(x => x.Id).NotEmpty().GreaterThan(0);
         }
     }

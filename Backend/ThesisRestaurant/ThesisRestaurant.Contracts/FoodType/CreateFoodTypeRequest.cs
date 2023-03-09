@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 namespace ThesisRestaurant.Contracts.FoodType
 {
     public record CreateFoodTypeRequest(
-            string Name
+            string Name,
+            double Price
         );
 }

@@ -1,12 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.IO;
-using System.Linq;
-using System.Reflection.Emit;
-using System.Text;
-using System.Threading.Tasks;
-using ThesisRestaurant.Domain.Orders;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace ThesisRestaurant.Domain.Users.UserAddresses
 {
@@ -21,7 +13,6 @@ namespace ThesisRestaurant.Domain.Users.UserAddresses
         [MaxLength(100)]
         public string HouseNumber { get; set; }
 
-        public List<Order> Orders { get; set; } = new();
 
         private UserAddress(int id, int zipCode, string city, string street, string houseNumber)
         {

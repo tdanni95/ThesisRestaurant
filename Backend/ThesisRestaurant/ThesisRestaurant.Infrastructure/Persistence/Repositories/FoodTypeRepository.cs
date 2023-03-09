@@ -53,17 +53,21 @@ namespace ThesisRestaurant.Infrastructure.Persistence.Repositories
             var dbType = await GetById(foodType.Id);
             if (dbType.IsError) return dbType.Errors;
 
-            bool isTaken = await IsNameTaken(foodType.Name);
+            bool isTaken = await IsNameTaken(foodType.Name, foodType.Id);
             if (isTaken) return Errors.FoodTypes.NameTaken;
 
             dbType.Value.Update(foodType);
             await _context.SaveChangesAsync();
             return Result.Updated;
         }
-
         private async Task<bool> IsNameTaken(string name)
         {
             var type = await _context.FoodTypes.Where(s => s.Name == name).FirstOrDefaultAsync();
+            return type is not null;
+        }
+        private async Task<bool> IsNameTaken(string name, int id)
+        {
+            var type = await _context.FoodTypes.Where(s => s.Name == name && s.Id != id).FirstOrDefaultAsync();
             return type is not null;
         }
     }

@@ -4,5 +4,6 @@ POST {{host}}/foodtype
 Content-Type: application/json
 
 {
-    "name": "Pizza"
+    "name": "Pizza",
+    "price": 1000
 }

@@ -10,12 +10,14 @@ namespace ThesisRestaurant.Domain.Foods
 {
     public class Food
     {
-        public int Id { get; set; }
+        public int Id { get; private set; }
         [MaxLength(255)]
-        public string Name { get; set; }
-        public FoodType Type { get; set; }
+        public string Name { get; private set; }
+        public FoodType Type { get; private set; }
         [DefaultValue(1)]
-        public byte Visible { get; set; } = 1;
+        public byte Visible { get; private set; } = 1;
+
+        public double BasePrice { get; private set; }
 
         public List<FoodPicture> FoodPictures { get; set; } = new();
         public List<Ingredient> Ingredients { get; set; } = new();

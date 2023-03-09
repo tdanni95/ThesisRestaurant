@@ -9,5 +9,5 @@ using ThesisRestaurant.Domain.FoodTypes;
 
 namespace ThesisRestaurant.Application.FoodTypes.Commands.Update
 {
-    public record UpdateFoodTypeCommand(int Id, string Name) : IRequest<ErrorOr<FoodType>>;
+    public record UpdateFoodTypeCommand(int Id, string Name, double Price) : IRequest<ErrorOr<FoodType>>;
 }

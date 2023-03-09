@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ThesisRestaurant.Infrastructure.Persistence;
 
@@ -10,9 +11,11 @@ using ThesisRestaurant.Infrastructure.Persistence;
 namespace ThesisRestaurant.Infrastructure.Migrations
 {
     [DbContext(typeof(ThesisRestaurantDbContext))]
-    partial class ThesisRestaurantDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230309163350_OrderModification")]
+    partial class OrderModification
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

@@ -9,6 +9,6 @@ using ThesisRestaurant.Domain.FoodTypes;
 
 namespace ThesisRestaurant.Application.FoodTypes.Commands.Create
 {
-    public record CreateFoodTypeCommand(string Name) : IRequest<ErrorOr<FoodType>>;
+    public record CreateFoodTypeCommand(string Name, double Price) : IRequest<ErrorOr<FoodType>>;
 
 }

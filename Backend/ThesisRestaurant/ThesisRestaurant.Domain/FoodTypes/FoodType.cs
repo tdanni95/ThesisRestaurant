@@ -9,22 +9,26 @@ namespace ThesisRestaurant.Domain.FoodTypes
         [MaxLength(255)]
         public string Name { get; private set; }
 
+        public double Price { get; private set; }
+
         public List<FoodSize> FoodSizes { get; private set; } = new();
 
-        private FoodType(string name, int id = 0)
+        private FoodType(string name, double price, int id = 0)
         {
             Name = name;
+            Price = price;
             Id = id;
         }
 
-        public static FoodType Create(string name, int id = 0)
+        public static FoodType Create(string name, double price, int id = 0)
         {
-            return new(name, id);
+            return new(name, price, id);
         }
 
         public void Update(FoodType foodType)
         {
             this.Name = foodType.Name;
+            this.Price = foodType.Price;
         }
     }
 }

@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ThesisRestaurant.Infrastructure.Persistence;
 
@@ -10,9 +11,11 @@ using ThesisRestaurant.Infrastructure.Persistence;
 namespace ThesisRestaurant.Infrastructure.Migrations
 {
     [DbContext(typeof(ThesisRestaurantDbContext))]
-    partial class ThesisRestaurantDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230309162507_FoodAndFoodTypePrice")]
+    partial class FoodAndFoodTypePrice
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -244,19 +247,15 @@ namespace ThesisRestaurant.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<string>("Address")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
                     b.Property<DateTime>("Created")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<int?>("UserId")
+                    b.Property<int?>("UserAddressId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("UserAddressId");
 
                     b.ToTable("Orders");
                 });
@@ -485,9 +484,9 @@ namespace ThesisRestaurant.Infrastructure.Migrations
 
             modelBuilder.Entity("ThesisRestaurant.Domain.Orders.Order", b =>
                 {
-                    b.HasOne("ThesisRestaurant.Domain.Users.User", null)
+                    b.HasOne("ThesisRestaurant.Domain.Users.UserAddresses.UserAddress", null)
                         .WithMany("Orders")
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("UserAddressId");
                 });
 
             modelBuilder.Entity("ThesisRestaurant.Domain.Orders.OrderCustomItems.OrderCustomItem", b =>
@@ -556,9 +555,12 @@ namespace ThesisRestaurant.Infrastructure.Migrations
                 {
                     b.Navigation("CustomFoods");
 
-                    b.Navigation("Orders");
-
                     b.Navigation("UserAddresses");
+                });
+
+            modelBuilder.Entity("ThesisRestaurant.Domain.Users.UserAddresses.UserAddress", b =>
+                {
+                    b.Navigation("Orders");
                 });
 #pragma warning restore 612, 618
         }

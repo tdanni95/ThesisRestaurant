@@ -6,5 +6,5 @@ using System.Threading.Tasks;
 
 namespace ThesisRestaurant.Contracts.FoodType
 {
-    public record FoodTypeResponse(int Id, string Name);
+    public record FoodTypeResponse(int Id, string Name, double Price);
 }

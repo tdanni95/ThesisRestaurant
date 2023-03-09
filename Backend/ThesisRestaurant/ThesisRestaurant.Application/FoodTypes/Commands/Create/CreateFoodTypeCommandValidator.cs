@@ -12,6 +12,7 @@ namespace ThesisRestaurant.Application.FoodTypes.Commands.Create
         public CreateFoodTypeCommandValidator()
         {
             RuleFor(c => c.Name).NotEmpty();
+            RuleFor(x => x.Price).NotEmpty().GreaterThan(0);   
         }
     }
 }

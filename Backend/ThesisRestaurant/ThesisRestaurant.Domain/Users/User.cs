@@ -23,6 +23,8 @@ namespace ThesisRestaurant.Domain.Users
         public List<UserAddress> UserAddresses { get; private set; } = new();
         public List<CustomFood> CustomFoods { get; private set; } = new();
 
+        public List<Order> Orders { get; private set; } = new();
+
         private User(int id, string firstName, string lastName, string email, string password, string phoneNumber, string? authToken, byte level)
         {
             Id = id;
