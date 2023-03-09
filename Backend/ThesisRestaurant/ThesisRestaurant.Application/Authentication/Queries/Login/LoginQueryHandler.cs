@@ -23,7 +23,6 @@ namespace ThesisRestaurant.Application.Authentication.Queries.Login
 
         public async Task<ErrorOr<AuthenticationResult>> Handle(LoginQuery query, CancellationToken cancellationToken)
         {
-            await Task.CompletedTask;
             var user = await _userRepository.GetUserByEmail(query.Email);
             //user exists
             if (user is null)
@@ -39,6 +38,7 @@ namespace ThesisRestaurant.Application.Authentication.Queries.Login
             }
 
             var token = _jwtTokenGenerator.GenerateToken(user);
+            await _userRepository.Login(user, token);
 
             //create jwt and return
             return new AuthenticationResult(user, token);

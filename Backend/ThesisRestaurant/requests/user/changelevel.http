@@ -1,0 +1,9 @@
+@host=https://localhost:7068
+
+PUT {{host}}/user/level
+Content-Type: application/json
+
+{
+  "id": 8,
+   "level": 15
+}

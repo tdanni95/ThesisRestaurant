@@ -6,10 +6,5 @@ using System.Threading.Tasks;
 
 namespace ThesisRestaurant.Contracts.User
 {
-    public record UpdateUser(
-        int Id,
-        string FirstName,
-        string LastName,
-        string Email,
-        string PhoneNumber);
+    public record ChangeUserPassword(int Id, string OldPassword, string NewPassword, string NewPasswordAgain);
 }

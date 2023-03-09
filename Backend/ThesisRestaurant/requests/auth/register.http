@@ -6,8 +6,9 @@ Content-Type: application/json
 {
   "firstName": "Dani",
   "lastName": "Vagyok",
-  "email": "123@email.hu",
+  "email": "str",
   "password": "asd123",
+  "passwordAgain": "asd123",
   "phoneNumber": "06-00-123-4567",
   "addresses": [
     {

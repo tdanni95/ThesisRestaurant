@@ -87,5 +87,10 @@ namespace ThesisRestaurant.Domain.Users
         {
             this.Password = password;
         }
+
+        public void SetAuthToken(string token)
+        {
+            this.AuthToken = token;
+        }
     }
 }

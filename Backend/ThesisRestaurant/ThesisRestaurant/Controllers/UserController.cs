@@ -6,7 +6,9 @@ using Microsoft.AspNetCore.Mvc;
 using ThesisRestaurant.Application.Addresses.Commands.Create;
 using ThesisRestaurant.Application.Addresses.Commands.Delete;
 using ThesisRestaurant.Application.Addresses.Commands.Update;
+using ThesisRestaurant.Application.Users.Commands.ChangeUserPassword;
 using ThesisRestaurant.Application.Users.Commands.Update;
+using ThesisRestaurant.Application.Users.Commands.UpdateUserLevel;
 using ThesisRestaurant.Contracts.Authentication;
 using ThesisRestaurant.Contracts.User;
 
@@ -58,7 +60,7 @@ namespace ThesisRestaurant.Api.Controllers
             var command = new DeleteAddressCommand(userId, addressId);
             var result = await _mediator.Send(command);
             return result.Match(
-                    address => Ok(addressId),
+                    address => NoContent(),
                     errors => Problem(errors)
                 );
         }
@@ -70,6 +72,29 @@ namespace ThesisRestaurant.Api.Controllers
             var result = await _mediator.Send(command);
             return result.Match(
                     user => Ok(user),
+                    errors => Problem(errors)
+                );
+        }
+
+        [HttpPut("level")]
+        public async Task<IActionResult> UpdateUserLevel(UpdateUserLevel request)
+        {
+            var command = _mapper.Map<UpdateUserLevelCommand>(request);
+            var result = await _mediator.Send(command);
+            return result.Match(
+                    updated => NoContent(),
+                    errors => Problem(errors)
+                );
+        }
+
+        [HttpPut("password")]
+        public async Task<IActionResult> ChangePassword(ChangeUserPassword request)
+        {
+            var command = _mapper.Map<ChangeUserPasswordCommand>(request);
+            var result = await _mediator.Send(command);
+
+            return result.Match(
+                    updated => NoContent(),
                     errors => Problem(errors)
                 );
         }

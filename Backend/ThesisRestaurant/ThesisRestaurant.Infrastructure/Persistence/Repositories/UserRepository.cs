@@ -27,6 +27,13 @@ namespace ThesisRestaurant.Infrastructure.Persistence.Repositories
             return Result.Created;
         }
 
+        public async Task<ErrorOr<Updated>> Login(User user, string token)
+        {
+            user.SetAuthToken(token);
+            await _context.SaveChangesAsync();
+            return Result.Updated;
+        }
+
 
         public async Task<User?> GetUserByEmail(string email)
         {
@@ -61,7 +68,7 @@ namespace ThesisRestaurant.Infrastructure.Persistence.Repositories
         public async Task<ErrorOr<Updated>> ChangeLevel(byte newLevel, int id)
         {
             var dbUser = await GetUserById(id);
-            if (dbUser is not null) return Errors.User.NotFound;
+            if (dbUser is null) return Errors.User.NotFound;
             dbUser!.SetLevel(newLevel);
             await _context.SaveChangesAsync();
             return Result.Updated;
@@ -70,8 +77,10 @@ namespace ThesisRestaurant.Infrastructure.Persistence.Repositories
         public async Task<ErrorOr<Updated>> ChangePassword(string newPassword, int id)
         {
             var dbUser = await GetUserById(id);
-            if (dbUser is not null) return Errors.User.NotFound;
+            if (dbUser is null) return Errors.User.NotFound;
             dbUser!.SetPassword(newPassword);
+            //force new login
+            dbUser!.SetAuthToken("");
             await _context.SaveChangesAsync();
             return Result.Updated;
         }
@@ -120,5 +129,7 @@ namespace ThesisRestaurant.Infrastructure.Persistence.Repositories
             await _context.SaveChangesAsync();
             return Result.Deleted;
         }
+
+
     }
 }

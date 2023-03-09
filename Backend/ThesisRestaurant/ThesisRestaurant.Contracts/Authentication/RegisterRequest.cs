@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace ThesisRestaurant.Contracts.Authentication
 {
     public record RegisterRequest(
-            string FirstName, string LastName, string Email, string Password, string PhoneNumber, List<RegisterAddressRequest> Addresses
+            string FirstName, string LastName, string Email, string Password, string PasswordAgain, string PhoneNumber, List<RegisterAddressRequest> Addresses
         );
 
     public record RegisterAddressRequest(

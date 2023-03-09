@@ -10,6 +10,7 @@ namespace ThesisRestaurant.Application.Authentication.Commands.Register
             RuleFor(x => x.LastName).NotEmpty();
             RuleFor(x => x.Email).NotEmpty();
             RuleFor(x => x.Password).NotEmpty();
+            RuleFor(x => x.Password).Equal(x => x.PasswordAgain).WithMessage("Passwords must match");
             RuleFor(x => x.PhoneNumber).NotEmpty();
             RuleFor(x => x.Addresses).NotEmpty();
             RuleForEach(x => x.Addresses).SetValidator(new AddressValidator());
