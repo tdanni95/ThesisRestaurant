@@ -11,6 +11,6 @@ namespace ThesisRestaurant.Contracts.Authentication
         );
 
     public record RegisterAddressRequest(
-        int ZipCode, string City, string Street, string HouseNumber
+            int ZipCode, string City, string Street, string HouseNumber
         );
 }

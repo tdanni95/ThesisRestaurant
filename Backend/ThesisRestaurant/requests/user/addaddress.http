@@ -1,0 +1,11 @@
+@host=https://localhost:7068
+
+POST {{host}}/user/address/4
+Content-Type: application/json
+
+{
+  "zipCode": 1000,
+  "city": "Miskolc",
+  "street": "Nemtomottmivan",
+  "houseNumber": "69"
+}

@@ -19,6 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Addresses\Queries\" />
     <Folder Include="Users\Commands\Delete\" />
     <Folder Include="Users\Common\" />
     <Folder Include="Users\Queries\" />

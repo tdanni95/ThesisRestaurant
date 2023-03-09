@@ -6,7 +6,7 @@ namespace ThesisRestaurant.Application.Common.Interfaces.Persistence
 {
     public interface IUserRepository
     {
-        Task<ErrorOr<User>> GetUserByEmail(string email);
+        Task<User?> GetUserByEmail(string email);
         Task<ErrorOr<Created>> Add(User user);
         Task<ErrorOr<Updated>> Update(User user);
         Task<ErrorOr<Updated>> ChangePassword(string newPassword, int id);
@@ -15,8 +15,8 @@ namespace ThesisRestaurant.Application.Common.Interfaces.Persistence
 
         Task<ErrorOr<Created>> AddAddress(UserAddress address, int userId);
         Task<ErrorOr<Updated>> UpdateAddress(UserAddress address, int userId);
-        Task<ErrorOr<Deleted>> DeleteAddress(UserAddress address, int userId);
+        Task<ErrorOr<Deleted>> DeleteAddress(int addressId, int userId);
 
-        Task<ErrorOr<User>> GetUserById(int id);
+        Task<User?> GetUserById(int id);
     }
 }

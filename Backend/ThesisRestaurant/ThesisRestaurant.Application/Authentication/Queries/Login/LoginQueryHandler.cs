@@ -24,13 +24,13 @@ namespace ThesisRestaurant.Application.Authentication.Queries.Login
         public async Task<ErrorOr<AuthenticationResult>> Handle(LoginQuery query, CancellationToken cancellationToken)
         {
             await Task.CompletedTask;
-            var isUser = await _userRepository.GetUserByEmail(query.Email);
+            var user = await _userRepository.GetUserByEmail(query.Email);
             //user exists
-            if (isUser.IsError)
+            if (user is null)
             {
                 return Errors.Authentication.InvalidCredentials;
             }
-            var user = isUser.Value;
+            
             bool isValidPassowrd = _passowrdHandler.VerifyPassword(query.Password, user.Password);
             //pw correct
             if (!isValidPassowrd)

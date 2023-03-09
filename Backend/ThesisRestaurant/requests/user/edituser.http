@@ -1,0 +1,12 @@
+@host=https://localhost:7068
+
+PUT {{host}}/user
+Content-Type: application/json
+
+{
+  "id": 4,
+  "firstName": "Danibb",
+  "lastName": "Is Vagyok",
+  "email": "1234@emai.hu",
+  "phoneNumber": "06-11-123-4567"
+}

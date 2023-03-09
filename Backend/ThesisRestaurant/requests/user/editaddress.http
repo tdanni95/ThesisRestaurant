@@ -1,0 +1,11 @@
+@host=https://localhost:7068
+
+PUT {{host}}/user/address/1/1
+Content-Type: application/json
+
+{
+  "zipCode": 1000,
+  "city": "Budapest",
+  "street": "Keleti pályaudvar",
+  "houseNumber": "férfi wc, de lehet hogy a női"
+}

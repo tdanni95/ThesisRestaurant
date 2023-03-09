@@ -3,7 +3,11 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using ThesisRestaurant.Application.Addresses.Commands.Create;
+using ThesisRestaurant.Application.Addresses.Commands.Delete;
+using ThesisRestaurant.Application.Addresses.Commands.Update;
 using ThesisRestaurant.Application.Users.Commands.Update;
+using ThesisRestaurant.Contracts.Authentication;
 using ThesisRestaurant.Contracts.User;
 
 namespace ThesisRestaurant.Api.Controllers
@@ -13,10 +17,6 @@ namespace ThesisRestaurant.Api.Controllers
     public class UserController : ApiController
     {
         /**
-         * Cím hozzáadása
-         * Cím módosítás
-         * Cím törlés
-         * User adat módosítás 
          * User level módosítás [admin only]
          * User PW módosítás
          * */
@@ -26,6 +26,41 @@ namespace ThesisRestaurant.Api.Controllers
         {
             _mediator = mediator;
             _mapper = mapper;
+        }
+
+        [HttpPost("address/{userId:int}")]
+        public async Task<IActionResult> CreateAddress(RegisterAddressRequest request, int userId)
+        {
+            var command = _mapper.Map<CreateAddressCommand>((request, userId));
+            var result = await _mediator.Send(command);
+
+            return result.Match(
+                    address => Ok(address),
+                    errors => Problem(errors)
+                );
+        }
+
+        [HttpPut("address/{userId:int}/{addressId:int}")]
+        public async Task<IActionResult> UpdateAddress(RegisterAddressRequest request, int userId, int addressId)
+        {
+            var command = _mapper.Map<UpdateAddressCommand>((request, userId, addressId));
+            var result = await _mediator.Send(command);
+
+            return result.Match(
+                    address => Ok(address),
+                    errors => Problem(errors)
+                );
+        }
+
+        [HttpDelete("address/{userId:int}/{addressId:int}")]
+        public async Task<IActionResult> DeleteAddress(int userId, int addressId)
+        {
+            var command = new DeleteAddressCommand(userId, addressId);
+            var result = await _mediator.Send(command);
+            return result.Match(
+                    address => Ok(addressId),
+                    errors => Problem(errors)
+                );
         }
 
         [HttpPut]

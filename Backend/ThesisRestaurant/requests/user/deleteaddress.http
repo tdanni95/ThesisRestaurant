@@ -1,0 +1,4 @@
+@host=https://localhost:7068
+
+DELETE  {{host}}/user/address/2/2
+Content-Type: application/json

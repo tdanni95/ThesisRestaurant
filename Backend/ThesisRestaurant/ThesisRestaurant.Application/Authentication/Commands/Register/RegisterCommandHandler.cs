@@ -3,6 +3,7 @@ using MediatR;
 using ThesisRestaurant.Application.Authentication.Common;
 using ThesisRestaurant.Application.Common.Interfaces.Authentication;
 using ThesisRestaurant.Application.Common.Interfaces.Persistence;
+using ThesisRestaurant.Domain.Common.Errors;
 using ThesisRestaurant.Domain.Users;
 using ThesisRestaurant.Domain.Users.UserAddresses;
 
@@ -25,9 +26,9 @@ namespace ThesisRestaurant.Application.Authentication.Commands.Register
         {
             //Validate the user doesnt exist
             var isUser = await userRepository.GetUserByEmail(command.Email);
-            if (isUser.IsError)
+            if (isUser is not null)
             {
-                return isUser.Errors;
+                return Errors.User.DuplicateEmail;
             }
             string hashedPassword = passwordHandler.HashPassword(command.Password);
             var user = User.Create(
