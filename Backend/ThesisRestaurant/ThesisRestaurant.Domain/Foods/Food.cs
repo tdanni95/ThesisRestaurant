@@ -5,6 +5,7 @@ using ThesisRestaurant.Domain.Foods.FoodPrices;
 using ThesisRestaurant.Domain.FoodTypes;
 using ThesisRestaurant.Domain.Ingredients;
 using ThesisRestaurant.Domain.Orders;
+using ThesisRestaurant.Domain.Orders.OrderItems;
 
 namespace ThesisRestaurant.Domain.Foods
 {
@@ -23,6 +24,6 @@ namespace ThesisRestaurant.Domain.Foods
         public List<Ingredient> Ingredients { get; set; } = new();
         public List<FoodPrice> FoodPrices { get; set; } = new();
 
-        public List<Order> Orders { get; set; } = new();
+        public List<OrderItem> Orders { get; set; } = new();
     }
 }

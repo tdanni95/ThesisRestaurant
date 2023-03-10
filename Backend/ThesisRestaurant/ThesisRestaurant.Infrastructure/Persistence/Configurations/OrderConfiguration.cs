@@ -10,9 +10,9 @@ namespace ThesisRestaurant.Infrastructure.Persistence.Configurations
     {
         public void Configure(EntityTypeBuilder<Order> builder)
         {
-            builder.HasMany(o => o.Foods).WithMany(f => f.Orders).UsingEntity<OrderItem>();
+            builder.HasMany(o => o.Foods).WithOne(f => f.Order);
 
-            builder.HasMany(o => o.CustomFoods).WithMany(cf => cf.Orders).UsingEntity<OrderCustomItem>(); 
+            builder.HasMany(o => o.CustomFoods).WithOne(cf => cf.Order); 
         }
     }
 }

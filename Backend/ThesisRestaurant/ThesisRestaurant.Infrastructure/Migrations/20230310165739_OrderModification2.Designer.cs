@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ThesisRestaurant.Infrastructure.Persistence;
 
@@ -10,9 +11,11 @@ using ThesisRestaurant.Infrastructure.Persistence;
 namespace ThesisRestaurant.Infrastructure.Migrations
 {
     [DbContext(typeof(ThesisRestaurantDbContext))]
-    partial class ThesisRestaurantDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230310165739_OrderModification2")]
+    partial class OrderModification2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -512,13 +515,13 @@ namespace ThesisRestaurant.Infrastructure.Migrations
             modelBuilder.Entity("ThesisRestaurant.Domain.Orders.OrderItems.OrderItem", b =>
                 {
                     b.HasOne("ThesisRestaurant.Domain.Foods.Food", "Food")
-                        .WithMany("Orders")
+                        .WithMany()
                         .HasForeignKey("FoodId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("ThesisRestaurant.Domain.Orders.Order", "Order")
-                        .WithMany("Foods")
+                        .WithMany()
                         .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -550,8 +553,6 @@ namespace ThesisRestaurant.Infrastructure.Migrations
                     b.Navigation("FoodPictures");
 
                     b.Navigation("FoodPrices");
-
-                    b.Navigation("Orders");
                 });
 
             modelBuilder.Entity("ThesisRestaurant.Domain.Ingredients.IngredientTypes.IngredientType", b =>
@@ -562,8 +563,6 @@ namespace ThesisRestaurant.Infrastructure.Migrations
             modelBuilder.Entity("ThesisRestaurant.Domain.Orders.Order", b =>
                 {
                     b.Navigation("CustomFoods");
-
-                    b.Navigation("Foods");
                 });
 
             modelBuilder.Entity("ThesisRestaurant.Domain.Users.User", b =>

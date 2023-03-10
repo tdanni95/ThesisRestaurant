@@ -2,6 +2,7 @@
 using ThesisRestaurant.Domain.FoodTypes;
 using ThesisRestaurant.Domain.Ingredients;
 using ThesisRestaurant.Domain.Orders;
+using ThesisRestaurant.Domain.Orders.OrderCustomItems;
 
 namespace ThesisRestaurant.Domain.CustomFoods
 {
@@ -58,6 +59,6 @@ namespace ThesisRestaurant.Domain.CustomFoods
         }
 
         public List<Ingredient> Ingredients { get; set; } = new();
-        public List<Order> Orders { get; private set; } = new();
+        public List<OrderCustomItem> Orders { get; private set; } = new();
     }
 }

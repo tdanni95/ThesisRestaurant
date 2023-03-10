@@ -1,6 +1,8 @@
 ﻿using ThesisRestaurant.Domain.Foods;
 using ThesisRestaurant.Domain.CustomFoods;
 using System.ComponentModel.DataAnnotations;
+using ThesisRestaurant.Domain.Orders.OrderCustomItems;
+using ThesisRestaurant.Domain.Orders.OrderItems;
 
 namespace ThesisRestaurant.Domain.Orders
 {
@@ -11,7 +13,23 @@ namespace ThesisRestaurant.Domain.Orders
 
         public string Address { get; private set; }
 
-        public List<Food> Foods { get; private set; } = new();
-        public List<CustomFood> CustomFoods { get; private set; } = new();
+        public Order(int id, DateTime created, string address)
+        {
+            Id = id;
+            Created = created;
+            Address = address;
+        }
+
+        public Order(int id, DateTime created, string address, List<OrderItem> foods, List<OrderCustomItem> customFoods)
+        {
+            Id = id;
+            Created = created;
+            Address = address;
+            Foods = foods;
+            CustomFoods = customFoods;
+        }
+
+        public List<OrderItem> Foods { get; private set; } = new();
+        public List<OrderCustomItem> CustomFoods { get; private set; } = new();
     }
 }
