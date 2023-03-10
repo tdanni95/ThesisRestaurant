@@ -1,0 +1,12 @@
+@host=https://localhost:7068
+
+POST {{host}}/customfood/8
+Content-Type: application/json
+
+{
+  "name": "BBQ dream",
+  "foodTypeId": 5,
+  "ingredientIds": [
+    6, 7
+  ]
+}

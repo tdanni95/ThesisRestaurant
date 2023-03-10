@@ -5,7 +5,7 @@ Content-Type: application/json
 
 
 {
-  "name": "BBQ alap",
-  "price": 100,
+  "name": "Tejfölös alap",
+  "price": 150,
   "ingredientTypeId": 8
 }

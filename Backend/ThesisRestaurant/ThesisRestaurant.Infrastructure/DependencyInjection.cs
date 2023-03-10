@@ -40,6 +40,7 @@ namespace ThesisRestaurant.Infrastructure
             services.AddScoped<IIngredientRepository, IngredientRepository>();
             services.AddScoped<IFoodTypeRepository, FoodTypeRepository>();
             services.AddScoped<IFoodSizeRepository, FoodSizeRepository>();
+            services.AddScoped<ICustomFoodRepository, CustomFoodRepository>();
 
             return services;
         }

@@ -4,6 +4,8 @@ PUT {{host}}/ingredienttype
 Content-Type: application/json
 
 {
-    "id" : 7,
-    "name": "Pizza szósz"
+    "id" : 8,
+    "name": "Pizza szósz",
+    "minOption": 1,
+    "maxOption": 1
 }

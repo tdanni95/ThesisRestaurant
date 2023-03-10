@@ -65,5 +65,15 @@ namespace ThesisRestaurant.Infrastructure.Persistence.Repositories
             await _context.SaveChangesAsync();
             return Result.Deleted;
         }
+
+        public async Task<ErrorOr<List<Ingredient>>> GetWhereIdIn(List<int> ids)
+        {
+            var ingredients = await _context.Ingredients.Where(x => ids.Contains(x.Id)).Include(x => x.IngredientType).ToListAsync();
+
+            if (ingredients.Count < ids.Distinct().ToList().Count) return Errors.Ingredients.NotFound;
+
+            return ingredients;
+        }
+
     }
 }

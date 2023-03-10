@@ -20,6 +20,8 @@
 
   <ItemGroup>
     <Folder Include="Addresses\Queries\" />
+    <Folder Include="Common\Interfaces\Food\" />
+    <Folder Include="CustomFoods\Queries\" />
     <Folder Include="Users\Commands\Delete\" />
     <Folder Include="Users\Common\" />
     <Folder Include="Users\Queries\" />

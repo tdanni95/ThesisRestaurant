@@ -13,6 +13,7 @@ namespace ThesisRestaurant.Application.Common.Interfaces.Persistence
         Task<ErrorOr<Ingredient>> GetById(int id);
         Task<ErrorOr<List<Ingredient>>> GetAll();
         Task<ErrorOr<List<Ingredient>>> GetAllByIngredientType(int ingredientTypeId);
+        Task<ErrorOr<List<Ingredient>>> GetWhereIdIn(List<int> ids);
 
         Task<ErrorOr<Created>> Add(Ingredient ingredient);
         Task<ErrorOr<Updated>> Update(Ingredient ingredient);

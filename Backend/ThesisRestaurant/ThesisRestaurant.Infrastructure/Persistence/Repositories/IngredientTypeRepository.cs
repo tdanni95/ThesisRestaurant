@@ -39,9 +39,6 @@ namespace ThesisRestaurant.Infrastructure.Persistence.Repositories
 
         public async Task<ErrorOr<List<IngredientType>>> GetAll()
         {
-
-            //var ids = new List<int>() { 5, 6, 7, 8 };
-            //var types = await _dbContext.IngredientTypes.Where(x => ids.Contains(x.Id)).ToListAsync();
             var types = await _dbContext.IngredientTypes.Include(x => x.ingredients).ToListAsync();
             return types;
         }
