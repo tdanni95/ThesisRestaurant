@@ -4,9 +4,9 @@ POST {{host}}/customfood/8
 Content-Type: application/json
 
 {
-  "name": "BBQ dream",
+  "name": "Sour cream dream",
   "foodTypeId": 5,
   "ingredientIds": [
-    6, 7
+    7
   ]
 }

@@ -27,6 +27,7 @@ namespace ThesisRestaurant.Infrastructure
 
             services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
             services.AddSingleton<IPasswordHandler, PasswordHandler>();
+            services.AddSingleton<IFoodIngredientValidator, FoodIngredientValidator>();
             return services;
         }
 

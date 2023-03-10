@@ -1,5 +1,6 @@
 ﻿using ErrorOr;
 using MediatR;
+using ThesisRestaurant.Application.Common.Services;
 using ThesisRestaurant.Application.Common.Interfaces.Persistence;
 using ThesisRestaurant.Domain.Common.Errors;
 using ThesisRestaurant.Domain.CustomFoods;
@@ -13,12 +14,18 @@ namespace ThesisRestaurant.Application.CustomFoods.Commands.Create
         private readonly IIngredientRepository _ingredientRepository;
         private readonly IFoodTypeRepository _foodTypeRepository;
         private readonly ICustomFoodRepository _customFoodRepository;
+        private readonly IFoodIngredientValidator _foodIngredientValidation;
 
-        public CreateCustomFoodRequestHandler(IIngredientRepository ingredientRepository, IFoodTypeRepository foodTypeRepository, ICustomFoodRepository customFoodRepository)
+        public CreateCustomFoodRequestHandler(
+            IIngredientRepository ingredientRepository, 
+            IFoodTypeRepository foodTypeRepository, 
+            ICustomFoodRepository customFoodRepository,
+            IFoodIngredientValidator foodIngredientValidation)
         {
             _ingredientRepository = ingredientRepository;
             _foodTypeRepository = foodTypeRepository;
             _customFoodRepository = customFoodRepository;
+            _foodIngredientValidation = foodIngredientValidation;
         }
 
         public async Task<ErrorOr<CustomFood>> Handle(CreateCustomFoodCommand request, CancellationToken cancellationToken)
@@ -27,7 +34,7 @@ namespace ThesisRestaurant.Application.CustomFoods.Commands.Create
             if (ingredients.IsError) return ingredients.Errors;
 
 
-            var ingredientErros = ValidateIngredients(ingredients.Value);
+            var ingredientErros = _foodIngredientValidation.ValidateIngredients(ingredients.Value);
             if (ingredientErros.Count > 0) return ingredientErros;
 
             var foodType = await _foodTypeRepository.GetById(request.FoodTypeId);
@@ -39,7 +46,7 @@ namespace ThesisRestaurant.Application.CustomFoods.Commands.Create
                     ingredients.Value,
                     foodType.Value
                 );
-            var result = await _customFoodRepository.AddCustomFood(customFood);
+            var result = await _customFoodRepository.AddCustomFood(customFood, request.UserId);
             if (result.IsError) return result.Errors;
 
             return customFood;
@@ -50,47 +57,6 @@ namespace ThesisRestaurant.Application.CustomFoods.Commands.Create
             return await _ingredientRepository.GetWhereIdIn(ids);
         }
 
-        private async Task<ErrorOr<FoodType>> GetFoodType(int foodTypeId)
-        {
-            return await _foodTypeRepository.GetById(foodTypeId);
-        }
-
-
-        private List<Error> ValidateIngredients(List<Ingredient> ingredients)
-        {
-            List<Error> errors = new();
-            var typeByCount = BuildTypeDictionary(ingredients);
-            foreach (var keyValuePair in typeByCount)
-            {
-                var type = ingredients.Select(i => i.IngredientType).Where(it => it.Id == keyValuePair.Key).First();
-
-                int minOption = type.MinOption;
-                int maxOption = type.MaxOption;
-
-                if (keyValuePair.Value < minOption || keyValuePair.Value > maxOption)
-                {
-                    errors.Add(Errors.Ingredients.FoodCreatinCountError(type.Name, type.MinOption, type.MaxOption));
-                }
-            }
-            return errors;
-        }
-
-        private Dictionary<int, int> BuildTypeDictionary(List<Ingredient> ingredients)
-        {
-            Dictionary<int, int> typeByCount = new();
-            foreach (var ingredient in ingredients)
-            {
-                if (!typeByCount.ContainsKey(ingredient.IngredientType.Id))
-                {
-                    typeByCount.Add(ingredient.IngredientType.Id, 1);
-                }
-                else
-                {
-                    typeByCount[ingredient.IngredientType.Id] += 1;
-                }
-            }
-            return typeByCount;
-        }
     }
 }
 

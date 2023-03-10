@@ -13,9 +13,11 @@ namespace ThesisRestaurant.Infrastructure.Persistence.Repositories
         {
             _context = context;
         }
-        public async Task<ErrorOr<Created>> AddCustomFood(CustomFood customFood)
+        public async Task<ErrorOr<Created>> AddCustomFood(CustomFood customFood, int userId)
         {
-            _context.CustomFoods.Add(customFood);
+            var user = await _context.Users.FindAsync(userId);
+            if (user is null) return Errors.User.NotFound;
+            user.CustomFoods.Add(customFood);
             await _context.SaveChangesAsync();
             return Result.Created;
         }
@@ -35,7 +37,7 @@ namespace ThesisRestaurant.Infrastructure.Persistence.Repositories
             return list!;
         }
 
-        public async Task<ErrorOr<Updated>> UpdateCustomFood(CustomFood customFood)
+        public async Task<ErrorOr<Updated>> UpdateCustomFood(CustomFood customFood, int userId)
         {
             var dbCf = await GetById(customFood.Id);
             if (dbCf is null) return Errors.CustomFoods.NotFound;
