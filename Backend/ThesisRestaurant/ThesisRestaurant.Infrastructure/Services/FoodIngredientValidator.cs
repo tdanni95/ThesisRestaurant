@@ -31,13 +31,14 @@ namespace ThesisRestaurant.Infrastructure.Services
             Dictionary<int, int> typeByCount = new();
             foreach (var ingredient in ingredients)
             {
-                if (!typeByCount.ContainsKey(ingredient.IngredientType.Id))
+                int id = ingredient.IngredientType.Id;
+                if (!typeByCount.ContainsKey(id))
                 {
-                    typeByCount.Add(ingredient.IngredientType.Id, 1);
+                    typeByCount.Add(id, 1);
                 }
                 else
                 {
-                    typeByCount[ingredient.IngredientType.Id] += 1;
+                    typeByCount[id] += 1;
                 }
             }
             return typeByCount;

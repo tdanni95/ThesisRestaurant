@@ -5,7 +5,7 @@ Content-Type: application/json
 
 
 {
-  "name": "Tejfölös alap",
+  "name": "axa",
   "price": 150,
-  "ingredientTypeId": 8
+  "ingredientTypeId": 13
 }

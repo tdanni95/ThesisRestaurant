@@ -22,9 +22,15 @@ namespace ThesisRestaurant.Infrastructure.Persistence.Repositories
             return Result.Created;
         }
 
-        public async Task<CustomFood?> GetById(int id)
+        public async Task<CustomFood?> GetById(int id, int userId)
         {
-            return await _context.CustomFoods.FindAsync(id);
+            var res = 
+            await _context.Users.Where(u => u.Id == userId)
+                .Include(u => u.CustomFoods).ThenInclude(cf => cf.Ingredients).ThenInclude(cfi => cfi.IngredientType)
+                .Select(u => u.CustomFoods.Where(cf => cf.Id == id).FirstOrDefault())
+                .FirstOrDefaultAsync();
+
+            return res;
         }
 
         public async Task<List<CustomFood>> GetUserCustomFoods(int userId)
@@ -32,6 +38,8 @@ namespace ThesisRestaurant.Infrastructure.Persistence.Repositories
             var list = await _context.Users
                 .Where(u => u.Id == userId)
                 .Include(u => u.CustomFoods)
+                .ThenInclude(cf => cf.Ingredients)
+                .ThenInclude(cfi => cfi.IngredientType)
                 .Select(u => u.CustomFoods)
                 .FirstOrDefaultAsync();
             return list!;
@@ -39,10 +47,12 @@ namespace ThesisRestaurant.Infrastructure.Persistence.Repositories
 
         public async Task<ErrorOr<Updated>> UpdateCustomFood(CustomFood customFood, int userId)
         {
-            var dbCf = await GetById(customFood.Id);
+            var dbCf = await GetById(customFood.Id, userId);
             if (dbCf is null) return Errors.CustomFoods.NotFound;
-            //TODO owner or admin check
+
+
             dbCf.Update(customFood);
+
             await _context.SaveChangesAsync();
             return Result.Updated;
         }

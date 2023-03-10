@@ -46,7 +46,14 @@ namespace ThesisRestaurant.Domain.CustomFoods
         {
             this.Name = customFood.Name;
             this.Price = customFood.Price;
-            this.Ingredients = customFood.Ingredients;
+
+            Ingredients.Clear();
+
+            foreach (var ingredient in customFood.Ingredients)
+            {
+                Ingredients.Add(ingredient);
+            }
+
             this.FoodType = customFood.FoodType;
         }
 
