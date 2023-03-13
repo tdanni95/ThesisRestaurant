@@ -1,7 +1,10 @@
 ﻿using ErrorOr;
+using Google.Protobuf.WellKnownTypes;
 using Microsoft.EntityFrameworkCore;
 using ThesisRestaurant.Application.Common.Interfaces.Persistence;
+using ThesisRestaurant.Domain.Common.Errors;
 using ThesisRestaurant.Domain.Foods;
+using ThesisRestaurant.Domain.Foods.FoodPrices;
 
 namespace ThesisRestaurant.Infrastructure.Persistence.Repositories
 {
@@ -13,11 +16,35 @@ namespace ThesisRestaurant.Infrastructure.Persistence.Repositories
             _context = context;
         }
 
+        public async Task<ErrorOr<Food>> AddDiscount(FoodPrice price, int foodId)
+        {
+            if (price.From > price.To) return Errors.Foods.InvalidDiscountDates;
+            var dbFood = await GetFoodById(foodId);
+            if (dbFood is null) return Errors.Foods.NotFound;
+
+            if (price.Price > dbFood.BasePrice) return Errors.Foods.InvalidDiscountValue;
+
+            dbFood.AddDiscount(price);
+            await _context.SaveChangesAsync();
+
+            return dbFood;
+        }
+
         public async Task<ErrorOr<Created>> CreateFood(Food food)
         {
             _context.Foods.Add(food);
             await _context.SaveChangesAsync();
             return Result.Created;
+        }
+
+        public async Task<ErrorOr<Deleted>> Delete(int Id)
+        {
+            var dbFood = await GetFoodById(Id);
+            if (dbFood is null) return Errors.Foods.NotFound;
+
+            dbFood.Delete();
+            await _context.SaveChangesAsync();
+            return Result.Deleted;
         }
 
         public async Task<List<Food>> GetAllFoods()
@@ -41,6 +68,17 @@ namespace ThesisRestaurant.Infrastructure.Persistence.Repositories
                 .Include(f => f.Ingredients)
                 .ThenInclude(i => i.IngredientType)
                 .FirstOrDefaultAsync();
+        }
+
+        public async Task<ErrorOr<Updated>> Update(Food value)
+        {
+            var dbFood = await GetFoodById(value.Id);
+            if (dbFood is null) return Errors.Foods.NotFound;
+
+            dbFood.Update(value);
+            await _context.SaveChangesAsync();
+
+            return Result.Updated;
         }
     }
 }

@@ -12,6 +12,7 @@ namespace ThesisRestaurant.Api
             services.AddSingleton<ProblemDetailsFactory, ThesisRestaurantProblemDetailsFactory>();
             services.AddMappings();
             services.AddCors(configuration);
+
             return services;
         }
 

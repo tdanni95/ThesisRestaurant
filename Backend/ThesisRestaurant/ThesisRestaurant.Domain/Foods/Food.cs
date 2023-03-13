@@ -67,10 +67,15 @@ namespace ThesisRestaurant.Domain.Foods
             this.FoodPictures.Add(picture);
         }
 
+        public void Delete()
+        {
+            this.Visible = 0;
+        }
+
         public FoodPrice? GetCurrentPrice()
         {
             var now = DateTime.Now;
-            var price = this.FoodPrices.Where(fp => now >= fp.From && now <= fp.To).FirstOrDefault();
+            var price = this.FoodPrices.Where(fp => now.Date >= fp.From.Date && now.Date <= fp.To.Date).FirstOrDefault();
             return price;
         }
 

@@ -1,0 +1,4 @@
+@host=https://localhost:7068
+
+DELETE  {{host}}/food/2
+Content-Type: application/json

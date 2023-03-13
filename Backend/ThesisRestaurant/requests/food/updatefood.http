@@ -1,0 +1,13 @@
+@host=https://localhost:7068
+
+PUT {{host}}/food/1
+Content-Type: application/json
+
+{
+  "name": "Tejfölös csoda-moda",
+  "basePrice": 1800,
+  "foodTypeId": 5,
+  "ingredientIds": [
+    6
+  ]
+}

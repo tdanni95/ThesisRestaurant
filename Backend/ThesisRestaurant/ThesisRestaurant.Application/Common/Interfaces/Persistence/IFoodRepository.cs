@@ -1,5 +1,6 @@
 ﻿using ErrorOr;
 using ThesisRestaurant.Domain.Foods;
+using ThesisRestaurant.Domain.Foods.FoodPrices;
 
 namespace ThesisRestaurant.Application.Common.Interfaces.Persistence
 {
@@ -8,5 +9,9 @@ namespace ThesisRestaurant.Application.Common.Interfaces.Persistence
         Task<ErrorOr<Created>> CreateFood(Food food);
         Task<Food?> GetFoodById(int id);
         Task<List<Food>> GetAllFoods();
+        Task<ErrorOr<Updated>> Update(Food value);
+        Task<ErrorOr<Deleted>> Delete(int Id);
+
+        Task<ErrorOr<Food>> AddDiscount(FoodPrice price, int foodId);
     }
 }
