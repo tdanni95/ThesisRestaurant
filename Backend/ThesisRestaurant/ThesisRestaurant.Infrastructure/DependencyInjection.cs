@@ -30,6 +30,7 @@ namespace ThesisRestaurant.Infrastructure
             services.AddSingleton<IFoodIngredientValidator, FoodIngredientValidator>();
 
             services.AddScoped<ICustomFoodBuilder, CustomFoodBuilder>();
+            services.AddScoped<IFoodBuilder, FoodBuilder>();
             return services;
         }
 
@@ -45,6 +46,7 @@ namespace ThesisRestaurant.Infrastructure
             services.AddScoped<IFoodSizeRepository, FoodSizeRepository>();
             services.AddScoped<ICustomFoodRepository, CustomFoodRepository>();
             services.AddScoped<IOrderRepository, OrderRepository>();
+            services.AddScoped<IFoodRepository, FoodRepository>();
 
             return services;
         }
