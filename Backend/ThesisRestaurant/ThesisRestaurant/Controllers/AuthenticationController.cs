@@ -45,5 +45,20 @@ namespace ThesisRestaurant.Api.Controllers
                     errors => Problem(errors)
                 );
         }
+
+        /**
+         * You should check if the server answers you with an 401 or 403, 
+         * and if it does try to refresh the token calling the enpoint and try again, 
+         * if that does not work, you simulate a log out deleting the auth jwt 
+         * and redirecting the user to the login page.
+         */
+        [HttpPost("refreshtoken")]
+        public async Task<IActionResult> RefreshToken()
+        {
+            var refreshToken = Request.Cookies["refreshToken"];
+            //db-be megnézni melyik user-nek ez a tokenja
+            //megnézni lejár-e
+            return Ok();
+        }
     }
 }

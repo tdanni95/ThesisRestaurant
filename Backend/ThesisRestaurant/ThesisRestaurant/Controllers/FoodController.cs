@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Globalization;
+using ThesisRestaurant.Application.Common.Services;
 using ThesisRestaurant.Application.Foods.Commands.Create;
 using ThesisRestaurant.Application.Foods.Commands.Delete;
 using ThesisRestaurant.Application.Foods.Commands.Discount;
@@ -16,21 +17,26 @@ using ThesisRestaurant.Contracts.Food;
 namespace ThesisRestaurant.Api.Controllers
 {
     [Route("food")]
-    [AllowAnonymous]
+    [Authorize]
     public class FoodController : ApiController
     {
         private readonly IMapper _mapper;
         private readonly ISender _meaditor;
+        private readonly IUserService _userService;
 
-        public FoodController(IMapper mapper, ISender meaditor)
+        public FoodController(IMapper mapper, ISender meaditor, IUserService userService)
         {
             _mapper = mapper;
             _meaditor = meaditor;
+            _userService = userService;
         }
 
         [HttpGet]
         public async Task<IActionResult> GetAllFoods()
         {
+            var userName = _userService.GetMyName();
+            return Ok(userName);
+
             var query = new GetAllFoodQuery();
             var result = await _meaditor.Send(query);
             return result.Match(

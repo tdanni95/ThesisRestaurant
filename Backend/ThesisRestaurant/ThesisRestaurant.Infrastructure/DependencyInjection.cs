@@ -31,6 +31,7 @@ namespace ThesisRestaurant.Infrastructure
 
             services.AddScoped<ICustomFoodBuilder, CustomFoodBuilder>();
             services.AddScoped<IFoodBuilder, FoodBuilder>();
+            services.AddScoped<IUserService, UserService>();
             return services;
         }
 

@@ -26,11 +26,13 @@ namespace ThesisRestaurant.Infrastructure.Authentication
                             Encoding.UTF8.GetBytes(jwtSettings.Secret)),
                        SecurityAlgorithms.HmacSha256);
 
+            var role = UserRoles.Roles.GetValueOrDefault(user.Level);
             var claims = new[]
             {
-                new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
-                new Claim(JwtRegisteredClaimNames.GivenName, user.FirstName),
-                new Claim(JwtRegisteredClaimNames.FamilyName, user.LastName),
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                new Claim(ClaimTypes.GivenName, user.FirstName),
+                new Claim(ClaimTypes.Surname, user.LastName),
+                new Claim(ClaimTypes.Role, role ?? "AppUser"),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
             };
 

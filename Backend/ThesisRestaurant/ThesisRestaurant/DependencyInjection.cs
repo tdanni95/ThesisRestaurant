@@ -11,6 +11,7 @@ namespace ThesisRestaurant.Api
             services.AddControllers();
             services.AddSingleton<ProblemDetailsFactory, ThesisRestaurantProblemDetailsFactory>();
             services.AddMappings();
+            services.AddHttpContextAccessor();
             services.AddCors(configuration);
 
             return services;
