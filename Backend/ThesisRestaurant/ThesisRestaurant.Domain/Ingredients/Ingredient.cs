@@ -39,7 +39,6 @@ namespace ThesisRestaurant.Domain.Ingredients
 
         public IngredientType IngredientType { get; set; }
         public List<Food> Foods { get; set; } = new();
-
         public List<CustomFood> CustomFoods { get; set; } = new();
     }
 }

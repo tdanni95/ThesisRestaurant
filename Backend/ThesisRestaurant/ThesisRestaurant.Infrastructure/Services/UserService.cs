@@ -20,7 +20,8 @@ namespace ThesisRestaurant.Infrastructure.Services
             {
                 var givenName = _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.GivenName);
                 var surName = _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.Surname);
-                result = $"{surName} {givenName}";
+                var id = _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+                result = $"{surName} {givenName} id:{id}";
             }
 
             return result;
