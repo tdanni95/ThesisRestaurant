@@ -31,13 +31,14 @@ namespace ThesisRestaurant.Application.Authentication.Commands.Register
                 return Errors.User.DuplicateEmail;
             }
             string hashedPassword = passwordHandler.HashPassword(command.Password);
+            var refreshToken = jwtTokenGenerator.GenerateRefreshToken();
             var user = User.Create(
                     command.FirstName,
                     command.LastName,
                     command.Email,
                     hashedPassword,
                     command.PhoneNumber,
-                    string.Empty,
+                    refreshToken,
                     1,
                     command.Addresses.ConvertAll(address => UserAddress.Create(address.ZipCode, address.City, address.Street, address.HouseNumber))
                 );

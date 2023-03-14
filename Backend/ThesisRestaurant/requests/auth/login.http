@@ -4,6 +4,6 @@ POST {{host}}/authentication/login
 Content-Type: application/json
 
 {
-  "email": "str",
-  "password": "kekw12"
+  "email": "string",
+  "password": "string"
 }

@@ -1,5 +1,6 @@
 ﻿using ErrorOr;
 using ThesisRestaurant.Domain.Users;
+using ThesisRestaurant.Domain.Users.RefreshTokens;
 using ThesisRestaurant.Domain.Users.UserAddresses;
 
 namespace ThesisRestaurant.Application.Common.Interfaces.Persistence
@@ -8,7 +9,7 @@ namespace ThesisRestaurant.Application.Common.Interfaces.Persistence
     {
         Task<User?> GetUserByEmail(string email);
         Task<ErrorOr<Created>> Add(User user);
-        Task<ErrorOr<Updated>> Login(User user, string token);
+        Task<ErrorOr<Updated>> Login(User user, RefreshToken? token);
         Task<ErrorOr<Updated>> Update(User user);
         Task<ErrorOr<Updated>> ChangePassword(string newPassword, int id);
         Task<ErrorOr<Updated>> ChangeLevel(byte newLevel, int id);

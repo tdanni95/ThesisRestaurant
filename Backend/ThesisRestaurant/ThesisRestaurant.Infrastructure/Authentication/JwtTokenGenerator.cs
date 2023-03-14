@@ -6,6 +6,7 @@ using System.Text;
 using ThesisRestaurant.Application.Common.Interfaces.Authentication;
 using ThesisRestaurant.Application.Common.Services;
 using ThesisRestaurant.Domain.Users;
+using ThesisRestaurant.Domain.Users.RefreshTokens;
 
 namespace ThesisRestaurant.Infrastructure.Authentication
 {
@@ -45,5 +46,17 @@ namespace ThesisRestaurant.Infrastructure.Authentication
 
             return new JwtSecurityTokenHandler().WriteToken(securityToken);
         }
+
+        public RefreshToken GenerateRefreshToken()
+        {
+            var token = new RefreshToken
+            {
+                Token = Guid.NewGuid().ToString(),
+                Created = dateTimeProvider.UtcNow,
+                Expires = dateTimeProvider.UtcNow.AddDays(7)
+            };
+            return token;
+        }
+
     }
 }

@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using ThesisRestaurant.Application.Common.Interfaces.Persistence;
 using ThesisRestaurant.Domain.Common.Errors;
 using ThesisRestaurant.Domain.Users;
+using ThesisRestaurant.Domain.Users.RefreshTokens;
 using ThesisRestaurant.Domain.Users.UserAddresses;
 
 namespace ThesisRestaurant.Infrastructure.Persistence.Repositories
@@ -27,7 +28,7 @@ namespace ThesisRestaurant.Infrastructure.Persistence.Repositories
             return Result.Created;
         }
 
-        public async Task<ErrorOr<Updated>> Login(User user, string token)
+        public async Task<ErrorOr<Updated>> Login(User user, RefreshToken? token)
         {
             user.SetAuthToken(token);
             await _context.SaveChangesAsync();
@@ -80,7 +81,7 @@ namespace ThesisRestaurant.Infrastructure.Persistence.Repositories
             if (dbUser is null) return Errors.User.NotFound;
             dbUser!.SetPassword(newPassword);
             //force new login
-            dbUser!.SetAuthToken("");
+            dbUser!.SetAuthToken(null);
             await _context.SaveChangesAsync();
             return Result.Updated;
         }

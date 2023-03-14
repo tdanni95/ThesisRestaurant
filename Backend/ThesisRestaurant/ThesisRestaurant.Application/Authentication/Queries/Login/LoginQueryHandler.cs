@@ -37,11 +37,12 @@ namespace ThesisRestaurant.Application.Authentication.Queries.Login
                 return new[] { Errors.Authentication.InvalidCredentials };
             }
 
-            var token = _jwtTokenGenerator.GenerateToken(user);
+            var token = _jwtTokenGenerator.GenerateRefreshToken();
+            var jwt = _jwtTokenGenerator.GenerateToken(user);
             await _userRepository.Login(user, token);
 
             //create jwt and return
-            return new AuthenticationResult(user, token);
+            return new AuthenticationResult(user, jwt);
         }
     }
 }

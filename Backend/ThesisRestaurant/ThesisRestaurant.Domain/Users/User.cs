@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using ThesisRestaurant.Domain.CustomFoods;
 using ThesisRestaurant.Domain.Orders;
+using ThesisRestaurant.Domain.Users.RefreshTokens;
 using ThesisRestaurant.Domain.Users.UserAddresses;
 
 namespace ThesisRestaurant.Domain.Users
@@ -18,14 +19,14 @@ namespace ThesisRestaurant.Domain.Users
         public string Password { get; private set; }
         [MaxLength(255)]
         public string PhoneNumber { get; private set; }
-        public string? AuthToken { get; private set; }
+        public RefreshToken? RefreshToken { get; private set; }
         public byte Level { get; private set; }
         public List<UserAddress> UserAddresses { get; private set; } = new();
         public List<CustomFood> CustomFoods { get; private set; } = new();
 
         public List<Order> Orders { get; private set; } = new();
 
-        private User(int id, string firstName, string lastName, string email, string password, string phoneNumber, string? authToken, byte level)
+        private User(int id, string firstName, string lastName, string email, string password, string phoneNumber,  byte level)
         {
             Id = id;
             FirstName = firstName;
@@ -33,11 +34,10 @@ namespace ThesisRestaurant.Domain.Users
             Email = email;
             Password = password;
             PhoneNumber = phoneNumber;
-            AuthToken = authToken;
             Level = level;
         }
 
-        private User(int id, string firstName, string lastName, string email, string password, string phoneNumber, string? authToken, byte level, List<UserAddress> userAddresses)
+        private User(int id, string firstName, string lastName, string email, string password, string phoneNumber, RefreshToken? refreshToken, byte level, List<UserAddress> userAddresses)
         {
             Id = id;
             FirstName = firstName;
@@ -45,19 +45,19 @@ namespace ThesisRestaurant.Domain.Users
             Email = email;
             Password = password;
             PhoneNumber = phoneNumber;
-            AuthToken = authToken;
+            RefreshToken = refreshToken;
             Level = level;
             UserAddresses = userAddresses;
         }
 
-        public static User Create(string firstName, string lastName, string email, string password, string phoneNumber, string? authToken, byte level, List<UserAddress> userAddresses, int id = 0)
+        public static User Create(string firstName, string lastName, string email, string password, string phoneNumber, RefreshToken? refreshToken, byte level, List<UserAddress> userAddresses, int id = 0)
         {
-            return new(id, firstName, lastName, email, password, phoneNumber, authToken, level, userAddresses);
+            return new(id, firstName, lastName, email, password, phoneNumber, refreshToken, level, userAddresses);
         }
 
         public static User Create(string firstName, string lastName, string email, string phoneNumber, int id = 0)
         {
-            return new User(id, firstName, lastName, email, "", phoneNumber, "", 1);
+            return new User(id, firstName, lastName, email, phoneNumber, "", 1);
         }
 
         public void Update(User user)
@@ -67,7 +67,7 @@ namespace ThesisRestaurant.Domain.Users
             this.Email = user.Email;
             this.Password = user.Password;
             this.PhoneNumber = user.PhoneNumber;
-            this.AuthToken = user.AuthToken;
+            this.RefreshToken= user.RefreshToken;
             this.Level = user.Level;
             this.UserAddresses = user.UserAddresses;
         }
@@ -90,9 +90,9 @@ namespace ThesisRestaurant.Domain.Users
             this.Password = password;
         }
 
-        public void SetAuthToken(string token)
+        public void SetAuthToken(RefreshToken? token)
         {
-            this.AuthToken = token;
+            this.RefreshToken= token;
         }
     }
 }
