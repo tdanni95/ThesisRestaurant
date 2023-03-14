@@ -131,6 +131,9 @@ namespace ThesisRestaurant.Infrastructure.Persistence.Repositories
             return Result.Deleted;
         }
 
-
+        public async Task<User?> GetuserByRefreshToken(string refreshToken)
+        {
+            return await _context.Users.Where(u => u.RefreshToken != null && u.RefreshToken.Token == refreshToken).FirstOrDefaultAsync();
+        }
     }
 }

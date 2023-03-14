@@ -43,12 +43,12 @@ namespace ThesisRestaurant.Application.Authentication.Commands.Register
                     command.Addresses.ConvertAll(address => UserAddress.Create(address.ZipCode, address.City, address.Street, address.HouseNumber))
                 );
             var token = jwtTokenGenerator.GenerateToken(user);
-
+            
             await userRepository.Add(user);
 
             //Create user (generate unique id)
             //Create JWT token
-            return new AuthenticationResult(user, token);
+            return new AuthenticationResult(user, token, refreshToken);
         }
     }
 }

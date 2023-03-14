@@ -13,6 +13,8 @@ namespace ThesisRestaurant.Domain.Common.Errors
             public static Error NotFound => Error.NotFound(code: "User.NotFound", description: "User not found");
 
             public static Error AddressNotFound => Error.NotFound(code: "UserAddress.NotFound", description: "Address not found");
+
+            public static Error BadToken => Error.Validation(code: "User.InvdalitToken", description: "Token is invalud");
         }
     }
 }

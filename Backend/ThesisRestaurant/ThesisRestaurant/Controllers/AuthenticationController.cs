@@ -6,7 +6,9 @@ using Microsoft.AspNetCore.Mvc;
 using ThesisRestaurant.Application.Authentication.Commands.Register;
 using ThesisRestaurant.Application.Authentication.Common;
 using ThesisRestaurant.Application.Authentication.Queries.Login;
+using ThesisRestaurant.Application.Authentication.Queries.RefreshToken;
 using ThesisRestaurant.Contracts.Authentication;
+using ThesisRestaurant.Domain.Users.RefreshTokens;
 
 namespace ThesisRestaurant.Api.Controllers
 {
@@ -28,6 +30,10 @@ namespace ThesisRestaurant.Api.Controllers
         {
             var command = _mapper.Map<RegisterCommand>(request);
             ErrorOr<AuthenticationResult> authResult = await _meaditor.Send(command);
+            if (!authResult.IsError)
+            {
+                SetRefreshToken(authResult.Value.RefreshToken);
+            }
             return authResult.Match(
                     authResult => Ok(_mapper.Map<AuthenticationResponse>(authResult)),
                     errors => Problem(errors)
@@ -39,11 +45,24 @@ namespace ThesisRestaurant.Api.Controllers
         {
             var query = _mapper.Map<LoginQuery>(request);
             ErrorOr<AuthenticationResult> authResult = await _meaditor.Send(query);
-
+            if (!authResult.IsError)
+            {
+                SetRefreshToken(authResult.Value.RefreshToken);
+            }
             return authResult.Match(
                     authResult => Ok(_mapper.Map<AuthenticationResponse>(authResult)),
                     errors => Problem(errors)
                 );
+        }
+
+        private void SetRefreshToken(RefreshToken newRefreshToken)
+        {
+            var cookieOptions = new CookieOptions
+            {
+                HttpOnly = true,
+                Expires = newRefreshToken.Expires
+            };
+            Response.Cookies.Append("refreshToken", newRefreshToken.Token, cookieOptions);
         }
 
         /**
@@ -56,9 +75,16 @@ namespace ThesisRestaurant.Api.Controllers
         public async Task<IActionResult> RefreshToken()
         {
             var refreshToken = Request.Cookies["refreshToken"];
-            //db-be megnézni melyik user-nek ez a tokenja
-            //megnézni lejár-e
-            return Ok();
+            var query = new RefreshTokenQuery(refreshToken);
+            var result = await _meaditor.Send(query);
+            if (!result.IsError)
+            {
+                SetRefreshToken(result.Value.RefreshToken);
+            }
+            return result.Match(
+                authResult => Ok(_mapper.Map<AuthenticationResponse>(authResult)),
+                errors => Problem(errors)
+            );
         }
     }
 }
