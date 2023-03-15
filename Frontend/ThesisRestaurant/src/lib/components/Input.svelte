@@ -1,13 +1,16 @@
 <script lang="ts">
+
     export let parentWidth: string = "w-1/2";
     export let label: string;
     export let inputName: string;
     export let type: string = "text";
-    export let required: boolean = false;
-    export let value:string = ""
+    export let required: boolean = true;
+    export let value: string | number = "";
 
     export let error: string | undefined = undefined;
-    let actualName = inputName.replace("[]", "");
+    export let regex: RegExp | undefined = undefined;
+
+    let actualName = inputName.replace("[]", "")
 
     $: hasError = Boolean(error);
 </script>
@@ -29,8 +32,16 @@
             {required}
             placeholder={label}
             {value}
-            on:keyup={() => {
+            on:keyup={(e) => {
+                value = e.currentTarget.value;
                 hasError = false;
+            }}
+            on:input={(e) => {
+                if (!regex) return;
+                e.currentTarget.value = e.currentTarget.value.replace(
+                    regex,
+                    ""
+                );
             }}
             on:input
         />

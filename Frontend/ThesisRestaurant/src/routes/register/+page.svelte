@@ -7,16 +7,18 @@
     import MdPhoneIphone from "svelte-icons/md/MdPhoneIphone.svelte";
     import MdLockOutline from "svelte-icons/md/MdLockOutline.svelte";
 
-    import { fade, scale } from "svelte/transition";
-
     import Input from "$lib/components/Input.svelte";
     import type {
         AddressError,
         RegisterErrors,
     } from "$lib/types/registerErrors";
     import TabHeadItem from "$lib/components/TabHeadItem.svelte";
+    import Button from "$lib/components/Button.svelte";
+    import type { ApiErrorResponse } from "$lib/types/apiErrorResponse";
+    import FormAd from "$lib/components/FormAd.svelte";
 
     let addressFormCount: number = 1;
+    let errorText = "";
 
     $: isRemoveBtnDisabled = addressFormCount === 1;
 
@@ -48,6 +50,34 @@
     };
 
     let AddressErrors: Array<AddressError> = [];
+    let apiResponsErrors: Array<ApiErrorResponse> = [];
+
+    const handleApiResponseErrors = () => {
+        for (const err in apiResponsErrors) {
+            if (err.includes("[")) {
+                // Addresses[0]
+                let newErrKey = err.split("[")[1];
+                let indexAndKey = newErrKey.split("]");
+                let index = +indexAndKey[0];
+                let addressErrorKey = indexAndKey[1].replace(".", "");
+                if (!AddressErrors[index]) {
+                    AddressErrors[index] = {
+                        ZipCode: "",
+                        City: "",
+                        Street: "",
+                        HouseNumber: "",
+                    };
+                }
+                console.log(apiResponsErrors[err]);
+
+                AddressErrors[index][addressErrorKey] = apiResponsErrors[
+                    err
+                ][0] as string;
+            } else {
+                errors[err] = apiResponsErrors[err][0] as string;
+            }
+        }
+    };
 </script>
 
 <form
@@ -64,33 +94,13 @@
                 PhoneNumber: "",
             };
             isLoading = false;
-
-            if (result.errors) {
-                for (const err in result.errors) {
-                    if (err.includes("[")) {
-                        // Addresses[0]
-                        let newErrKey = err.split("[")[1];
-                        let indexAndKey = newErrKey.split("]");
-                        let index = +indexAndKey[0];
-                        let addressErrorKey = indexAndKey[1].replace(".", "");
-                        if (!AddressErrors[index]) {
-                            AddressErrors[index] = {
-                                ZipCode: "",
-                                City: "",
-                                Street: "",
-                                HouseNumber: "",
-                            };
-                        }
-                        AddressErrors[index][addressErrorKey] =
-                            result.errors[err];
-                    } else {
-                        errors[err] = result.errors[err];
-                    }
-                }
-            }else if(result.status == 409){
-                errors.Email = result.title
-            }
-            else if (result.status == 200) {
+            errorText = result.title ? result.title: "";
+            apiResponsErrors = result.errors;
+            handleApiResponseErrors();
+            if (apiResponsErrors) {
+            } else if (result.status == 409) {
+                errors.Email = result.title;
+            } else if (result.status == 200) {
                 applyAction(result);
             }
         };
@@ -99,15 +109,25 @@
     action="api/register"
 >
     <div
-        class="min-w-screen min-h-screen bg-gray-900 flex items-center justify-center px-5 py-5"
+        class="min-w-screen min-h-screen  flex items-center justify-center px-5 py-5"
     >
-        <div class="bg-gray-100 text-gray-500 rounded-3xl shadow-xl w-full">
+        <div class="bg-gray-200 text-gray-500 rounded-3xl shadow-xl w-10/12">
             <div class="md:flex w-full">
+                <FormAd />
                 <div class="w-full md:w-6/12 py-10 px-5 md:px-10">
                     <div class="text-center  h-4/12">
                         <h1 class="font-bold text-3xl text-gray-900">
-                            REGISTER
+                            Register
                         </h1>
+                        <h1 class="font-bold text-4xl text-red-600">
+                            {errorText}
+                        </h1>
+                        <p>
+                            Already registered? <a
+                                class="underline "
+                                href="/login">Login</a
+                            >
+                        </p>
                         <p>Enter your information to register</p>
                     </div>
                     <div class="h-5/6">
@@ -165,30 +185,16 @@
                                 ><MdLockOutline slot="icon" /></Input
                             >
                         </div>
-                    </div>
-                    <div class="flex -mx-3 h-1/6">
-                        <div class="w-full px-3 mb-5">
-                            <button
-                                disabled={isLoading}
-                                class="block w-full max-w-xs mx-auto bg-indigo-500 hover:bg-indigo-700 focus:bg-indigo-700 text-white rounded-lg px-3 py-3 font-semibold"
-                                >REGISTER NOW</button
-                            >
+                        <div class="text-center  h-4/12">
+                            <h1 class="font-bold text-3xl text-gray-900">
+                                ADDRESSES
+                            </h1>
+                            <p>
+                                Enter address details, currently: {addressFormCount}
+                            </p>
                         </div>
-                    </div>
-                </div>
-                <div class="w-full md:w-6/12 py-10 px-5 md:px-10">
-                    <div class="text-center  h-4/12">
-                        <h1 class="font-bold text-3xl text-gray-900">
-                            ADDRESSES
-                        </h1>
-                        <p>
-                            Enter address details, currently: {addressFormCount}
-                        </p>
-                    </div>
-                    <div class="h-5/6 overflow-auto w-full">
-                        <div class='mb-4 text-sm font-medium text-center text-gray-500 border-b border-gray-200 dark:text-gray-400 dark:border-gray-700'>
-                            <ul class="flex flex-wrap -mb-px">
-                                {#each list as n (n)}
+                        <ul class="flex flex-wrap -mb-px">
+                            {#each list as n (n)}
                                 <TabHeadItem
                                     id={n}
                                     activeTabValue={currentlyShowed}
@@ -196,38 +202,45 @@
                                         currentlyShowed = n;
                                     }}
                                     tabStyle="underline"
-                                    >Address {n}</TabHeadItem>
-                                    {/each}
-                                </ul>
-                            </div>
+                                    >Address {n}</TabHeadItem
+                                >
+                            {/each}
+                        </ul>
                         {#each list as n (n)}
-                            <div 
+                            <div
                                 style="display: {currentlyShowed === n
                                     ? ''
                                     : 'none'}"
                             >
                                 <AddressForm
-                                    idx={n}
                                     errors={AddressErrors[n - 1]}
                                 />
                             </div>
                         {/each}
                     </div>
-
-                    <div class="flex -mx-3 h-1/6">
+                    <div class="flex mt-10">
                         <div class="w-full px-3 mb-5 max">
-                            <button
-                                on:click|preventDefault={addAddressForm}
-                                class="block w-full max-w-xs mx-auto bg-green-500 hover:bg-green-700 text-white rounded-lg px-3 py-3 font-semibold"
-                                >Add new address</button
+                            <Button
+                                on:click={(e) => {
+                                    e.preventDefault();
+                                    addAddressForm();
+                                }}
+                                btnClass="btn-success">Add new address</Button
                             >
                         </div>
                         <div class="w-full px-3 mb-5">
-                            <button
-                                on:click|preventDefault={removeAddressForm}
+                            <Button
                                 disabled={isRemoveBtnDisabled}
-                                class="block w-full max-w-xs mx-auto bg-red-500 hover:bg-red-700 text-white rounded-lg px-3 py-3 font-semibold disabled:cursor-not-allowed disabled:bg-red-400"
-                                >Remove last address</button
+                                on:click={(e) => {
+                                    e.preventDefault();
+                                    removeAddressForm();
+                                }}
+                                btnClass="btn-error">Remove last address</Button
+                            >
+                        </div>
+                        <div class="w-full px-3 mb-5">
+                            <Button disabled={isLoading} btnClass="btn-primary"
+                                >Register</Button
                             >
                         </div>
                     </div>
@@ -236,9 +249,3 @@
         </div>
     </div>
 </form>
-
-<style>
-    button {
-        transition: background-color 0.4s ease;
-    }
-</style>

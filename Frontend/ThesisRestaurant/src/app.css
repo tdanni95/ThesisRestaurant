@@ -1,3 +1,21 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.btn-success{
+    @apply bg-green-500 hover:bg-green-700 disabled:bg-green-400 w-full max-w-xs mx-auto  text-white rounded-lg px-3 py-3 font-semibold disabled:cursor-not-allowed
+}
+
+.btn-error{
+    @apply bg-red-500 hover:bg-red-700 disabled:bg-red-400 w-full max-w-xs mx-auto  text-white rounded-lg px-3 py-3 font-semibold disabled:cursor-not-allowed
+}
+.btn-primary{
+    @apply bg-indigo-500 hover:bg-indigo-700 disabled:bg-indigo-400 w-full max-w-xs mx-auto  text-white rounded-lg px-3 py-3 font-semibold disabled:cursor-not-allowed
+}
+.btn-warning{
+    @apply bg-yellow-500 hover:bg-yellow-700 disabled:bg-yellow-400 w-full max-w-xs mx-auto  text-white rounded-lg px-3 py-3 font-semibold disabled:cursor-not-allowed
+}
+
+body{
+    background: url("https://s3.eu-central-1.amazonaws.com/onemin-prod-frankfurt/images/images/000/001/215/original/pizzakaravan_web_bg.png?1559834414");
+}

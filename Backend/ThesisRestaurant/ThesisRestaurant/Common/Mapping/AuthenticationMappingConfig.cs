@@ -13,6 +13,7 @@ namespace ThesisRestaurant.Api.Common.Mapping
             config.NewConfig<RegisterRequest, RegisterCommand>();
             config.NewConfig<LoginRequest, LoginQuery>();
             config.NewConfig<AuthenticationResult, AuthenticationResponse>()
+                .Map(dest => dest.RefreshToken, src => src.RefreshToken.Token)
                 .Map(dest => dest, src => src.User);
         }
     }

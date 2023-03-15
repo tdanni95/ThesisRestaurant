@@ -14,6 +14,12 @@ namespace ThesisRestaurant.Api
             services.AddHttpContextAccessor();
             services.AddCors(configuration);
 
+            services.Configure<CookiePolicyOptions>(options =>
+            {
+                options.CheckConsentNeeded = context => false;
+                options.MinimumSameSitePolicy = SameSiteMode.None;
+            });
+
             return services;
         }
 
@@ -26,10 +32,13 @@ namespace ThesisRestaurant.Api
                 options.AddPolicy(name: policyName!,
                     builder =>
                     {
-                        builder.WithOrigins("http://localhost:5173/")
-                        .AllowAnyOrigin()
+                        builder
+                        //.WithOrigins("http://localhost:5173/")
+                        //.AllowAnyOrigin()
                         .AllowAnyMethod()
-                        .AllowAnyHeader();
+                        .AllowCredentials()
+                        .AllowAnyHeader()
+                        .SetIsOriginAllowed(origin => true);
                     });
             });
             return services;

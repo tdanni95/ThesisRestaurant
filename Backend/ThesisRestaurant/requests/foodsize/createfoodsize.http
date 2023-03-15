@@ -6,5 +6,5 @@ Content-Type: application/json
 {
     "name": "Családi",
     "multiplier": 1.75,
-    "foodTypeId": 4
+    "foodTypeId": 5
 }

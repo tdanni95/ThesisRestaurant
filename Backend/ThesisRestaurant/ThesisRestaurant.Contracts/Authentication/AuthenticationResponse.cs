@@ -12,6 +12,7 @@ namespace ThesisRestaurant.Contracts.Authentication
         string LastName,
         string Email,
         string PhoneNumber,
-        string Token
+        string Token,
+        string RefreshToken
      );
 }

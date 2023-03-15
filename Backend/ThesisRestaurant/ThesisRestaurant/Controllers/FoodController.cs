@@ -34,8 +34,8 @@ namespace ThesisRestaurant.Api.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAllFoods()
         {
-            var userName = _userService.GetMyName();
-            return Ok(userName);
+            //var userName = _userService.GetMyName();
+            //return Ok(userName);
 
             var query = new GetAllFoodQuery();
             var result = await _meaditor.Send(query);

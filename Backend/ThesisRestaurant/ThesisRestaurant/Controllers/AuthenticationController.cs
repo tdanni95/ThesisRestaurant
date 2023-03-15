@@ -59,8 +59,10 @@ namespace ThesisRestaurant.Api.Controllers
         {
             var cookieOptions = new CookieOptions
             {
+                Path = "/",
                 HttpOnly = true,
-                Expires = newRefreshToken.Expires
+                Expires = newRefreshToken.Expires,
+                IsEssential = true
             };
             Response.Cookies.Append("refreshToken", newRefreshToken.Token, cookieOptions);
         }
@@ -75,6 +77,7 @@ namespace ThesisRestaurant.Api.Controllers
         public async Task<IActionResult> RefreshToken()
         {
             var refreshToken = Request.Cookies["refreshToken"];
+            Console.WriteLine(refreshToken);
             var query = new RefreshTokenQuery(refreshToken);
             var result = await _meaditor.Send(query);
             if (!result.IsError)

@@ -2,9 +2,10 @@
 
 PUT {{host}}/food/discount/1
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI4IiwiZ2l2ZW5fbmFtZSI6IkRhbmkiLCJmYW1pbHlfbmFtZSI6IlZhZ3lvayIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IkFwcFVzZXIiLCJqdGkiOiIyODE0ZTczYi1iOTk5LTRmODYtYmY3MC0yNjcxNDBiODEzZWYiLCJleHAiOjE2Nzg4MDk4NDcsImlzcyI6IlRoZXNpc1Jlc3RhdXJhbnQiLCJhdWQiOiJUaGVzaXNSZXN0YXVyYW50In0.JgdtLfkhiUOjpT60AVx-6Y6Ro3cZGF_2q5P7oP0egdk
 
 {
     "price": 1500,
     "from": "2023-03-13",
-    "to": "2023-03-14"
+    "to": "2023-03-30"
 }

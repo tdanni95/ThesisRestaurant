@@ -1,5 +1,5 @@
 export interface RegisterErrors {
-    [key: string]: string | number;
+    [key: string | number]: string | number;
     Password: string;
     Email: string;
     FirstName: string;
@@ -8,7 +8,7 @@ export interface RegisterErrors {
 }
 
 export interface AddressError{
-    [key: string]: string | number;
+    [key: string | number]: string | number;
     ZipCode: string;
     City: string;
     Street: string;
