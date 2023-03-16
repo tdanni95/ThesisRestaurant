@@ -9,6 +9,8 @@
     import Input from "$lib/components/Input.svelte";
     import type { ApiErrorResponse } from "$lib/types/apiErrorResponse";
     import Button from "$lib/components/Button.svelte";
+    import { redirect } from "@sveltejs/kit";
+    import { invalidateAll } from "$app/navigation";
 
     let errorText: string = "";
     let isLoading = false;
@@ -22,10 +24,10 @@
         return ({ result }) => {
             errorText = "";
             isLoading = false;
-
-            console.log(result, result.id);
             if (result.id) {
                 applyAction(result);
+                invalidateAll()
+                // redirect(302, '/')
             } else {
                 errorText = result.title;
                 for (const err in result.errors) {
@@ -57,7 +59,7 @@
                                 href="/register">Register</a
                             >
                         </p>
-                        <p>Enter your information to register</p>
+                        <p>Enter email and password to login</p>
                     </div>
                     <div class="flex -mx-3">
                         <Input

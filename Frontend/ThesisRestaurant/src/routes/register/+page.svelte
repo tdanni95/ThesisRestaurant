@@ -16,6 +16,7 @@
     import Button from "$lib/components/Button.svelte";
     import type { ApiErrorResponse } from "$lib/types/apiErrorResponse";
     import FormAd from "$lib/components/FormAd.svelte";
+    import { invalidateAll } from "$app/navigation";
 
     let addressFormCount: number = 1;
     let errorText = "";
@@ -68,7 +69,6 @@
                         HouseNumber: "",
                     };
                 }
-                console.log(apiResponsErrors[err]);
 
                 AddressErrors[index][addressErrorKey] = apiResponsErrors[
                     err
@@ -94,15 +94,21 @@
                 PhoneNumber: "",
             };
             isLoading = false;
-            errorText = result.title ? result.title: "";
+            // @ts-ignore
+            errorText = result.title ? result.title : "";
+            // @ts-ignore
             apiResponsErrors = result.errors;
             handleApiResponseErrors();
-            if (apiResponsErrors) {
-            } else if (result.status == 409) {
+            console.log(result);
+            if (result.status == 409) {
+                // @ts-ignore
                 errors.Email = result.title;
-            } else if (result.status == 200) {
+                // @ts-ignore
+            } else if (result.id) {
                 applyAction(result);
+                invalidateAll();
             }
+            console.log(result.status);
         };
     }}
     method="POST"
@@ -212,9 +218,7 @@
                                     ? ''
                                     : 'none'}"
                             >
-                                <AddressForm
-                                    errors={AddressErrors[n - 1]}
-                                />
+                                <AddressForm errors={AddressErrors[n - 1]} />
                             </div>
                         {/each}
                     </div>

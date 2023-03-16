@@ -24,13 +24,13 @@ namespace ThesisRestaurant.Application.Authentication.Queries.RefreshToken
             var user = await _userRepository.GetuserByRefreshToken(request.refreshToken!);
             if(user is null)
             {
-                return Errors.User.NotFound;
+                return Errors.Users.NotFound;
             }
             var now = DateTime.UtcNow;
             //check if token date is valid
             if(user.RefreshToken!.Expires < now)
             {
-                return Errors.User.BadToken;
+                return Errors.Users.BadToken;
             }
             //generate new refresh token
             var refreshToken = _jwtTokenGenerator.GenerateRefreshToken();

@@ -16,7 +16,7 @@ namespace ThesisRestaurant.Infrastructure.Persistence.Repositories
         public async Task<ErrorOr<Created>> AddCustomFood(CustomFood customFood, int userId)
         {
             var user = await _context.Users.FindAsync(userId);
-            if (user is null) return Errors.User.NotFound;
+            if (user is null) return Errors.Users.NotFound;
             user.CustomFoods.Add(customFood);
             await _context.SaveChangesAsync();
             return Result.Created;

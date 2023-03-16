@@ -43,7 +43,7 @@
         left: 0px;
         width: 100%;
         height: 100%;
-        opacity: 0.3;
+        opacity: 0.4;
     }
     .advertGrid {
         width: 100%;

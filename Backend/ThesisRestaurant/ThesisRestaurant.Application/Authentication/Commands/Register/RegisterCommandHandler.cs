@@ -28,7 +28,7 @@ namespace ThesisRestaurant.Application.Authentication.Commands.Register
             var isUser = await userRepository.GetUserByEmail(command.Email);
             if (isUser is not null)
             {
-                return Errors.User.DuplicateEmail;
+                return Errors.Users.DuplicateEmail;
             }
             string hashedPassword = passwordHandler.HashPassword(command.Password);
             var refreshToken = jwtTokenGenerator.GenerateRefreshToken();

@@ -9,13 +9,14 @@ using ThesisRestaurant.Application.Addresses.Commands.Update;
 using ThesisRestaurant.Application.Users.Commands.ChangeUserPassword;
 using ThesisRestaurant.Application.Users.Commands.Update;
 using ThesisRestaurant.Application.Users.Commands.UpdateUserLevel;
+using ThesisRestaurant.Application.Users.Queries.GetUserById;
 using ThesisRestaurant.Contracts.Authentication;
 using ThesisRestaurant.Contracts.User;
 
 namespace ThesisRestaurant.Api.Controllers
 {
     [Route("user")]
-    [AllowAnonymous]
+    [Authorize]
     public class UserController : ApiController
     {
         /**
@@ -28,6 +29,18 @@ namespace ThesisRestaurant.Api.Controllers
         {
             _mediator = mediator;
             _mapper = mapper;
+        }
+
+        [HttpGet("{id:int}")]
+        public async Task<IActionResult> GetUserData(int id)
+        {
+            var query = new GetUserByIdQuery(id);
+            var result = await _mediator.Send(query);
+
+            return result.Match(
+                user => Ok(_mapper.Map<UserResponse>(user)),
+                errors => Problem(errors)
+                );
         }
 
         [HttpPost("address/{userId:int}")]

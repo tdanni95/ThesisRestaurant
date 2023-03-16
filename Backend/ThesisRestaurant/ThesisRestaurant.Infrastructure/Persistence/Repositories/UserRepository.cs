@@ -21,7 +21,7 @@ namespace ThesisRestaurant.Infrastructure.Persistence.Repositories
             var isEmailTaken = await GetUserByEmail(user.Email);
             if (isEmailTaken is not null)
             {
-                return Errors.User.DuplicateEmail;
+                return Errors.Users.DuplicateEmail;
             }
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
@@ -53,10 +53,10 @@ namespace ThesisRestaurant.Infrastructure.Persistence.Repositories
         public async Task<ErrorOr<Updated>> Update(User user)
         {
             var dbUser = await GetUserById(user.Id);
-            if (dbUser is null) return Errors.User.NotFound;
+            if (dbUser is null) return Errors.Users.NotFound;
 
             var isEmailTaken = await GetUserByEmail(user.Email, user.Id);
-            if (isEmailTaken is not null) return Errors.User.DuplicateEmail;
+            if (isEmailTaken is not null) return Errors.Users.DuplicateEmail;
 
             dbUser!.UpdateBaseFields(user.FirstName, user.LastName, user.Email, user.PhoneNumber);
 
@@ -69,7 +69,7 @@ namespace ThesisRestaurant.Infrastructure.Persistence.Repositories
         public async Task<ErrorOr<Updated>> ChangeLevel(byte newLevel, int id)
         {
             var dbUser = await GetUserById(id);
-            if (dbUser is null) return Errors.User.NotFound;
+            if (dbUser is null) return Errors.Users.NotFound;
             dbUser!.SetLevel(newLevel);
             await _context.SaveChangesAsync();
             return Result.Updated;
@@ -78,7 +78,7 @@ namespace ThesisRestaurant.Infrastructure.Persistence.Repositories
         public async Task<ErrorOr<Updated>> ChangePassword(string newPassword, int id)
         {
             var dbUser = await GetUserById(id);
-            if (dbUser is null) return Errors.User.NotFound;
+            if (dbUser is null) return Errors.Users.NotFound;
             dbUser!.SetPassword(newPassword);
             //force new login
             dbUser!.SetAuthToken(null);
@@ -89,7 +89,7 @@ namespace ThesisRestaurant.Infrastructure.Persistence.Repositories
         public async Task<ErrorOr<Deleted>> Delete(int id)
         {
             var dbUser = await GetUserById(id);
-            if (dbUser is not null) return Errors.User.NotFound;
+            if (dbUser is not null) return Errors.Users.NotFound;
             _context.Users.Remove(dbUser!);
             await _context.SaveChangesAsync();
             return Result.Deleted;
@@ -98,7 +98,7 @@ namespace ThesisRestaurant.Infrastructure.Persistence.Repositories
         public async Task<ErrorOr<Created>> AddAddress(UserAddress address, int userId)
         {
             var dbUser = await GetUserById(userId);
-            if (dbUser is null) return Errors.User.NotFound;
+            if (dbUser is null) return Errors.Users.NotFound;
             dbUser!.UserAddresses.Add(address);
             await _context.SaveChangesAsync();
             return Result.Created;
@@ -107,11 +107,11 @@ namespace ThesisRestaurant.Infrastructure.Persistence.Repositories
         public async Task<ErrorOr<Updated>> UpdateAddress(UserAddress address, int userId)
         {
             var dbUser = await GetUserById(userId);
-            if (dbUser is null) return Errors.User.NotFound;
+            if (dbUser is null) return Errors.Users.NotFound;
             var dbAddress = dbUser!.UserAddresses.Where(a => a.Id == address.Id).FirstOrDefault();
             if (dbAddress is null)
             {
-                return Errors.User.AddressNotFound;
+                return Errors.Users.AddressNotFound;
             }
             dbAddress.Update(address);
             await _context.SaveChangesAsync();
@@ -120,11 +120,11 @@ namespace ThesisRestaurant.Infrastructure.Persistence.Repositories
         public async Task<ErrorOr<Deleted>> DeleteAddress(int addressId, int userId)
         {
             var dbUser = await GetUserById(userId);
-            if (dbUser is null) return Errors.User.NotFound;
+            if (dbUser is null) return Errors.Users.NotFound;
             var dbAddress = dbUser!.UserAddresses.Where(a => a.Id == addressId).FirstOrDefault();
             if (dbAddress is null)
             {
-                return Errors.User.AddressNotFound;
+                return Errors.Users.AddressNotFound;
             }
             _context.UserAddresses.Remove(dbAddress);
             await _context.SaveChangesAsync();

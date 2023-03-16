@@ -23,7 +23,6 @@
     <Folder Include="Common\Interfaces\Food\" />
     <Folder Include="Users\Commands\Delete\" />
     <Folder Include="Users\Common\" />
-    <Folder Include="Users\Queries\" />
   </ItemGroup>
 
 </Project>
