@@ -67,17 +67,12 @@ namespace ThesisRestaurant.Api.Controllers
             Response.Cookies.Append("refreshToken", newRefreshToken.Token, cookieOptions);
         }
 
-        /**
-         * You should check if the server answers you with an 401 or 403, 
-         * and if it does try to refresh the token calling the enpoint and try again, 
-         * if that does not work, you simulate a log out deleting the auth jwt 
-         * and redirecting the user to the login page.
-         */
         [HttpPost("refreshtoken")]
-        public async Task<IActionResult> RefreshToken()
+        public async Task<IActionResult> RefreshToken(TokenRefreshRequest request)
         {
-            var refreshToken = Request.Cookies["refreshToken"];
-            Console.WriteLine(refreshToken);
+            //var refreshToken = Request.Cookies["refreshToken"];
+            var refreshToken = request.Token;
+            Console.WriteLine("TOKEN: ", refreshToken);
             var query = new RefreshTokenQuery(refreshToken);
             var result = await _meaditor.Send(query);
             if (!result.IsError)

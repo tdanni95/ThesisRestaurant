@@ -33,7 +33,7 @@ namespace ThesisRestaurant.Api
                     builder =>
                     {
                         builder
-                        //.WithOrigins("http://localhost:5173/")
+                        .WithOrigins("http://localhost:5173/")
                         //.AllowAnyOrigin()
                         .AllowAnyMethod()
                         .AllowCredentials()

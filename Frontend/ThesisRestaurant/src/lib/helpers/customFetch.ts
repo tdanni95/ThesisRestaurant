@@ -14,6 +14,7 @@ export async function customFetch(url: string, cookies: Cookies, options: Custom
         };
     }
 
+    
     const response = await fetch(url, options)
     
     if (response.status == 401) {
@@ -21,6 +22,7 @@ export async function customFetch(url: string, cookies: Cookies, options: Custom
             throw redirect(307, '/login')
         }
         const res = await RefreshToken(refreshToken, cookies)
+        console.log("ITT", res);
         if (res.id) {
             return await customFetch(url, cookies, options)
         } else {
