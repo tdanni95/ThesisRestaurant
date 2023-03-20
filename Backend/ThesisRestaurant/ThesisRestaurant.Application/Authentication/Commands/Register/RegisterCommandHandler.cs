@@ -42,9 +42,9 @@ namespace ThesisRestaurant.Application.Authentication.Commands.Register
                     1,
                     command.Addresses.ConvertAll(address => UserAddress.Create(address.ZipCode, address.City, address.Street, address.HouseNumber))
                 );
-            var token = jwtTokenGenerator.GenerateToken(user);
             
             await userRepository.Add(user);
+            var token = jwtTokenGenerator.GenerateToken(user);
 
             //Create user (generate unique id)
             //Create JWT token

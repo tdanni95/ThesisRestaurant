@@ -42,6 +42,8 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+    //already ran
+    //app.Seed();
 }
 
 app.UseCors(builder.Configuration.GetValue<string>("corsname")!);

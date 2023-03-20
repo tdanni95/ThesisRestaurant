@@ -16,7 +16,6 @@ using ThesisRestaurant.Contracts.User;
 namespace ThesisRestaurant.Api.Controllers
 {
     [Route("user")]
-    [Authorize]
     public class UserController : ApiController
     {
         /**
@@ -77,8 +76,7 @@ namespace ThesisRestaurant.Api.Controllers
                     errors => Problem(errors)
                 );
         }
-
-        [HttpPut]
+    [HttpPut]
         public async Task<IActionResult> UpdateUser(UpdateUser request)
         {
             var command = _mapper.Map<UpdateUserCommand>(request);

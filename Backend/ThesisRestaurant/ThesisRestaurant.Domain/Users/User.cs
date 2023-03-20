@@ -57,7 +57,7 @@ namespace ThesisRestaurant.Domain.Users
 
         public static User Create(string firstName, string lastName, string email, string phoneNumber, int id = 0)
         {
-            return new User(id, firstName, lastName, email, phoneNumber, "", 1);
+            return new User(id, firstName, lastName, email, "", phoneNumber, 1);
         }
 
         public void Update(User user)

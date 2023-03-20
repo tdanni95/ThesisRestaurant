@@ -72,7 +72,6 @@ namespace ThesisRestaurant.Api.Controllers
         {
             //var refreshToken = Request.Cookies["refreshToken"];
             var refreshToken = request.Token;
-            Console.WriteLine("TOKEN: ", refreshToken);
             var query = new RefreshTokenQuery(refreshToken);
             var result = await _meaditor.Send(query);
             if (!result.IsError)
