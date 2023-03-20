@@ -23,7 +23,10 @@
 	},
 	"type": "module",
 	"dependencies": {
+		"node-sass": "^8.0.0",
+		"sass": "^1.59.3",
 		"svelte-carousel": "^1.0.23",
-		"svelte-icons": "^2.1.0"
+		"svelte-icons": "^2.1.0",
+		"sweetalert2": "^11.7.3"
 	}
 }

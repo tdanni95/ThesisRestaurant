@@ -99,7 +99,6 @@
             // @ts-ignore
             apiResponsErrors = result.errors;
             handleApiResponseErrors();
-            console.log(result);
             if (result.status == 409) {
                 // @ts-ignore
                 errors.Email = result.title;

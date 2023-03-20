@@ -2,7 +2,7 @@
 {
     public record UserResponse
     (
-        int Id, string FirstName, string LastName, string PhoneNumber, string Email, List<AddressResponse> Addresses
+        int Id, string FirstName, string LastName, string PhoneNumber, string Email, byte Level, List<AddressResponse> Addresses
     );
 
    public record AddressResponse(

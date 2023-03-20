@@ -11,6 +11,7 @@ export function UserDataFromJwt(accesToken: string): UserData {
                 break;
             }
         }
+        
         user.firstName = tokenData.family_name;
         user.lastName = tokenData.given_name;
         user.id = tokenData.sub;

@@ -21,7 +21,6 @@ export const handle: Handle = async({event, resolve}) => {
 export const handleHooks = sequence(handle)
 
 export const handleFetch: HandleFetch = async({request, fetch}) => {
-    console.log("REQUEST", request);
     return fetch(request)
 }
 

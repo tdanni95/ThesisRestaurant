@@ -2,19 +2,14 @@
     import FormAd from "$lib/components/FormAd.svelte";
     import { applyAction, enhance } from "$app/forms";
 
-    import FaRegUser from "svelte-icons/fa/FaRegUser.svelte";
     import MdMailOutline from "svelte-icons/md/MdMailOutline.svelte";
-    import MdPhoneIphone from "svelte-icons/md/MdPhoneIphone.svelte";
     import MdLockOutline from "svelte-icons/md/MdLockOutline.svelte";
     import Input from "$lib/components/Input.svelte";
-    import type { ApiErrorResponse } from "$lib/types/apiErrorResponse";
     import Button from "$lib/components/Button.svelte";
-    import { redirect } from "@sveltejs/kit";
     import { invalidateAll } from "$app/navigation";
 
     let errorText: string = "";
     let isLoading = false;
-
 </script>
 
 <form
@@ -24,14 +19,18 @@
         return ({ result }) => {
             errorText = "";
             isLoading = false;
+            // @ts-ignore
             if (result.id) {
                 applyAction(result);
-                invalidateAll()
+                invalidateAll();
                 // redirect(302, '/')
             } else {
+                // @ts-ignore
                 errorText = result.title;
+                // @ts-ignore
                 for (const err in result.errors) {
                     if (err === "Auth.InvalidCredentials") {
+                        // @ts-ignore
                         errorText += ` ${result.errors[err]}`;
                     }
                 }

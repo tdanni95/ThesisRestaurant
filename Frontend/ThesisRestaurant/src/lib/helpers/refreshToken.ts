@@ -28,6 +28,8 @@ export async function RefreshToken(token: string, cookies: Cookies) {
         cookies.set('refreshToken', res.refreshToken, { httpOnly: true, path: "/", expires: plusOneMonth, sameSite: "none" })
     } else {
         //TODO delete cookies
+        cookies.delete('token')
+        cookies.delete('refreshToken')
         throw redirect(307, "/login")
     }
     return res

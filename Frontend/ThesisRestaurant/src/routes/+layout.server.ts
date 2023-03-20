@@ -9,7 +9,7 @@ export const load: LayoutServerLoad = async ({ cookies, fetch, url, locals }) =>
     const accessToken = cookies.get('token')
     
     if(accessToken){
-        const userData = UserDataFromJwt(accessToken!)
+        const userData = UserDataFromJwt(accessToken!)        
         return {
             user: userData
         }
