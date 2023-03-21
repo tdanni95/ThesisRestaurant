@@ -71,6 +71,9 @@
             </div>
         </div>
         <div class="lg:flex hidden items-center space-x-2">
+            {#if $page.data.user.role !== "AppUser"}
+                <a href="/stock" class="text-gray-50">Stock</a>
+            {/if}
             <span class="h-5 text-yellow-400">
                 <FaRegUser />
             </span>

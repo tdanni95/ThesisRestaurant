@@ -17,7 +17,6 @@ using ThesisRestaurant.Contracts.Ingredient;
 namespace ThesisRestaurant.Api.Controllers
 {
     [Route("ingredient")]
-    [AllowAnonymous]
     public class IngredientController : ApiController
     {
         private readonly IMapper _mapper;
@@ -29,6 +28,7 @@ namespace ThesisRestaurant.Api.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin,Employee")]
         public async Task<IActionResult> Create(CreateIngredientRequest request)
         {
             var command = _mapper.Map<CreateIngredientCommand>(request);
@@ -40,6 +40,7 @@ namespace ThesisRestaurant.Api.Controllers
         }
 
         [HttpPut]
+        [Authorize(Roles = "Admin,Employee")]
         public async Task<IActionResult> Update(UpdateIngredientRequest request)
         {
             var command = _mapper.Map<UpdateIngredientCommand>(request);
@@ -88,6 +89,7 @@ namespace ThesisRestaurant.Api.Controllers
         }
 
         [HttpDelete("{id:int}")]
+        [Authorize(Roles = "Admin,Employee")]
         public async Task<IActionResult> DeleteIngredient(int id)
         {
             var query = new DeleteIngredientCommand(id);

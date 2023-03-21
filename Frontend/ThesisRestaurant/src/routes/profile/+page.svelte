@@ -13,7 +13,6 @@
         AddressError,
         RegisterErrors,
     } from "$lib/types/registerErrors";
-    import { error, json } from "@sveltejs/kit";
 
     import MdDelete from "svelte-icons/md/MdDelete.svelte";
     import Input from "$lib/components/Input.svelte";
@@ -25,7 +24,9 @@
     import Modal from "$lib/components/Modal.svelte";
     import MdAdd from "svelte-icons/md/MdAdd.svelte";
 
-    $: userData = $page.data.userData as UserData;
+    let userData = $page.data.userData as UserData;
+    let currentlyShowed = userData.addresses[0].id;
+
     $: errorText = "";
 
     let errors: RegisterErrors = {
@@ -143,8 +144,7 @@
             errors[err] = apiResponsErrors[err][0] as string;
         }
     };
-
-    $: currentlyShowed = userData.addresses[0].id;
+    
     let modalVisible = false;
 
     const closeModal = () => {

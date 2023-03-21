@@ -15,7 +15,6 @@ using ThesisRestaurant.Contracts.FoodType;
 namespace ThesisRestaurant.Api.Controllers
 {
     [Route("foodtype")]
-    [AllowAnonymous]
     public class FoodTypeController : ApiController
     {
         private readonly ISender _meaditor;
@@ -28,6 +27,7 @@ namespace ThesisRestaurant.Api.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin,Employee")]
         public async Task<IActionResult> Create(CreateFoodTypeRequest request)
         {
             var command = _mapper.Map<CreateFoodTypeCommand>(request);
@@ -38,6 +38,7 @@ namespace ThesisRestaurant.Api.Controllers
         }
 
         [HttpPut]
+        [Authorize(Roles = "Admin,Employee")]
         public async Task<IActionResult> Update(UpdateFoodTypeRequest request)
         {
             var command = _mapper.Map<UpdateFoodTypeCommand>(request);
@@ -49,6 +50,7 @@ namespace ThesisRestaurant.Api.Controllers
         }
 
         [HttpDelete("{id:int}")]
+        [Authorize(Roles = "Admin,Employee")]
         public async Task<IActionResult> Delete(int id)
         {
             var command = new DeleteFoodTypeCommand(id);

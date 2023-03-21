@@ -16,7 +16,6 @@ using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 namespace ThesisRestaurant.Api.Controllers
 {
     [Route("foodsize")]
-    [AllowAnonymous]
     public class FoodSizeController : ApiController
     {
         private readonly ISender _meaditor;
@@ -29,6 +28,7 @@ namespace ThesisRestaurant.Api.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles= "Admin,Employee")]
         public async Task<IActionResult> CreateFoodSize(CreateFoodSizeRequest request)
         {
             var command = _mapper.Map<CreateFoodSizeCommand>(request);
@@ -41,6 +41,7 @@ namespace ThesisRestaurant.Api.Controllers
         }
 
         [HttpPut]
+        [Authorize(Roles = "Admin,Employee")]
         public async Task<IActionResult> UpdateFoodSize(UpdateFoodSizeRequest request)
         {
             var command = _mapper.Map<UpdateFoodSizeCommand>(request);
@@ -52,6 +53,7 @@ namespace ThesisRestaurant.Api.Controllers
         }
 
         [HttpDelete("{id:int}")]
+        [Authorize(Roles = "Admin,Employee")]
         public async Task<IActionResult> DeleteFoodSize(int id)
         {
             var command = new DeleteFoodSizeCommand(id);

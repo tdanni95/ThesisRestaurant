@@ -15,7 +15,6 @@ using ThesisRestaurant.Contracts.IngredientTypes;
 namespace ThesisRestaurant.Api.Controllers
 {
     [Route("ingredienttype")]
-    [AllowAnonymous]
     public class IngredientTypesController : ApiController
     {
         private readonly IMapper _mapper;
@@ -28,6 +27,7 @@ namespace ThesisRestaurant.Api.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin,Employee")]
         public async Task<IActionResult> CreateIngredientType(CreateIngredientTypeRequest request)
         {
             var command = _mapper.Map<CreateIngredientTypeCommand>(request);
@@ -72,6 +72,7 @@ namespace ThesisRestaurant.Api.Controllers
                     );
         }
         [HttpDelete("{id:int}")]
+        [Authorize(Roles = "Admin,Employee")]
         public async Task<IActionResult> DeleteIngredientType(int id)
         {
             var query = new DeleteIngredientTypeCommand(id);
@@ -83,6 +84,7 @@ namespace ThesisRestaurant.Api.Controllers
         }
 
         [HttpPut]
+        [Authorize(Roles = "Admin,Employee")]
         public async Task<IActionResult> UpdateIngredientType(UpdateIngredientTypeRequest request)
         {
             var command = _mapper.Map<UpdateIngredientTypeCommand>(request);
