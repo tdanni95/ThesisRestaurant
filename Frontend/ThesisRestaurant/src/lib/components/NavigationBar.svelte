@@ -71,13 +71,14 @@
             </div>
         </div>
         <div class="lg:flex hidden items-center space-x-2">
-            {#if $page.data.user.role !== "AppUser"}
-                <a href="/stock" class="text-gray-50">Stock</a>
-            {/if}
-            <span class="h-5 text-yellow-400">
-                <FaRegUser />
-            </span>
+
             {#if $page.data.user}
+                {#if $page.data.user.role !== "AppUser"}
+                    <a href="/stock" class="text-gray-50">Stock</a>
+                {/if}
+                <span class="h-5 text-yellow-400">
+                    <FaRegUser />
+                </span>
                 <a href="/profile" class="text-gray-50"
                     >{$page.data.user.firstName}
                     {$page.data.user.lastName} - {$page.data.user.role}</a
@@ -94,3 +95,11 @@
         </div>
     </div>
 </nav>
+
+<style lang="scss">
+    nav{
+        position: sticky;
+        top: 0;
+        z-index: 9999;
+    }
+</style>

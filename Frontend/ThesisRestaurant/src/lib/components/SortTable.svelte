@@ -7,17 +7,13 @@
         FoodSize,
     } from "$lib/types/classData";
     type T = $$Generic<Ingredient | IngredientType | FoodType | FoodSize>;
-    export let columns: Array<string>;
-    export let rowData: Array<T>;
+    export let columns: Array<string | Array<string>>;
+    export let ogArray: Array<T>;
 
-    export let rowConfig: Array<string | Array<string>>;
-    export let filterFunc: (value: string) => void;
+    let rowData: Array<T> = ogArray;
+    console.log(rowData.length);
+
     export let needEditAndDelete: boolean = true;
-
-    export let sortFunc: (
-        col: string,
-        target: EventTarget & HTMLTableCellElement
-    ) => void;
 
     const getObjectField = (object: T, field: string | Array<string>) => {
         if (Array.isArray(field)) {
@@ -25,9 +21,44 @@
         }
         return object[field];
     };
+
+    const filterFunc = (value: string) => {
+        value = value.toLowerCase();
+        rowData = ogArray.filter((i) => {
+            let shouldShow = false;
+            for (const config of columns) {
+                let val = getObjectField(i, config);
+                shouldShow =
+                    shouldShow || val.toString().toLowerCase().includes(value);
+            }
+            return shouldShow;
+        });
+    };
+
+    const mySortFunc = (
+        col: string | Array<string>,
+        eventTarget: EventTarget & HTMLTableCellElement
+    ) => {
+        let currentOrder = eventTarget.dataset.sort;
+        let newOrder = "asc";
+        let firstReturn = 1;
+        if (currentOrder && currentOrder == "asc") {
+            newOrder = "desc";
+            firstReturn = -1;
+        }
+        eventTarget.setAttribute("data-sort", newOrder);
+        rowData = rowData.sort((a, b) => {
+            let aVal = getObjectField(a, col);
+            let bVal = getObjectField(b, col);
+
+            if (aVal > bVal) return firstReturn;
+            else if (bVal > aVal) return firstReturn * -1;
+            return 0;
+        });
+    };
 </script>
 
-<div class="relative overflow-x-auto overflow-y-auto">
+<div class="relative">
     <label for="table-search" class="sr-only">Search</label>
     <div class="relative mt-1 mb-3">
         <div
@@ -54,61 +85,67 @@
             on:keyup={(e) => filterFunc(e.currentTarget.value)}
         />
     </div>
-    <table class="w-full text-sm text-left text-gray-500 ">
-        <thead class="text-xs text-gray-700 uppercase bg-gray-50 ">
-            <tr>
-                {#if needEditAndDelete}
-                    <th scope="col" class="px-6 py-3"> Actions </th>
-                {/if}
-                {#each columns as col}
-                    <th
-                        scope="col"
-                        class="px-6 py-3 cursor-pointer opacity-70 hover:opacity-100 tableHead"
-                        data-sort="asc"
-                        on:click={(e) => {
-                            sortFunc(col.toLowerCase(), e.currentTarget);
-                        }}
-                    >
-                        <div class="h-5 ml-2">{col} <FaSort /></div>
-                    </th>
-                {/each}
-            </tr>
-        </thead>
-        <tbody>
-            {#if rowData.length === 0}
-                <tr class="bg-white border-b text-center">
-                    <td class="px-6 py-4" colspan="4">No result</td>
+    <div class="overflow-y-auto">
+        <table class="w-full text-sm text-left text-gray-500 ">
+            <thead class="text-xs text-gray-700 uppercase bg-gray-50 ">
+                <tr>
+                    {#if needEditAndDelete}
+                        <th scope="col" class="px-6 py-3"> Actions </th>
+                    {/if}
+                    {#each columns as col}
+                        <th
+                            scope="col"
+                            class="px-6 py-3 cursor-pointer opacity-70 hover:opacity-100 tableHead"
+                            data-sort="asc"
+                            on:click={(e) => {
+                                mySortFunc(col, e.currentTarget);
+                            }}
+                        >
+                            <div class="h-5 ml-2">
+                                {Array.isArray(col) ? col[1] : col}
+                                <FaSort />
+                            </div>
+                        </th>
+                    {/each}
                 </tr>
-            {:else}
-                {#each rowData as data}
-                    <tr class="bg-white border-b ">
-                        {#if needEditAndDelete}
-                            <th
-                                scope="row"
-                                class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
-                            >
-                                <p
-                                    class="text-blue-500 cursor-pointer hover:text-blue-700"
-                                >
-                                    Edit
-                                </p>
-                                <p
-                                    class="text-red-500 cursor-pointer hover:text-red-700"
-                                >
-                                    Delete
-                                </p>
-                            </th>
-                        {/if}
-                        {#each rowConfig as config}
-                            <td class="px-6 py-4">
-                                {getObjectField(data, config)}
-                            </td>
-                        {/each}
+            </thead>
+            <tbody>
+                {#if rowData.length === 0}
+                    <tr class="bg-white border-b text-center">
+                        <td class="px-6 py-4 text-3xl" colspan="4">No result</td
+                        >
                     </tr>
-                {/each}
-            {/if}
-        </tbody>
-    </table>
+                {:else}
+                    {#each rowData as data}
+                        <tr class="bg-white border-b ">
+                            {#if needEditAndDelete}
+                                <th
+                                    scope="row"
+                                    class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
+                                >
+                                    <p
+                                        class="text-blue-500 cursor-pointer hover:text-blue-700"
+                                    >
+                                        Edit
+                                    </p>
+                                    <p
+                                        class="text-red-500 cursor-pointer hover:text-red-700"
+                                    >
+                                        Delete
+                                    </p>
+                                </th>
+                            {/if}
+                            {#each columns as config}
+                                <td class="px-6 py-4">
+                                    {getObjectField(data, config)}
+                                </td>
+                            {/each}
+                        </tr>
+                    {/each}
+                {/if}
+            </tbody>
+        </table>
+    </div>
 </div>
 
 <style lang="scss">
