@@ -12,8 +12,8 @@ namespace ThesisRestaurant.Application.IngredientTypes.Commands.Create
         public CreateIngredientTypeCommandValidator()
         {
             RuleFor(c => c.Name).NotEmpty();
-            RuleFor(c => c.MinOption).NotEmpty().GreaterThanOrEqualTo(0);
-            RuleFor(c => c.MaxOption).NotEmpty().GreaterThanOrEqualTo(x => x.MinOption);
+            RuleFor(c => c.MinOption).GreaterThanOrEqualTo(0);
+            RuleFor(c => c.MaxOption).GreaterThanOrEqualTo(x => x.MinOption);
         }
     }
 }

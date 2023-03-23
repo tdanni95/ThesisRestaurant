@@ -10,8 +10,7 @@
     export let columns: Array<string | Array<string>>;
     export let ogArray: Array<T>;
 
-    let rowData: Array<T> = ogArray;
-    console.log(rowData.length);
+    $: rowData = ogArray as Array<T>;
 
     export let needEditAndDelete: boolean = true;
 
@@ -21,6 +20,9 @@
         }
         return object[field];
     };
+
+    export let deleteFunc: (id: number) => void;
+    export let editFunc: (object: T) => void;
 
     const filterFunc = (value: string) => {
         value = value.toLowerCase();
@@ -102,7 +104,7 @@
                             }}
                         >
                             <div class="h-5 ml-2">
-                                {Array.isArray(col) ? col[1] : col}
+                                {Array.isArray(col) ? col[0] : col}
                                 <FaSort />
                             </div>
                         </th>
@@ -123,13 +125,21 @@
                                     scope="row"
                                     class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
                                 >
+                                    <!-- svelte-ignore a11y-click-events-have-key-events -->
                                     <p
                                         class="text-blue-500 cursor-pointer hover:text-blue-700"
+                                        on:click={() => {
+                                            editFunc(data);
+                                        }}
                                     >
                                         Edit
                                     </p>
+                                    <!-- svelte-ignore a11y-click-events-have-key-events -->
                                     <p
                                         class="text-red-500 cursor-pointer hover:text-red-700"
+                                        on:click={() => {
+                                            deleteFunc(Number(data.id));
+                                        }}
                                     >
                                         Delete
                                     </p>

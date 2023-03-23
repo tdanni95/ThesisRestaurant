@@ -1,6 +1,7 @@
 <script lang="ts">
     import FaRegUser from "svelte-icons/fa/FaRegUser.svelte";
     import FaPowerOff from "svelte-icons/fa/FaPowerOff.svelte";
+    import FaWarehouse from "svelte-icons/fa/FaWarehouse.svelte";
 
     import { page } from "$app/stores";
     import { enhance } from "$app/forms";
@@ -71,18 +72,25 @@
             </div>
         </div>
         <div class="lg:flex hidden items-center space-x-2">
-
+            
             {#if $page.data.user}
                 {#if $page.data.user.role !== "AppUser"}
-                    <a href="/stock" class="text-gray-50">Stock</a>
+                    <div class="flex items-center space-x-2">
+                        <span class="h-5 text-yellow-400">
+                            <FaWarehouse />
+                        </span>
+                        <a href="/stock" class="text-gray-50">Stock</a>
+                    </div>
                 {/if}
-                <span class="h-5 text-yellow-400">
-                    <FaRegUser />
-                </span>
-                <a href="/profile" class="text-gray-50"
-                    >{$page.data.user.firstName}
-                    {$page.data.user.lastName} - {$page.data.user.role}</a
-                >
+                <div class="flex items-center space-x-2">
+                    <span class="h-5 text-yellow-400">
+                        <FaRegUser />
+                    </span>
+                    <a href="/profile" class="text-gray-50"
+                        >{$page.data.user.firstName}
+                        {$page.data.user.lastName} - {$page.data.user.role}</a
+                    >
+                </div>
                 <span class="h-5 text-yellow-400">
                     <FaPowerOff />
                 </span>
@@ -97,7 +105,7 @@
 </nav>
 
 <style lang="scss">
-    nav{
+    nav {
         position: sticky;
         top: 0;
         z-index: 9999;

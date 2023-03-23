@@ -53,9 +53,10 @@ namespace ThesisRestaurant.Infrastructure.Persistence.Repositories
             return type;
         }
 
-        private async Task<bool> IsNameTaken(string name)
+        private async Task<bool> IsNameTaken(string name, int id = 0)
         {
             var type = await _dbContext.IngredientTypes.Where(it => it.Name == name).FirstOrDefaultAsync();
+            if (type is not null && type.Id == id) type = null;
             return type is not null;
         }
 
@@ -64,7 +65,7 @@ namespace ThesisRestaurant.Infrastructure.Persistence.Repositories
             var result = await GetById(ingredient.Id);
             if (result.IsError) return result.Errors;
 
-            bool isTaken = await IsNameTaken(ingredient.Name);
+            bool isTaken = await IsNameTaken(ingredient.Name, ingredient.Id);
             if (isTaken) return Errors.IngredientTypes.NameTaken;
 
             var type = result.Value;
