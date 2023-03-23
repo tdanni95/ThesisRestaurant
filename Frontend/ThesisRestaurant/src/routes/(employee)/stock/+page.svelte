@@ -16,17 +16,18 @@
     import toastStore from "$lib/stores/toastStore";
     import type { IngredientTypeErrors } from "$lib/types/errors";
     import Swal from "sweetalert2";
+    import { each } from "svelte/internal";
+    import IngredientTypeForm from "$lib/components/stockForms/IngredientTypeForm.svelte";
+    import FoodTypeForm from "$lib/components/stockForms/FoodTypeForm.svelte";
+    import IngredientForm from "$lib/components/stockForms/IngredientForm.svelte";
+    import FoodSizeForm from "$lib/components/stockForms/FoodSizeForm.svelte";
+
     let isLoading = false;
     export let data: PageData;
 
     $: ingredientTypes = data.ingredientTypes as Array<IngredientType>;
     let currentIngredientType: IngredientType = {} as IngredientType;
     let isIngredientTypeEdit: boolean = false;
-    const ingredientTypeErrors: IngredientTypeErrors = {
-        Name: "",
-        MinOption: "",
-        MaxOption: "",
-    };
 
     $: ingredients = data.ingredients as Array<Ingredient>;
     let currentIngredient: Ingredient = {} as Ingredient;
@@ -49,84 +50,100 @@
         method: string,
         body?: {} | undefined
     ) => {
+        isLoading = true;
         const response = await fetch(url, {
             method: method,
             body: JSON.stringify(body),
         });
+        isLoading = false;
         return response;
     };
 
-    const handleIngredientTypeErrors = (res:any) => {
-        if (res.title) {
-            toastStore.error(res.title, 2000);
-        }
-        if (res.errors) {
-            for (const err in res.errors) {
-                ingredientTypeErrors[err] = res.errors[err];
-            }
-        } else if(!res.title){
-            toastStore.success("Saved successfully", 2000);
-            invalidateLoad();
-        }
-    }
-
-    const saveIngredientType = async () => {
-        const response = await doFetch(
-            `api/stock?type=ingredienttype`,
-            "POST",
-            {
-                name: currentIngredientType.name,
-                minOption: currentIngredientType.minOption,
-                maxOption: currentIngredientType.maxOption,
-            }
-        );
-        const res = await response.json();
-        handleIngredientTypeErrors(res)
-    };
-
-    const editIngredientType = async () => {
-        const response = await doFetch(
-            `api/stock?type=ingredienttype`,
-            "PUT",
-            currentIngredientType
-        );
-        const res = await response.json();
-        handleIngredientTypeErrors(res)
-    };
-
-    const deleteIngredientType = async (id:number) => {
+    const doDelete = async (id: number, route: string, name: string) => {
         await Swal.fire({
-            title: "Are you sure you want to delete the ingredient type?",
+            title: `Are you sure you want to delete the ${name}?`,
             icon: "question",
             showCancelButton: true,
             showLoaderOnConfirm: true,
             preConfirm: async () => {
-                const resp = await doFetch(`api/stock?type=ingredienttype&id=${id}`, "DELETE", {});
-                const res = await resp.json()
-                console.log(res);
-                
-                if(!res.title) {
-                    toastStore.success("Deleted successfully", 2000)
-                    invalidateLoad()
-                }
-                else{
-                    toastStore.error(res.title, 2000)
+                const resp = await doFetch(
+                    `api/stock?type=${route}&id=${id}`,
+                    "DELETE",
+                    {}
+                );
+                const res = await resp.json();
+                if (!res.title) {
+                    toastStore.success("Deleted successfully", 2000);
+                    invalidateLoad();
+                } else {
+                    toastStore.error(res.title, 2000);
                 }
             },
         });
+    };
+
+    const doSave = async (
+        route: string,
+        body: {},
+        errorHandler: (res: any) => void
+    ) => {
+        
+        const response = await doFetch(`api/stock?type=${route}`, "POST", body);
+        const res = await response.json();
+        errorHandler(res);
+        if (!res.errors) {
+            invalidateLoad();
+        }
+    };
+
+    const doEdit = async (
+        obj: {},
+        route: string,
+        errorHandler: (res: any) => void
+    ) => {
+        const response = await doFetch(`api/stock?type=${route}`, "PUT", obj);
+        const res = await response.json();
+        errorHandler(res);
+        if (!res.errors) {
+            invalidateLoad();
+        }
+    };
+
+    const deleteIngredientType = async (id: number) => {
+        await doDelete(id, "ingredienttype", "ingredient type");
+    };
+
+    const triggerIngredeintTypeEdit = (obj: IngredientType) => {
+        isIngredientTypeEdit = true;
+        currentIngredientType = JSON.parse(JSON.stringify(obj));
+    };
+
+    const deleteFoodType = async (id: number) => {
+        await doDelete(id, "foodtype", "food type");
+    };
+    const triggerFoodTypeEdit = (obj: FoodType) => {
+        isFoodTypeEdit = true;
+        currentFoodType = JSON.parse(JSON.stringify(obj));;
+    };
+
+    const deleteIngredient = async (id:number) =>{
+        await doDelete(id, "ingredient", "ingredient");
     }
 
-    const triggerIngredeintTypeEdit = (obj:IngredientType) => {
-        isIngredientTypeEdit = true
-        currentIngredientType = obj
+    const triggerIngredientEdit = (obj:Ingredient) => {
+        isIngredientEdit = true;
+        currentIngredient = JSON.parse(JSON.stringify(obj));
     }
 
-    const cancelIngredientTypeEdit = () => {
-        isIngredientTypeEdit = false
-        currentIngredientType.name = ""
-        currentIngredientType.minOption = 0
-        currentIngredientType.maxOption = 0
-        currentIngredientType.id = 0
+    const deleteFoodSize = async (id:number) => {
+        await doDelete(id, "foodsize", "food size");
+    }
+
+    const triggerFoodSizeEdit = async (obj:FoodSize) => {
+        isFoodSizeEdit = true
+        console.log(obj);
+        
+        currentFoodSize = JSON.parse(JSON.stringify(obj));
     }
 </script>
 
@@ -157,50 +174,13 @@
                 />
             </div>
             <div class="w-full md:w-6/12 pb-10 px-5 md:px-10">
-                <div class="flex -mx-3 mt-5 justify-center">
-                    <h1 class="font-bold text-3xl text-gray-900">Ingredient type data</h1>
-                </div>
-                <div class="flex -mx-3">
-                    <Input
-                        label="Name"
-                        inputName="name"
-                        bind:value={currentIngredientType.name}
-                        parentWidth="w-full"
-                        error={ingredientTypeErrors.Name}
-                    />
-                </div>
-                <div class="flex -mx-3">
-                    <Input
-                        label="Min option"
-                        inputName="minOption"
-                        bind:value={currentIngredientType.minOption}
-                        parentWidth="w-full"
-                        regex={/[^0-9]/g}
-                        error={ingredientTypeErrors.MinOption}
-                    />
-                </div>
-                <div class="flex -mx-3">
-                    <Input
-                        label="Max option"
-                        inputName="maxOption"
-                        bind:value={currentIngredientType.maxOption}
-                        parentWidth="w-full"
-                        regex={/[^0-9]/g}
-                        error={ingredientTypeErrors.MaxOption}
-                    />
-                </div>
-                {#if !isIngredientTypeEdit}
-                    <Button on:click={saveIngredientType}>Save</Button>
-                {:else}
-                    <div class="flex mt-10">
-                        <div class="w-full px-3 mb-5 max">
-                            <Button btnClass="btn-primary" on:click={editIngredientType}>Update</Button>
-                        </div>
-                        <div class="w-full px-3 mb-5 max">
-                            <Button btnClass="btn-error" on:click={cancelIngredientTypeEdit}>Cancel edit</Button>
-                        </div>
-                    </div>
-                {/if}
+                <IngredientTypeForm
+                    {doEdit}
+                    {doSave}
+                    bind:currentIngredientType
+                    bind:isIngredientTypeEdit
+                    bind:isLoading
+                />
             </div>
         </div>
     </div>
@@ -218,6 +198,18 @@
                 <SortTable
                     columns={["name", "price", ["ingredientType", "name"]]}
                     ogArray={ingredients}
+                    deleteFunc={deleteIngredient}
+                    editFunc={triggerIngredientEdit}
+                />
+            </div>
+            <div class="w-full md:w-6/12 pb-10 px-5 md:px-10">
+                <IngredientForm 
+                {doEdit}
+                {doSave}
+                bind:isIngredientEdit
+                bind:currentIngredient
+                bind:isLoading
+                bind:ingredientTypeList={ingredientTypes}
                 />
             </div>
         </div>
@@ -229,7 +221,21 @@
         <h1 class="font-bold text-3xl text-center text-gray-900">Food types</h1>
         <div class="md:flex w-full">
             <div class="w-full md:w-6/12 pb-10 px-5 md:px-10">
-                <SortTable columns={["name", "price"]} ogArray={foodTypes} />
+                <SortTable
+                    columns={["name", "price"]}
+                    ogArray={foodTypes}
+                    deleteFunc={deleteFoodType}
+                    editFunc={triggerFoodTypeEdit}
+                />
+            </div>
+            <div class="w-full md:w-6/12 pb-10 px-5 md:px-10">
+                <FoodTypeForm
+                    bind:currentFoodType
+                    bind:isFoodTypeEdit
+                    bind:isLoading
+                    {doEdit}
+                    {doSave}
+                />
             </div>
         </div>
     </div>
@@ -243,6 +249,18 @@
                 <SortTable
                     columns={["name", "multiplier", ["foodType", "name"]]}
                     ogArray={foodSizes}
+                    deleteFunc={deleteFoodSize}
+                    editFunc={triggerFoodSizeEdit}
+                />
+            </div>
+            <div class="w-full md:w-6/12 pb-10 px-5 md:px-10">
+                <FoodSizeForm
+                    bind:currentFoodSize
+                    bind:isFoodSizeEdit
+                    bind:isLoading
+                    {doEdit}
+                    {doSave}
+                    bind:foodTypeList={foodTypes}
                 />
             </div>
         </div>

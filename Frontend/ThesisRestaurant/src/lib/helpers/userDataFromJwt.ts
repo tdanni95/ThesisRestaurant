@@ -5,6 +5,7 @@ export function UserDataFromJwt(accesToken: string): UserData {
     // locals
     try {
         let tokenData = JSON.parse(Buffer.from(accesToken!.split('.')[1], 'base64').toString());
+        
         for (const key in tokenData) {
             if (key.indexOf('role') > 0) {
                 user.role = tokenData[key];

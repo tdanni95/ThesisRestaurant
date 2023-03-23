@@ -1,6 +1,6 @@
 export interface FoodType{
     [key: string]: string | number;
-    Id: number;
-    Name: string;
-    Price: number;
+    id: number;
+    name: string;
+    price: number;
 }

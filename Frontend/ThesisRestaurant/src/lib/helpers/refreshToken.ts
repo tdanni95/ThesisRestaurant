@@ -3,6 +3,7 @@ import { redirect, type Cookies } from "@sveltejs/kit"
 
 export async function RefreshToken(token: string, cookies: Cookies) {
     let refreshToken = cookies.get('refreshToken')
+    
     if (!refreshToken) {
         throw redirect(307, "/login")
     }
@@ -20,6 +21,7 @@ export async function RefreshToken(token: string, cookies: Cookies) {
             credentials: "include",
         }
     )
+    
     const res = await profileRes.json()
 
     if (res.id) {
@@ -28,8 +30,8 @@ export async function RefreshToken(token: string, cookies: Cookies) {
         cookies.set('refreshToken', res.refreshToken, { httpOnly: true, path: "/", expires: plusOneMonth, sameSite: "none" })
     } else {
         //TODO delete cookies
-        cookies.delete('token')
-        cookies.delete('refreshToken')
+        cookies.delete('token', {path: '/', httpOnly: true})
+        cookies.delete('refreshToken', {path: '/', httpOnly: true})
         throw redirect(307, "/login")
     }
     return res
