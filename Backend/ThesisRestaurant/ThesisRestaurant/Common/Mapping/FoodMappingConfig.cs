@@ -21,6 +21,8 @@ namespace ThesisRestaurant.Api.Common.Mapping
             config.NewConfig<FoodResult, FoodResponse>()
                 .Map(dest => dest.DiscountPrice, src => src.DiscountPrice)
                 .Map(dest => dest.FoodType, src => src.Food.Type)
+                .Map(dest => dest.FoodPrices, src => src.Food.FoodPrices)
+                .Map(dest => dest.FoodPictures, src => src.Food.FoodPictures)
                 .Map(dest => dest, src => src.Food);
 
             config.NewConfig<(DiscountRequest request, int foodId), AddDiscountCommand>()

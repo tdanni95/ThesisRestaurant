@@ -33,7 +33,7 @@
 <style lang="scss">
     .toasts {
         position: fixed;
-        top: 0;
+        top: 100px;
         right: 0;
         padding: 20px;
         width: 100%;

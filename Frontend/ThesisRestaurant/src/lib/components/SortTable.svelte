@@ -5,20 +5,49 @@
         IngredientType,
         FoodType,
         FoodSize,
+        Food,
     } from "$lib/types/classData";
-    type T = $$Generic<Ingredient | IngredientType | FoodType | FoodSize>;
+    import type { SortTableFormatters } from "$lib/types/sortTableFormatters";
+    type T = $$Generic<
+        Ingredient | IngredientType | FoodType | FoodSize | Food
+    >;
     export let columns: Array<string | Array<string>>;
     export let ogArray: Array<T>;
+
+    export let formatters: Array<SortTableFormatters<T>> | undefined =
+        undefined;
 
     $: rowData = ogArray as Array<T>;
 
     export let needEditAndDelete: boolean = true;
 
     const getObjectField = (object: T, field: string | Array<string>) => {
-        if (Array.isArray(field)) {
-            return (object[field[0]] as T)[field[1]];
+        let isArray = Array.isArray(field)
+        let mainField:string
+        if(isArray){
+            mainField = field[0]
+        }else{
+            mainField = (field as string)
         }
-        return object[field];
+        if (formatters) {
+            let myFormatter = formatters.filter((f) => f.name === mainField)
+            let formatterFunc = myFormatter[0]
+            
+            if(formatterFunc){
+                return formatterFunc.callBack(object)
+            }
+        }
+
+        if (isArray) {
+            if (Array.isArray(object[mainField] as Array<T>)) {
+                let arr = object[mainField] as Array<T>;
+                return arr.map((obj: T) => obj[field[1]]);
+            } else {
+                return (object[field[0]] as T)[field[1]];
+            }
+        } else {
+            return object[mainField];
+        }
     };
 
     export let deleteFunc: (id: number) => void;
@@ -147,7 +176,7 @@
                             {/if}
                             {#each columns as config}
                                 <td class="px-6 py-4">
-                                    {getObjectField(data, config)}
+                                    {@html getObjectField(data, config)}
                                 </td>
                             {/each}
                         </tr>

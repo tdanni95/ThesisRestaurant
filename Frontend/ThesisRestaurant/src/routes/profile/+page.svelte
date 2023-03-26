@@ -346,19 +346,6 @@
                     <FaRegEdit slot="icon" />
                     Change password
                 </Button>
-                <div class="text-center  h-4/12 mt-5">
-                    <h1 class="font-bold text-3xl text-gray-900">
-                        Change level
-                    </h1>
-                    <div class="flex -mx-3">
-                        <label for="level">level</label>
-                        <select name="level" bind:value={userData.level}>
-                            <option value={1}>AppUser</option>
-                            <option value={2}>Employee</option>
-                            <option value={3}>Admin</option>
-                        </select>
-                    </div>
-                </div>
             </div>
             <div class="w-full md:w-6/12 py-10 px-5 md:px-10">
                 <div class="text-center  h-4/12">

@@ -1,3 +1,4 @@
+using Microsoft.Extensions.FileProviders;
 using System.Text.Json.Serialization;
 using ThesisRestaurant.Api;
 using ThesisRestaurant.Application;
@@ -46,6 +47,7 @@ if (app.Environment.IsDevelopment())
     //app.Seed();
 }
 
+app.AllowAccessToUploadedFiles();
 app.UseCors(builder.Configuration.GetValue<string>("corsname")!);
 app.UseHttpsRedirection();
 

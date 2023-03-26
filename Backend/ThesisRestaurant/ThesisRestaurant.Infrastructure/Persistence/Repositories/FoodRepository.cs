@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using ThesisRestaurant.Application.Common.Interfaces.Persistence;
 using ThesisRestaurant.Domain.Common.Errors;
 using ThesisRestaurant.Domain.Foods;
+using ThesisRestaurant.Domain.Foods.FoodPictures;
 using ThesisRestaurant.Domain.Foods.FoodPrices;
 
 namespace ThesisRestaurant.Infrastructure.Persistence.Repositories
@@ -47,6 +48,15 @@ namespace ThesisRestaurant.Infrastructure.Persistence.Repositories
             return Result.Deleted;
         }
 
+        public async Task<ErrorOr<Deleted>> DeleteDiscount(int id)
+        {
+            var discount = await  _context.FoodPrices.Where(fp => fp.Id == id).FirstOrDefaultAsync();
+            if (discount is null) return Errors.Foods.NotFound;
+            _context.FoodPrices.Remove(discount);
+            await _context.SaveChangesAsync();
+            return Result.Deleted;
+        }
+
         public async Task<List<Food>> GetAllFoods()
         {
             return await _context.Foods
@@ -79,6 +89,15 @@ namespace ThesisRestaurant.Infrastructure.Persistence.Repositories
             await _context.SaveChangesAsync();
 
             return Result.Updated;
+        }
+
+        public async Task<ErrorOr<Created>> UploadFile(int id, FoodPicture picture)
+        {
+            var dbFood = await GetFoodById(id);
+            if (dbFood is null) return Errors.Foods.NotFound;
+            dbFood.FoodPictures.Add(picture);
+            await _context.SaveChangesAsync();
+            return Result.Created;
         }
     }
 }

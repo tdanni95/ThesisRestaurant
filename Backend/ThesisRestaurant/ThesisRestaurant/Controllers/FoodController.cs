@@ -8,8 +8,10 @@ using System.Globalization;
 using ThesisRestaurant.Application.Common.Services;
 using ThesisRestaurant.Application.Foods.Commands.Create;
 using ThesisRestaurant.Application.Foods.Commands.Delete;
+using ThesisRestaurant.Application.Foods.Commands.DeleteDiscount;
 using ThesisRestaurant.Application.Foods.Commands.Discount;
 using ThesisRestaurant.Application.Foods.Commands.Update;
+using ThesisRestaurant.Application.Foods.Commands.UploadFile;
 using ThesisRestaurant.Application.Foods.Queries.GetAll;
 using ThesisRestaurant.Application.Foods.Queries.GetById;
 using ThesisRestaurant.Contracts.Food;
@@ -56,6 +58,7 @@ namespace ThesisRestaurant.Api.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin,Employee")]
         public async Task<IActionResult> CreateFood(CreateFoodRequest request)
         {
             var command = _mapper.Map<CreateFoodCommand>(request);
@@ -67,6 +70,7 @@ namespace ThesisRestaurant.Api.Controllers
         }
 
         [HttpPut("{id:int}")]
+        [Authorize(Roles = "Admin,Employee")]
         public async Task<IActionResult> EditFood(CreateFoodRequest request, int id)
         {
             var command = _mapper.Map<UpdateFoodCommand>((request, id));
@@ -78,6 +82,7 @@ namespace ThesisRestaurant.Api.Controllers
         }
 
         [HttpPut("discount/{id:int}")]
+        [Authorize(Roles = "Admin,Employee")]
         public async Task<IActionResult> AddDiscount(DiscountRequest request, int id)
         {
 
@@ -89,13 +94,38 @@ namespace ThesisRestaurant.Api.Controllers
                 );
         }
 
+        [HttpDelete("discount={id:int}")]
+        [Authorize(Roles = "Admin,Employee")]
+        public async Task<IActionResult> DeleteDiscount(int id)
+        {
+            var command = new DeleteDiscountCommad(id);
+            var result = await _meaditor.Send(command);
+            return result.Match(
+                    deleted => NoContent(),
+                    errors => Problem(errors)
+                );
+        }
+
         [HttpDelete("{id:int}")]
+        [Authorize(Roles = "Admin,Employee")]
         public async Task<IActionResult> DeleteFood(int id)
         {
             var command = new DeleteFoodCommand(id);
             var result = await _meaditor.Send(command);
             return result.Match(
                     deleted => Ok(NoContent()),
+                    errors => Problem(errors)
+                );
+        }
+
+        [HttpPost("file/{id:int}")]
+        [Authorize(Roles = "Admin,Employee")]
+        public async Task<IActionResult> UploadFile(IFormFile file, int id)
+        {
+            var command = new UploadFileCommand(id, file);
+            var result = await _meaditor.Send(command);
+            return result.Match(
+                    uploaded => Ok(NoContent()),
                     errors => Problem(errors)
                 );
         }
