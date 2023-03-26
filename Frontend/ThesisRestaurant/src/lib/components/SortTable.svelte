@@ -6,10 +6,11 @@
         FoodType,
         FoodSize,
         Food,
+        CustomFood,
     } from "$lib/types/classData";
     import type { SortTableFormatters } from "$lib/types/sortTableFormatters";
     type T = $$Generic<
-        Ingredient | IngredientType | FoodType | FoodSize | Food
+        Ingredient | IngredientType | FoodType | FoodSize | Food | CustomFood
     >;
     export let columns: Array<string | Array<string>>;
     export let ogArray: Array<T>;
@@ -22,19 +23,19 @@
     export let needEditAndDelete: boolean = true;
 
     const getObjectField = (object: T, field: string | Array<string>) => {
-        let isArray = Array.isArray(field)
-        let mainField:string
-        if(isArray){
-            mainField = field[0]
-        }else{
-            mainField = (field as string)
+        let isArray = Array.isArray(field);
+        let mainField: string;
+        if (isArray) {
+            mainField = field[0];
+        } else {
+            mainField = field as string;
         }
         if (formatters) {
-            let myFormatter = formatters.filter((f) => f.name === mainField)
-            let formatterFunc = myFormatter[0]
-            
-            if(formatterFunc){
-                return formatterFunc.callBack(object)
+            let myFormatter = formatters.filter((f) => f.name === mainField);
+            let formatterFunc = myFormatter[0];
+
+            if (formatterFunc) {
+                return formatterFunc.callBack(object);
             }
         }
 
@@ -50,8 +51,8 @@
         }
     };
 
-    export let deleteFunc: (id: number) => void;
-    export let editFunc: (object: T) => void;
+    export let deleteFunc: (id: number) => void = () => {};
+    export let editFunc: (object: T) => void = () => {};
 
     const filterFunc = (value: string) => {
         value = value.toLowerCase();
@@ -150,29 +151,31 @@
                     {#each rowData as data}
                         <tr class="bg-white border-b ">
                             {#if needEditAndDelete}
-                                <th
-                                    scope="row"
-                                    class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
-                                >
-                                    <!-- svelte-ignore a11y-click-events-have-key-events -->
-                                    <p
-                                        class="text-blue-500 cursor-pointer hover:text-blue-700"
-                                        on:click={() => {
-                                            editFunc(data);
-                                        }}
+                                <slot name="actionButtons">
+                                    <th
+                                        scope="row"
+                                        class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
                                     >
-                                        Edit
-                                    </p>
-                                    <!-- svelte-ignore a11y-click-events-have-key-events -->
-                                    <p
-                                        class="text-red-500 cursor-pointer hover:text-red-700"
-                                        on:click={() => {
-                                            deleteFunc(Number(data.id));
-                                        }}
-                                    >
-                                        Delete
-                                    </p>
-                                </th>
+                                        <!-- svelte-ignore a11y-click-events-have-key-events -->
+                                        <p
+                                            class="text-blue-500 cursor-pointer hover:text-blue-700"
+                                            on:click={() => {
+                                                editFunc(data);
+                                            }}
+                                        >
+                                            Edit
+                                        </p>
+                                        <!-- svelte-ignore a11y-click-events-have-key-events -->
+                                        <p
+                                            class="text-red-500 cursor-pointer hover:text-red-700"
+                                            on:click={() => {
+                                                deleteFunc(Number(data.id));
+                                            }}
+                                        >
+                                            Delete
+                                        </p>
+                                    </th>
+                                </slot>
                             {/if}
                             {#each columns as config}
                                 <td class="px-6 py-4">

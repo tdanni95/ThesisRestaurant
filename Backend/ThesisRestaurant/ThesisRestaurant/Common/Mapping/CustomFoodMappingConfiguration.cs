@@ -19,7 +19,9 @@ namespace ThesisRestaurant.Api.Common.Mapping
                 .Map(dest => dest.Id, src => src.customFoodId)
                 .Map(dest => dest, src => src.request);
 
-            config.NewConfig<CustomFood, CustomFoodResponse>();
+            config.NewConfig<CustomFood, CustomFoodResponse>()
+                .Map(dest => dest.FoodType, src => src.FoodType)
+                .Map(dest => dest, src => src);
         }
     }
 }

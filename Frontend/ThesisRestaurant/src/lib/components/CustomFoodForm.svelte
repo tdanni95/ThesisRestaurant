@@ -13,8 +13,7 @@
     import type { FoodErrors } from "$lib/types/errors";
     import Button from "./Button.svelte";
 
-
-    export let currentFood: Food;
+    export let currentFood: CustomFood;
     export let ingredients: Array<Ingredient>;
     export let ingredientTypes: Array<IngredientType>;
     export let foodTypes: Array<FoodType>;
@@ -36,7 +35,16 @@
                 (i) => i.id !== id
             );
         }
+
+        calculatePrice()
     };
+
+    const calculatePrice = () => {
+        currentFood.price = currentFood.foodType ? currentFood.foodType.price : 0
+        for(const ingredient of currentFood.ingredients){
+            currentFood.price += ingredient.price
+        }
+    }
 
     const handleSelection = (id: number) => {
         const myType = foodTypes.filter((ft) => ft.id == id);
@@ -45,6 +53,7 @@
         } else {
             currentFood.foodType = {} as FoodType;
         }
+        calculatePrice()
     };
 
     let checkBoxes: Array<IngredientCheckboxes> = [];
@@ -72,17 +81,6 @@
         parentWidth="w-full"
         required={true}
         error={errors.Name}
-    />
-</div>
-<div class="flex -mx-3">
-    <Input
-        bind:value={currentFood.basePrice}
-        inputName="basePrice"
-        label="Base price"
-        parentWidth="w-full"
-        required={true}
-        regex={/[^0-9.]/g}
-        error={errors.BasePrice}
     />
 </div>
 <div class="flex -mx-3">
@@ -142,7 +140,7 @@
                             <label
                                 for="check-{ingredient.id}"
                                 class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-                                >{ingredient.name}</label
+                                >{ingredient.name} ({ingredient.price} Ft)</label
                             >
                         </div>
                     {/each}

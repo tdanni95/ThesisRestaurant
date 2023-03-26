@@ -12,7 +12,6 @@ using ThesisRestaurant.Contracts.CustomFood;
 namespace ThesisRestaurant.Api.Controllers
 {
     [Route("customfood/{userId:int}")]
-    [AllowAnonymous]
     public class CustomFoodController : ApiController
     {
         private readonly IMapper _mapper;

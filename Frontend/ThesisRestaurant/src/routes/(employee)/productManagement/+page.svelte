@@ -18,6 +18,8 @@
     import { invalidate } from "$app/navigation";
     import toastStore from "$lib/stores/toastStore";
     import type { FoodErrors } from "$lib/types/errors";
+    import { ingredientFormatter } from "$lib/helpers/ingredientFormatter";
+    import Swal from "sweetalert2";
 
     const baseBictures: Array<FoodPicture> = [{ id: 0, src: "pizza.png" }];
 
@@ -52,31 +54,34 @@
         productDiv.scrollIntoView({ behavior: "smooth" });
     };
 
+    const deleteFood = async (id: number) => {
+        const f = foods.find((f) => f.id == id)
+        if(!f){
+            toastStore.error("Food not found", 2000)
+            return
+        }
+        await Swal.fire({
+            title: `Are you sure you want to delete the food ${f.name}?`,
+            icon: "question",
+            showCancelButton: true,
+            showLoaderOnConfirm: true,
+            preConfirm: async () => {
+                const resp = await fetch(
+                    `api/food?id=${id}`, {method: "DELETE"}
+                );
+                const res = await resp.json();
+                if (!res.title) {
+                    toastStore.success("Deleted successfully", 2000);
+                    invalidateLoad();
+                } else {
+                    toastStore.error(res.title, 2000);
+                }
+            },
+        });
+    }
+
     const foodIngredientsFormatter = (food: Food) => {
         return ingredientFormatter(food.ingredients);
-    };
-
-    const ingredientFormatter = (ingredients: Array<Ingredient>) => {
-        let types: { [name: string]: Array<string> } = {};
-        if (!ingredients) return "";
-        ingredients.sort((a, b) => {
-            if (a.ingredientType.name === b.ingredientType.name) {
-                return a.name.localeCompare(b.name);
-            }
-            return a.ingredientType.name > b.ingredientType.name ? 1 : -1;
-        });
-        ingredients.forEach((ingredient) => {
-            const typeName = ingredient.ingredientType.name;
-            if (!types[typeName]) {
-                types[typeName] = [] as Array<string>;
-            }
-            types[typeName].push(ingredient.name);
-        });
-        let retStr: string = "";
-        for (const type in types) {
-            retStr += `<strong>${type}:</strong> ${types[type].join(", ")}<br>`;
-        }
-        return retStr;
     };
 
     const Formatter: SortTableFormatters<Food> = {
@@ -195,8 +200,6 @@
     };
 </script>
 
-<!-- <img src="https://localhost:7068/uploads/1/psco4unp.e2ydb4.png" alt=""> -->
-
 <div class="min-w-screen flex items-center justify-center px-5 py-5">
     <div class="bg-gray-200 text-gray-500 rounded-3xl shadow-xl w-11/12 py-10">
         <h1 class="font-bold text-3xl text-center text-gray-900">Foods</h1>
@@ -212,7 +215,7 @@
                     formatters={[Formatter, PriceFormatter]}
                     ogArray={foods}
                     editFunc={editFood}
-                    deleteFunc={() => {}}
+                    deleteFunc={deleteFood}
                 />
             </div>
         </div>

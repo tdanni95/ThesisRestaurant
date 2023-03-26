@@ -6,3 +6,5 @@ export type { FoodSize } from './foodSize'
 
 export type { Food } from './food'
 export type { FoodPicture } from './foodPicture'
+
+export type { CustomFood } from './customFoods'

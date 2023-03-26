@@ -38,6 +38,8 @@ namespace ThesisRestaurant.Infrastructure.Persistence.Repositories
             var list = await _context.Users
                 .Where(u => u.Id == userId)
                 .Include(u => u.CustomFoods)
+                .ThenInclude(cf => cf.FoodType)
+                .Include(u => u.CustomFoods)
                 .ThenInclude(cf => cf.Ingredients)
                 .ThenInclude(cfi => cfi.IngredientType)
                 .Select(u => u.CustomFoods)
