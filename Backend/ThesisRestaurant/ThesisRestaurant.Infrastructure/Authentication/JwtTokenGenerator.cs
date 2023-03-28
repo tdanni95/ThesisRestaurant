@@ -36,7 +36,7 @@ namespace ThesisRestaurant.Infrastructure.Authentication
                 new Claim(ClaimTypes.Role, role ?? "AppUser"),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
             };
-
+            Console.WriteLine(jwtSettings.ExpiryMinutes);
             var securityToken = new JwtSecurityToken(
                 issuer: jwtSettings.Issuer,
                 audience: jwtSettings.Audience,

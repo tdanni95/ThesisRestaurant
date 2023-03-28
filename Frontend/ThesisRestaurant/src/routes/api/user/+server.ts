@@ -21,16 +21,23 @@ export const PUT: RequestHandler = async ({ request, cookies, url }) => {
         const response = await modifyUserData(dataToSend, cookies)
         const res = await response.json()
         return json(res)
-    } else {        
+    } else if (action === "level") {
+        const response = await modifyUserLevel(fd, cookies)
+        //nocontent
+        if (response.status === 204) {
+            return json({ msg: 'success' })
+        }
+        const res = await response.json()
+        return json(res)
+    } else {
         fd.Id = userData.id
         const response = await modifyUserPassword(fd, cookies)
         //nocontent
-        if(response.status === 204){
-            return json({msg: 'success'})
+        if (response.status === 204) {
+            return json({ msg: 'success' })
         }
         const res = await response.json()
-        console.log(res);
-        
+
         return json(res)
     }
 }
@@ -58,5 +65,19 @@ async function modifyUserPassword(dataToSend: {}, cookies: Cookies): Promise<Res
             "Content-Type": "application/json",
         },
     });
+    return response
+}
+
+async function modifyUserLevel(dataToSend: {}, cookies: Cookies): Promise<Response> {
+    const postUrl = `${API_ROUTE}user/level`;
+    const response = await customFetch(postUrl, cookies, {
+        method: "PUT",
+        body: JSON.stringify(dataToSend),
+        headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+        },
+    });
+
     return response
 }

@@ -1,4 +1,5 @@
-﻿using MapsterMapper;
+﻿using Mapster;
+using MapsterMapper;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -9,8 +10,10 @@ using ThesisRestaurant.Application.Addresses.Commands.Update;
 using ThesisRestaurant.Application.Users.Commands.ChangeUserPassword;
 using ThesisRestaurant.Application.Users.Commands.Update;
 using ThesisRestaurant.Application.Users.Commands.UpdateUserLevel;
+using ThesisRestaurant.Application.Users.Queries.GetAllUsers;
 using ThesisRestaurant.Application.Users.Queries.GetUserById;
 using ThesisRestaurant.Contracts.Authentication;
+using ThesisRestaurant.Contracts.Ingredient;
 using ThesisRestaurant.Contracts.User;
 
 namespace ThesisRestaurant.Api.Controllers
@@ -28,6 +31,31 @@ namespace ThesisRestaurant.Api.Controllers
         {
             _mediator = mediator;
             _mapper = mapper;
+        }
+        [HttpGet]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> GetAllUsers()
+        {
+            var query = new GetAllUsersQuery();
+            var result = await _mediator.Send(query);
+
+            return result.Match(
+                    users => Ok(users.Adapt<UserResponse[]>()),
+                    errors => Problem(errors)
+                );
+
+        }
+
+        [HttpPut("level")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> UpdateUserLevel(UpdateUserLevel request)
+        {
+            var command = _mapper.Map<UpdateUserLevelCommand>(request);
+            var result = await _mediator.Send(command);
+            return result.Match(
+                    updated => NoContent(),
+                    errors => Problem(errors)
+                );
         }
 
         [HttpGet("{id:int}")]
@@ -76,7 +104,7 @@ namespace ThesisRestaurant.Api.Controllers
                     errors => Problem(errors)
                 );
         }
-    [HttpPut]
+        [HttpPut]
         public async Task<IActionResult> UpdateUser(UpdateUser request)
         {
             var command = _mapper.Map<UpdateUserCommand>(request);
@@ -87,16 +115,7 @@ namespace ThesisRestaurant.Api.Controllers
                 );
         }
 
-        [HttpPut("level")]
-        public async Task<IActionResult> UpdateUserLevel(UpdateUserLevel request)
-        {
-            var command = _mapper.Map<UpdateUserLevelCommand>(request);
-            var result = await _mediator.Send(command);
-            return result.Match(
-                    updated => NoContent(),
-                    errors => Problem(errors)
-                );
-        }
+
 
         [HttpPut("password")]
         public async Task<IActionResult> ChangePassword(ChangeUserPassword request)

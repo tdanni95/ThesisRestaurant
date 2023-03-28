@@ -32,6 +32,10 @@
             {required}
             placeholder={label}
             {value}
+            on:change={(e) => {
+                value = e.currentTarget.value;
+                hasError = false;
+            }}
             on:keyup={(e) => {
                 value = e.currentTarget.value;
                 hasError = false;

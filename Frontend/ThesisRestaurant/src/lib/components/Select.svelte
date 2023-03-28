@@ -5,8 +5,9 @@
         IngredientType,
         FoodType,
         FoodSize,
+        UserRole
     } from "$lib/types/classData";
-    type T = $$Generic<Ingredient | IngredientType | FoodType | FoodSize>;
+    type T = $$Generic<Ingredient | IngredientType | FoodType | FoodSize | UserRole>;
 
     const dispatch = createEventDispatcher();
 

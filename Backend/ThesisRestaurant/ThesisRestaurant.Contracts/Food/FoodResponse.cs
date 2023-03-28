@@ -8,7 +8,7 @@ namespace ThesisRestaurant.Contracts.Food
              FoodTypeResponse FoodType, 
              List<IngredientResponse> Ingredients, 
              List<FoodPictureResponse> FoodPictures, 
-             List<FoodPictureResponse> FoodPrices
+             List<FoodPriceResponse> FoodPrices
         );
 
     public record FoodPictureResponse(
@@ -16,6 +16,6 @@ namespace ThesisRestaurant.Contracts.Food
         );
 
     public record FoodPriceResponse(
-            int Id, double Price
+            int Id, double Price, DateTime From, DateTime To
         );
 }

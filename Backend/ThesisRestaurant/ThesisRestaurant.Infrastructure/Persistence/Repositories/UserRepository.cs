@@ -16,6 +16,18 @@ namespace ThesisRestaurant.Infrastructure.Persistence.Repositories
             _context = context;
         }
 
+        public async Task<ErrorOr<List<User>>> GetAllUsers()
+        {
+            var users = await _context.Users
+                .Include(u => u.UserAddresses)
+                .Include(u => u.Orders)
+                .ThenInclude(o => o.Foods)
+                .Include(u => u.Orders)
+                .ThenInclude(o => o.CustomFoods)
+                .ToListAsync();
+            return users;
+        }
+
         public async Task<ErrorOr<Created>> Add(User user)
         {
             var isEmailTaken = await GetUserByEmail(user.Email);
@@ -135,5 +147,7 @@ namespace ThesisRestaurant.Infrastructure.Persistence.Repositories
         {
             return await _context.Users.Where(u => u.RefreshToken != null && u.RefreshToken.Token == refreshToken).FirstOrDefaultAsync();
         }
+
+
     }
 }

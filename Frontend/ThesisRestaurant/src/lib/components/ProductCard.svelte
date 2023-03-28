@@ -2,6 +2,7 @@
     import type { Food } from "$lib/types/classData";
     import { Card } from "flowbite-svelte";
     import { onDestroy, onMount } from "svelte";
+    import {  slide } from "svelte/transition";
 
     export let food: Food;
 
@@ -9,15 +10,23 @@
     export let ingredient: string;
     $: foodType = food.foodType.name;
 
-    let isDiscounted = food.discountPrice < food.basePrice;
 
-    let currentImage = 0;
+    $: isDiscounted = food.discountPrice < food.basePrice;
+
+    //make current image lenth reactive -> food changes, currentImage also changes
+    $: idx = food.foodPictures.length - food.foodPictures.length;
+    $: currentImage = food.foodPictures[idx].id;
+
     let to: NodeJS.Timer;
+
     onMount(() => {
         to = setInterval(() => {
-            if (currentImage == food.foodPictures.length - 1) currentImage = 0;
-            else currentImage++;
-        }, 5000);
+            if (idx == food.foodPictures.length - 1) idx = 0;
+            else idx++;
+            console.log(idx, food.foodPictures[idx]);
+
+            currentImage = food.foodPictures[idx].id;
+        }, 3000);
     });
 
     onDestroy(() => {
@@ -34,11 +43,22 @@
     </div>
     <hr class="my-1" />
     {#if food.foodPictures && food.foodPictures.length}
-    <div class="w-full flex  justify-center items-center">
-        <div class="w-96 h-96 text-center flex flex-col justify-center items-center">
-            <img class="object-contain" src={food.foodPictures[currentImage].src} alt={food.name} />
-        </div>   
-    </div>
+        {#each food.foodPictures as picture (picture.id)}
+            <div class="w-full flex  justify-center items-center">
+                {#if currentImage === picture.id}
+                    <div
+                        transition:slide
+                        class="overflow-hidden w-96 h-96 max-h-96 text-center flex flex-col justify-center items-center"
+                    >
+                        <img
+                            class="object-contain"
+                            src={food.foodPictures[idx].src}
+                            alt={food.name}
+                        />
+                    </div>
+                {/if}
+            </div>
+        {/each}
     {/if}
 
     <div class="pb-5">

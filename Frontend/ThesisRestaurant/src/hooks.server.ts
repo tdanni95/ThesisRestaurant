@@ -6,10 +6,13 @@ import { sequence } from "@sveltejs/kit/hooks";
 export const handle: Handle = async({event, resolve}) => {
     const {locals, cookies, url} = event
     const accesToken = cookies.get('token')
-    const refreshToken = cookies.get('refreshToken')
     
-    if(!url.pathname.startsWith('/api')){
+    if(!accesToken){
+        locals.user = undefined
+    } else if(!url.pathname.startsWith('/api') && accesToken){
         locals.user = accesToken ? UserDataFromJwt(accesToken) : undefined      
+    }else{
+        console.log(accesToken);
     }
     
     const response = await resolve(event)

@@ -7,10 +7,20 @@
         FoodSize,
         Food,
         CustomFood,
+        FoodPrice,
     } from "$lib/types/classData";
+    import type { UserData } from "$lib/types/userData";
     import type { SortTableFormatters } from "$lib/types/sortTableFormatters";
+
     type T = $$Generic<
-        Ingredient | IngredientType | FoodType | FoodSize | Food | CustomFood
+        | Ingredient
+        | IngredientType
+        | FoodType
+        | FoodSize
+        | Food
+        | CustomFood
+        | FoodPrice
+        | UserData
     >;
     export let columns: Array<string | Array<string>>;
     export let ogArray: Array<T>;
@@ -88,6 +98,9 @@
             return 0;
         });
     };
+
+    let colSpan = columns.length;
+    if (needEditAndDelete) colSpan += 1;
 </script>
 
 <div class="relative">
@@ -127,7 +140,7 @@
                     {#each columns as col}
                         <th
                             scope="col"
-                            class="px-6 py-3 cursor-pointer opacity-70 hover:opacity-100 tableHead"
+                            class="px-6 py-3 cursor-pointer opacity-70 hover:opacity-100 transition-opacity tableHead"
                             data-sort="asc"
                             on:click={(e) => {
                                 mySortFunc(col, e.currentTarget);
@@ -144,12 +157,13 @@
             <tbody>
                 {#if rowData.length === 0}
                     <tr class="bg-white border-b text-center">
-                        <td class="px-6 py-4 text-3xl" colspan="4">No result</td
+                        <td class="px-6 py-4 text-3xl" colspan={colSpan}
+                            >No result</td
                         >
                     </tr>
                 {:else}
                     {#each rowData as data}
-                        <tr class="bg-white border-b ">
+                        <tr data-id={data.id} class="bg-white border-b ">
                             {#if needEditAndDelete}
                                 <slot name="actionButtons">
                                     <th
@@ -158,7 +172,7 @@
                                     >
                                         <!-- svelte-ignore a11y-click-events-have-key-events -->
                                         <p
-                                            class="text-blue-500 cursor-pointer hover:text-blue-700"
+                                            class="text-blue-500 cursor-pointer hover:text-blue-700 transition-colors"
                                             on:click={() => {
                                                 editFunc(data);
                                             }}
@@ -167,7 +181,7 @@
                                         </p>
                                         <!-- svelte-ignore a11y-click-events-have-key-events -->
                                         <p
-                                            class="text-red-500 cursor-pointer hover:text-red-700"
+                                            class="text-red-500 cursor-pointer hover:text-red-700 transition-colors"
                                             on:click={() => {
                                                 deleteFunc(Number(data.id));
                                             }}

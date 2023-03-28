@@ -46,6 +46,17 @@
                         >Product Management</DropdownItem
                     >
                     <DropdownItem href="/stock">Stock</DropdownItem>
+                    <DropdownItem href="/discount">Manage discounts</DropdownItem>
+                </Dropdown>
+            {/if}
+            {#if $page.data.user.role === "Admin"}
+            <NavLi id="adminMenu" class="cursor-pointer text-gray-50"
+                    ><Chevron aligned>Admin</Chevron></NavLi
+                >
+                <Dropdown triggeredBy="#adminMenu" class="w-44 z-20">
+                    <DropdownItem href="/users"
+                        >Users</DropdownItem
+                    >
                 </Dropdown>
             {/if}
             <NavLi id="userMenu">

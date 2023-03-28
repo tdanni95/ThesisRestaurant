@@ -1,8 +1,9 @@
+import { invalidate } from "$app/navigation"
 import { API_ROUTE } from "$env/static/private"
 import { redirect, type Cookies } from "@sveltejs/kit"
 
 export async function RefreshToken(token: string, cookies: Cookies) {
-    let refreshToken = cookies.get('refreshToken')
+    let refreshToken = token
     
     if (!refreshToken) {
         throw redirect(307, "/login")
@@ -28,11 +29,12 @@ export async function RefreshToken(token: string, cookies: Cookies) {
         const plusOneMonth = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
         cookies.set('token', res.token, { httpOnly: true, path: "/" })
         cookies.set('refreshToken', res.refreshToken, { httpOnly: true, path: "/", expires: plusOneMonth, sameSite: "none" })
+        console.log("REFRESH REFRESH", res.refreshToken);
     } else {
         //TODO delete cookies
         cookies.delete('token', {path: '/', httpOnly: true})
         cookies.delete('refreshToken', {path: '/', httpOnly: true})
-        throw redirect(307, "/login")
+        throw redirect(301, "/login")
     }
     return res
 }

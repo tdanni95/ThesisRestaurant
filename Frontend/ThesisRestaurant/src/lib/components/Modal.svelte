@@ -5,12 +5,14 @@
     export let close: () => void;
 
     export let visible = true;
+    export let width = "w-3/4"
+    
 </script>
 
 <div class="fixed inset-0 z-50 flex items-center justify-center modalHolder">
     {#if visible}
         <div
-            class="bg-white rounded-lg shadow-lg p-8 m-4 w-3/4 max-h-full overflow-y-auto z-50"
+            class="bg-white rounded-lg shadow-lg p-8 m-4 {width} max-h-full overflow-y-auto z-50"
             transition:fade={{ duration: 300 }}
         >
             <slot name="header">

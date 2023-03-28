@@ -6,10 +6,15 @@
     import MdLockOutline from "svelte-icons/md/MdLockOutline.svelte";
     import Input from "$lib/components/Input.svelte";
     import Button from "$lib/components/Button.svelte";
-    import { invalidateAll } from "$app/navigation";
+    import { goto, invalidateAll } from "$app/navigation";
+    import { redirect } from "@sveltejs/kit";
 
     let errorText: string = "";
     let isLoading = false;
+
+    console.log("HÖREN");
+    
+
 </script>
 
 <form
@@ -22,8 +27,8 @@
             // @ts-ignore
             if (result.id) {
                 applyAction(result);
+                goto('/')
                 invalidateAll();
-                // redirect(302, '/')
             } else {
                 // @ts-ignore
                 errorText = result.title;

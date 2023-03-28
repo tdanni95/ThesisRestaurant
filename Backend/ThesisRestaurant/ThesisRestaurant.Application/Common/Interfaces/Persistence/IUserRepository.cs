@@ -7,6 +7,7 @@ namespace ThesisRestaurant.Application.Common.Interfaces.Persistence
 {
     public interface IUserRepository
     {
+        Task<ErrorOr<List<User>>> GetAllUsers();
         Task<User?> GetUserByEmail(string email);
         Task<User?> GetuserByRefreshToken(string refreshToken);
         Task<ErrorOr<Created>> Add(User user);
