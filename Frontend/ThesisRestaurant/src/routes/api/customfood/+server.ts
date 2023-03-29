@@ -11,7 +11,6 @@ export const POST: RequestHandler = async ({ request, cookies }) => {
     const fetchUrl = `${API_ROUTE}customfood/${ud.id}`
     const data = await request.json()
 
-    console.log(fetchUrl);
     
 
 
@@ -21,8 +20,6 @@ export const POST: RequestHandler = async ({ request, cookies }) => {
             "Content-Type": "application/json",
         },
     })
-
-    console.log(response);
     
 
     const res = await response.json()

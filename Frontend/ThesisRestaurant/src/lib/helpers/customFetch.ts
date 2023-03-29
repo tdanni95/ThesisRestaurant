@@ -13,10 +13,6 @@ export async function customFetch(url: string, cookies: Cookies, options: Custom
         throw redirect(307, "/login")
     }
 
-    // console.log(refreshToken);
-    // await RefreshToken(refreshToken, cookies)
-    // console.log("after in custom fetch", cookies.get('refreshToken'))
-
 
     if (accessToken) {
         options.headers = {
@@ -30,7 +26,6 @@ export async function customFetch(url: string, cookies: Cookies, options: Custom
         if (!refreshToken) {
             cookies.delete('token', { path: '/', httpOnly: true })
             cookies.delete('refreshToken', { path: '/', httpOnly: true })
-            console.log("REDIRECT SECOND");
             throw redirect(307, '/login')
         }
         const res = await RefreshToken(refreshToken, cookies)
@@ -39,7 +34,6 @@ export async function customFetch(url: string, cookies: Cookies, options: Custom
         } else {
             cookies.delete('token', { path: '/', httpOnly: true })
             cookies.delete('refreshToken', { path: '/', httpOnly: true })
-            console.log("REDIRECT THIRD");
             throw redirect(307, "/login")
         }
     }

@@ -11,10 +11,7 @@ export const handle: Handle = async({event, resolve}) => {
         locals.user = undefined
     } else if(!url.pathname.startsWith('/api') && accesToken){
         locals.user = accesToken ? UserDataFromJwt(accesToken) : undefined      
-    }else{
-        console.log(accesToken);
     }
-    
     const response = await resolve(event)
 
     
@@ -29,5 +26,4 @@ export const handleFetch: HandleFetch = async({request, fetch}) => {
 
 export const handleError: HandleServerError = async ({error, event}) => {    
     console.log("error", error);
-    
 }

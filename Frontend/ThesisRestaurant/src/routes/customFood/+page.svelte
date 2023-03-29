@@ -1,10 +1,7 @@
 <script lang="ts">
     import { invalidate } from "$app/navigation";
-    import { page } from "$app/stores";
     import CustomFoodForm from "$lib/components/CustomFoodForm.svelte";
     import CustomProductCard from "$lib/components/CustomProductCard.svelte";
-    import FoodForm from "$lib/components/FoodForm.svelte";
-    import ProductCard from "$lib/components/ProductCard.svelte";
     import SortTable from "$lib/components/SortTable.svelte";
     import { ingredientFormatter } from "$lib/helpers/ingredientFormatter";
     import toastStore from "$lib/stores/toastStore";
@@ -16,7 +13,7 @@
     } from "$lib/types/classData";
     import type { FoodErrors } from "$lib/types/errors";
     import type { SortTableFormatters } from "$lib/types/sortTableFormatters";
-    import { Button } from "flowbite-svelte";
+    import Button from "$lib/components/Button.svelte";
     import type { PageData } from "../$types";
 
     export let data: PageData;
@@ -65,8 +62,6 @@
             method: "POST",
         });
         const res = await response.json();
-
-        console.log(res);
 
         if (res.errors) {
             handleFoodErrors(res);

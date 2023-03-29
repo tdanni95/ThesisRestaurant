@@ -52,7 +52,6 @@
         } else if (!res.title) {
             toastStore.success("Saved successfully", 2000);
         }
-        console.log(foodSizeErrors);
     };
 
     const handleSelection = (id: number) => {

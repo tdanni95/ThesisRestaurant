@@ -12,8 +12,6 @@
     let errorText: string = "";
     let isLoading = false;
 
-    console.log("HÖREN");
-    
 
 </script>
 

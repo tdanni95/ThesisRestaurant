@@ -34,8 +34,6 @@ export const DELETE: RequestHandler = async ({ request, cookies, url }) => {
             "Content-Type": "application/json",
         },
     })
-    console.log(response);
-
     if (response.status === 204) {
         return json({ mesg: 'success' })
     }

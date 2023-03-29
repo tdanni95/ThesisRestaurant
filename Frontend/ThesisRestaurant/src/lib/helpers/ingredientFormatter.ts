@@ -18,7 +18,7 @@ export function ingredientFormatter (ingredients: Array<Ingredient>) {
     });
     let retStr: string = "";
     for (const type in types) {
-        retStr += `<strong>${type}:</strong> ${types[type].join(", ")}<br>`;
+        retStr += `<p><strong>${type}:</strong> ${types[type].join(", ")}<br></p>`;
     }
     return retStr;
 };

@@ -14,10 +14,6 @@
 
 <style>
     button {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        align-content: center;
         transition: all 0.4s ease;
     }
     .has-icon{

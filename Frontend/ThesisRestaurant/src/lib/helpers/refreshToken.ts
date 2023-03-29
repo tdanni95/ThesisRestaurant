@@ -29,7 +29,6 @@ export async function RefreshToken(token: string, cookies: Cookies) {
         const plusOneMonth = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
         cookies.set('token', res.token, { httpOnly: true, path: "/" })
         cookies.set('refreshToken', res.refreshToken, { httpOnly: true, path: "/", expires: plusOneMonth, sameSite: "none" })
-        console.log("REFRESH REFRESH", res.refreshToken);
     } else {
         //TODO delete cookies
         cookies.delete('token', {path: '/', httpOnly: true})

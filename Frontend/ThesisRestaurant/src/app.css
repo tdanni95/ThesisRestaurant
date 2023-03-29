@@ -7,13 +7,13 @@
 }
 
 .btn-error{
-    @apply bg-transparent hover:bg-red-500 disabled:opacity-50 w-full max-w-xs mx-auto text-red-500 border border-red-500 hover:text-white rounded-lg px-3 py-3 font-semibold disabled:cursor-not-allowed
+    @apply bg-transparent hover:bg-red-500 disabled:opacity-50 w-full max-w-xs mx-auto text-red-500 border border-red-500 hover:text-white rounded-lg px-2 py-2 font-semibold disabled:cursor-not-allowed
 }
 .btn-primary{
-    @apply bg-transparent hover:bg-indigo-500 disabled:opacity-50 w-full max-w-xs mx-auto text-indigo-500 border border-indigo-500 hover:text-white rounded-lg px-3 py-3 font-semibold disabled:cursor-not-allowed
+    @apply bg-transparent hover:bg-indigo-500 disabled:opacity-50 w-full max-w-xs mx-auto text-indigo-500 border border-indigo-500 hover:text-white rounded-lg px-2 py-2 font-semibold disabled:cursor-not-allowed
 }
 .btn-warning{
-    @apply bg-transparent hover:bg-yellow-500 disabled:opacity-50 w-full max-w-xs mx-auto text-yellow-500 border border-yellow-500 hover:text-white rounded-lg px-3 py-3 font-semibold disabled:cursor-not-allowed
+    @apply bg-transparent hover:bg-yellow-500 disabled:opacity-50 w-full max-w-xs mx-auto text-yellow-500 border border-yellow-500 hover:text-white rounded-lg px-2 py-2 font-semibold disabled:cursor-not-allowed
 }
 
 body{

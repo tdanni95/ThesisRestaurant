@@ -45,6 +45,8 @@
     $: ingredients = data.ingredients as Array<Ingredient>;
     $: foodTypes = data.foodTypes as Array<FoodType>;
 
+    $: availableFoodSizes = data.foodSizes.filter((fs) => fs.foodType.id === currentFood.foodType.id)
+
     const editFood = (obj: Food) => {
         currentFood = JSON.parse(JSON.stringify(obj));
         if (!currentFood.foodPictures.length) {
@@ -178,7 +180,6 @@
             body: fd,
         });
         let res = await result.json()
-        console.log(res);
         
         if(res.msg){
             toastStore.success("File uploaded successfully", 2000)
@@ -242,6 +243,7 @@
                     </h1>
                 </div>
                 <ProductCard
+                    availableFoodSizes={availableFoodSizes}
                     bind:food={currentFood}
                     ingredient={ingredientFormatter(currentFood?.ingredients)}
                 />

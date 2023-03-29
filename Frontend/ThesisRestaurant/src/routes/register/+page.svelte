@@ -107,7 +107,6 @@
                 applyAction(result);
                 invalidateAll();
             }
-            console.log(result.status);
         };
     }}
     method="POST"

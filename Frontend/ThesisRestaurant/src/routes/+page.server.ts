@@ -1,7 +1,7 @@
 import { API_ROUTE } from "$env/static/private";
 import { ChangeFoodSources } from "$lib/helpers/changeFoodSources.server";
 import { customFetch } from "$lib/helpers/customFetch";
-import type { FoodSize } from "$lib/types/classData";
+import type { Food, FoodSize, FoodType, Ingredient, IngredientType } from "$lib/types/classData";
 import type { PageServerLoad } from "./$types";
 
 export const load: PageServerLoad = async ({ parent, cookies, locals, depends }) => {
@@ -22,18 +22,21 @@ export const load: PageServerLoad = async ({ parent, cookies, locals, depends })
 
     const foodSizes = await customFetch(`${API_ROUTE}foodsize`, cookies, { method: "GET" })
         .then(async (res) => await res.json())
+
     if (foods) {
         for (const food of foods) {
             ChangeFoodSources(food)
         }
     }
 
+    
+
     return {
         user: locals.user,
-        foods,
-        ingredients,
-        ingredientTypes,
-        foodTypes,
+        foods: foods as Array<Food>,
+        ingredients: ingredients as Array<Ingredient>,
+        ingredientTypes: ingredientTypes as Array<IngredientType>,
+        foodTypes: foodTypes as Array<FoodType>,
         foodSizes: foodSizes as Array<FoodSize>
     }
 }

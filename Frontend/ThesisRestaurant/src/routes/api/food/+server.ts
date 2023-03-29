@@ -9,8 +9,6 @@ export const POST: RequestHandler = async ({ request, cookies }) => {
     const fetchUrl = `${API_ROUTE}food`
     const data = await request.json()
 
-    console.log(data);
-    
 
     const response = await customFetch(fetchUrl, cookies, {
         method: 'POST', body: JSON.stringify(data), headers: {
@@ -29,9 +27,6 @@ export const PUT: RequestHandler = async ({ request, cookies, url }) => {
     const id = url.searchParams.get('id')
     const fetchUrl = `${API_ROUTE}food/${id}`
     const data = await request.json()
-
-    console.log(data);
-    
 
     const response = await customFetch(fetchUrl, cookies, {
         method: 'PUT', body: JSON.stringify(data), headers: {

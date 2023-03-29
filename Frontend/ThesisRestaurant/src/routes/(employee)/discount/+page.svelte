@@ -79,7 +79,6 @@
             method: "POST",
         });
         const res = await response.json();
-        console.log(res);
 
         if (res.title) {
             if (res.errors["Food.FoodPriceError"]) {
@@ -183,7 +182,6 @@
                                 on:click={async (e) => {
                                     const row = e.currentTarget.closest("tr");
                                     if (!row || !row.dataset.id) return;
-                                    console.log(row.dataset.id);
                                     await deleteDiscount(+row.dataset.id);
                                 }}
                             >

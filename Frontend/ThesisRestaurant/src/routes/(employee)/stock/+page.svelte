@@ -141,7 +141,6 @@
 
     const triggerFoodSizeEdit = async (obj:FoodSize) => {
         isFoodSizeEdit = true
-        console.log(obj);
         
         currentFoodSize = JSON.parse(JSON.stringify(obj));
     }

@@ -38,7 +38,6 @@
     };
 
     const handleIngredientErrors = (res: any) => {
-        console.log(res);
         
         if (res.title) {
             toastStore.error(res.title, 2000);
@@ -46,8 +45,6 @@
         if (res.errors) {
             for (const err in res.errors) {
                 if(err == "IngredientTypeId"){
-                    console.log("azám");
-                    
                     ingerdientErrors.Type = res.errors[err]
                 }else{
                     ingerdientErrors[err] = res.errors[err];
@@ -56,8 +53,6 @@
         } else if (!res.title) {
             toastStore.success("Saved successfully", 2000);
         }
-        console.log(ingerdientErrors);
-        
     };
 
     const handleSelection = (id:number) => {
