@@ -25,3 +25,23 @@ export const POST: RequestHandler = async ({ request, cookies, url }) => {
     // const response = await customFetch();
     return json(res)
 }
+
+export const DELETE: RequestHandler = async ({ request, cookies, url }) => {
+    const id = url.searchParams.get('id')
+    
+    const fetchUrl = `${API_ROUTE}food/file/${id}`
+
+    const response = await customFetch(fetchUrl, cookies, {
+        method: 'DELETE'
+    })
+
+    if(response.ok){
+        return json({msg: "success"})
+    }
+    
+
+    const res = await response.json()
+
+    // const response = await customFetch();
+    return json(res)
+}

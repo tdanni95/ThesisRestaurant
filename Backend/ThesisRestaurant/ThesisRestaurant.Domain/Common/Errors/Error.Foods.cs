@@ -9,6 +9,8 @@ namespace ThesisRestaurant.Domain.Common.Errors
             public static Error NotFound => Error.NotFound(code: "Food.NotFound", description: "Food not found.");
             public static Error InvalidDiscountDates => Error.Validation(code: "Food.FoodPriceError", "From date must be lower than to date.");
             public static Error InvalidDiscountValue => Error.Validation(code: "Food.FoodPriceError", "Discount price must be lower than regular price.");
+
+            public static Error PictureNotFound => Error.NotFound(code: "FoodPicture.NotFound", description: "FoodPicture with gicen id does not exists");
         }
     }
 }

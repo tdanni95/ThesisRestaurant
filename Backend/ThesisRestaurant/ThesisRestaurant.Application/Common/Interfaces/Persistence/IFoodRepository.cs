@@ -17,5 +17,6 @@ namespace ThesisRestaurant.Application.Common.Interfaces.Persistence
         Task<ErrorOr<Deleted>> DeleteDiscount(int id);
 
         Task<ErrorOr<Created>> UploadFile(int id, FoodPicture picture);
+        Task<ErrorOr<Deleted>> DeleteFile(int id);
     }
 }

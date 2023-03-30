@@ -1,11 +1,14 @@
 <script lang="ts">
     import { page } from "$app/stores";
+    import Button from "$lib/components/Button.svelte";
     import Modal from "$lib/components/Modal.svelte";
     import ProductCard from "$lib/components/ProductCard.svelte";
     import IngredientForm from "$lib/components/stockForms/IngredientForm.svelte";
     import { ingredientFormatter } from "$lib/helpers/ingredientFormatter";
+    import type { CartItem } from "$lib/types/cart";
     import type { Food, FoodSize, Ingredient } from "$lib/types/classData";
     import type { IngredientCheckboxes } from "$lib/types/ingredientCheckboxes";
+    import { fade, fly, slide } from "svelte/transition";
     import type { PageData } from "./$types";
 
     export let data: PageData;
@@ -20,7 +23,6 @@
     $: foodSizes = data.foodSizes.filter(
         (fs) => fs.foodType.id === currentFoodType.id
     );
-
 
     let modalVisible = false;
     let foodToAdd: Food | undefined = undefined;
@@ -38,32 +40,40 @@
                 ? foodToAdd.basePrice
                 : foodToAdd.discountPrice;
         currentFoodPrice *= foodSizeToAdd.multiplier;
-        selectedIngredients = [];
-        modalVisible = true;
-
+        resetDefaults();
         buildCheckBoxes();
     };
 
+    const resetDefaults = () => {
+        selectedIngredients = [];
+        additionalPrice = 0;
+        modalVisible = true;
+    };
+
     const handleIngredientChange = (id: number, checked: boolean) => {
+        const ingredient = data.ingredients.find((i) => i.id === id);
+        if (!ingredient) return;
         if (checked) {
-            const ingredient = data.ingredients.find((i) => i.id === id);
-            if (!ingredient) return;
             selectedIngredients = [...selectedIngredients, ingredient];
+            additionalPrice += ingredient.price;
         } else {
             selectedIngredients = selectedIngredients.filter(
                 (i) => i.id !== id
             );
+            additionalPrice -= ingredient.price;
         }
     };
 
     let checkBoxes: Array<IngredientCheckboxes> = [];
     const buildCheckBoxes = () => {
-        if(!foodToAdd) return
-        checkBoxes = []
+        if (!foodToAdd) return;
+        checkBoxes = [];
         for (const type of data.ingredientTypes) {
             let isSaved = checkBoxes.find((c) => c.name === type.name);
             let filtered = data.ingredients.filter(
-                (ingredient) => ingredient.ingredientType.id === type.id && !foodToAdd!.ingredients.find(i => i.id === ingredient.id)
+                (ingredient) =>
+                    ingredient.ingredientType.id === type.id &&
+                    !foodToAdd!.ingredients.find((i) => i.id === ingredient.id)
             );
             if (!isSaved) {
                 checkBoxes.push({
@@ -75,6 +85,17 @@
             }
         }
     };
+
+    const addCurrentFoodToCart = () => {
+        let cartItem: CartItem = {
+            id: foodToAdd!.id,
+            foodSizeId: foodSizeToAdd!.id,
+            additionalIngredients: selectedIngredients.map((i) => i.id),
+        };
+
+        console.log(cartItem);
+        //TODO push item to cart
+    };
 </script>
 
 {#if modalVisible}
@@ -84,7 +105,8 @@
                 {foodSizeToAdd?.name}: {foodToAdd?.name}
             </h2>
             <h3 class="text-red-500 font-bold text-xl">
-                {currentFoodPrice} Ft
+                {currentFoodPrice} + {additionalPrice} = {currentFoodPrice +
+                    additionalPrice} Ft
             </h3>
         </div>
         <div slot="body" class=" max-h-96 overflow-auto p-2">
@@ -111,20 +133,45 @@
                             <label
                                 for="check-{ingredient.id}"
                                 class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-                                >{ingredient.name}</label
+                                >{ingredient.name} - {ingredient.price} Ft</label
                             >
                         </div>
                     {/each}
                 </div>
             {/each}
         </div>
+        <div slot="footer" class="flex mt-3">
+            <Button
+                btnClass="btn-primary"
+                on:click={() => {
+                    modalVisible = false;
+                }}>Close</Button
+            >
+            <Button btnClass="btn-success" on:click={addCurrentFoodToCart}
+                >Add to cart</Button
+            >
+        </div>
     </Modal>
 {/if}
 
+
+<div class="foodTypeSelector mt-10 w-8/12 mx-auto">
+    {#each data.foodTypes as foodType}
+        <!-- svelte-ignore a11y-click-events-have-key-events -->
+        <div
+            on:click={() => {
+                currentFoodType = foodType;
+            }}
+            class:selected={currentFoodType.id == foodType.id}
+        >
+            {foodType.name}
+        </div>
+    {/each}
+</div>
 {#if displayFoods}
-    <div class="productGrid w-8/12 mx-auto mt-40">
+    <div class="productGrid w-8/12 mx-auto mt-10">
         {#each displayFoods as food (food.id)}
-            <div class="w-full">
+            <div class="w-full" in:fly={{duration: 2000}}>
                 <ProductCard
                     {toCartClick}
                     {food}
@@ -153,5 +200,57 @@
         display: grid;
         grid-template-columns: repeat(3, 1fr);
         gap: 5px;
+    }
+
+    .foodTypeSelector {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        justify-content: center;
+        align-items: center;
+
+        .selected {
+            color: #000;
+            opacity: 1;
+            &::before {
+                visibility: visible;
+                transform: scaleX(1);
+                background-color: #000;
+            }
+        }
+
+        div {
+            display: inline-block;
+            width: 100%;
+            position: relative;
+            text-decoration: none;
+            text-align: center;
+            cursor: pointer;
+            opacity: 0.6;
+            transition: all 0.3s ease-in-out 0s;
+
+            &:hover {
+                color: #000;
+                opacity: 1;
+
+                &::before {
+                    visibility: visible;
+                    transform: scaleX(1);
+                }
+            }
+
+            &::before {
+                content: "";
+                position: absolute;
+                display: inline-block;
+                width: 100%;
+                height: 2px;
+                bottom: -6px;
+                left: 0;
+                background-color: darkgrey;
+                visibility: hidden;
+                transform: scaleX(0);
+                transition: all 0.3s ease-in-out 0s;
+            }
+        }
     }
 </style>

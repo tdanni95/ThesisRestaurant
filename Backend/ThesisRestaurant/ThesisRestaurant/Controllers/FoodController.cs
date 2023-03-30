@@ -9,6 +9,7 @@ using ThesisRestaurant.Application.Common.Services;
 using ThesisRestaurant.Application.Foods.Commands.Create;
 using ThesisRestaurant.Application.Foods.Commands.Delete;
 using ThesisRestaurant.Application.Foods.Commands.DeleteDiscount;
+using ThesisRestaurant.Application.Foods.Commands.DeleteFile;
 using ThesisRestaurant.Application.Foods.Commands.Discount;
 using ThesisRestaurant.Application.Foods.Commands.Update;
 using ThesisRestaurant.Application.Foods.Commands.UploadFile;
@@ -123,6 +124,18 @@ namespace ThesisRestaurant.Api.Controllers
         public async Task<IActionResult> UploadFile(IFormFile file, int id)
         {
             var command = new UploadFileCommand(id, file);
+            var result = await _meaditor.Send(command);
+            return result.Match(
+                    uploaded => Ok(NoContent()),
+                    errors => Problem(errors)
+                );
+        }
+
+        [HttpDelete("file/{id:int}")]
+        [Authorize(Roles = "Admin,Employee")]
+        public async Task<IActionResult> DeleteFile(int id)
+        {
+            var command = new DeleteFileCommand(id);
             var result = await _meaditor.Send(command);
             return result.Match(
                     uploaded => Ok(NoContent()),

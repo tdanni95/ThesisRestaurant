@@ -57,6 +57,8 @@ namespace ThesisRestaurant.Infrastructure.Persistence.Repositories
             return Result.Deleted;
         }
 
+
+
         public async Task<List<Food>> GetAllFoods()
         {
             return await _context.Foods
@@ -98,6 +100,15 @@ namespace ThesisRestaurant.Infrastructure.Persistence.Repositories
             dbFood.FoodPictures.Add(picture);
             await _context.SaveChangesAsync();
             return Result.Created;
+        }
+
+        public async Task<ErrorOr<Deleted>> DeleteFile(int id)
+        {
+            var file = await _context.FoodPictures.Where(fp => fp.Id == id).FirstOrDefaultAsync();
+            if(file is null) return Errors.Foods.PictureNotFound;
+            _context.FoodPictures.Remove(file);
+            await _context.SaveChangesAsync();
+            return Result.Deleted;
         }
     }
 }

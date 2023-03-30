@@ -8,6 +8,7 @@
         Food,
         CustomFood,
         FoodPrice,
+        FoodPicture
     } from "$lib/types/classData";
     import type { UserData } from "$lib/types/userData";
     import type { SortTableFormatters } from "$lib/types/sortTableFormatters";
@@ -21,6 +22,7 @@
         | CustomFood
         | FoodPrice
         | UserData
+        | FoodPicture
     >;
     export let columns: Array<string | Array<string>>;
     export let ogArray: Array<T>;

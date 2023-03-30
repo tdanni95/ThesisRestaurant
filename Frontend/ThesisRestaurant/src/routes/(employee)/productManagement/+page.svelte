@@ -7,6 +7,7 @@
         Food,
         IngredientType,
         FoodPicture,
+        FoodPrice,
     } from "$lib/types/classData";
     import type { PageData } from "./$types";
     import SortTable from "$lib/components/SortTable.svelte";
@@ -45,7 +46,9 @@
     $: ingredients = data.ingredients as Array<Ingredient>;
     $: foodTypes = data.foodTypes as Array<FoodType>;
 
-    $: availableFoodSizes = data.foodSizes.filter((fs) => fs.foodType.id === currentFood.foodType.id)
+    $: availableFoodSizes = data.foodSizes.filter(
+        (fs) => fs.foodType.id === currentFood.foodType.id
+    );
 
     const editFood = (obj: Food) => {
         currentFood = JSON.parse(JSON.stringify(obj));
@@ -57,10 +60,10 @@
     };
 
     const deleteFood = async (id: number) => {
-        const f = foods.find((f) => f.id == id)
-        if(!f){
-            toastStore.error("Food not found", 2000)
-            return
+        const f = foods.find((f) => f.id == id);
+        if (!f) {
+            toastStore.error("Food not found", 2000);
+            return;
         }
         await Swal.fire({
             title: `Are you sure you want to delete the food ${f.name}?`,
@@ -68,9 +71,9 @@
             showCancelButton: true,
             showLoaderOnConfirm: true,
             preConfirm: async () => {
-                const resp = await fetch(
-                    `api/food?id=${id}`, {method: "DELETE"}
-                );
+                const resp = await fetch(`api/food?id=${id}`, {
+                    method: "DELETE",
+                });
                 const res = await resp.json();
                 if (!res.title) {
                     toastStore.success("Deleted successfully", 2000);
@@ -80,7 +83,7 @@
                 }
             },
         });
-    }
+    };
 
     const foodIngredientsFormatter = (food: Food) => {
         return ingredientFormatter(food.ingredients);
@@ -99,6 +102,17 @@
         name: "price",
         callBack: priceFormatter,
     };
+
+    const pictureFormatter = (picture:FoodPicture) => {
+        let splitted =  picture.src.split('/')
+        let srcText = splitted[splitted.length -1]
+        return `<a class='text-blue-500 hover:text-blue-700 transition-colors' href='${picture.src}' target='_blank'>${srcText}</a>`
+    }
+
+    const PictureFormatter:SortTableFormatters<FoodPicture> = {
+        name: "src",
+        callBack: pictureFormatter
+    }
 
     const invalidateLoad = () => {
         invalidate("app:productManagement");
@@ -179,13 +193,13 @@
             method: "POST",
             body: fd,
         });
-        let res = await result.json()
-        
-        if(res.msg){
-            toastStore.success("File uploaded successfully", 2000)
+        let res = await result.json();
+
+        if (res.msg) {
+            toastStore.success("File uploaded successfully", 2000);
             invalidateLoad();
-        }else{
-            toastStore.error(res.title, 2000)
+        } else {
+            toastStore.error(res.title, 2000);
         }
     };
 
@@ -199,6 +213,35 @@
             foodPictures: baseBictures,
         } as Food;
     };
+
+
+    async function deletePic(id: number) {
+        if(id === 0){
+            toastStore.error("Can't delete default picture!", 2000)
+            return
+        }
+        const pic = currentFood.foodPictures.find(fp => fp.id === id)
+        if(!pic) return
+        await Swal.fire({
+            title: "Delete picture?",
+            icon: 'question',
+            imageUrl: pic.src,
+            imageHeight: 200,
+            showLoaderOnConfirm: true,
+            showCancelButton: true,
+            preConfirm: async function() {
+                const response = await fetch(`api/file?id=${id}`, {method: "DELETE"})
+                const res = await response.json()
+                if(res.msg){
+                    toastStore.success("File deleted successfully!", 2000)
+                    invalidateLoad()
+                }else{
+                    console.log(res);
+                    toastStore.error(res.title, 2000)
+                }
+            }
+        })
+    }
 </script>
 
 <div class="min-w-screen flex items-center justify-center px-5 py-5">
@@ -243,7 +286,7 @@
                     </h1>
                 </div>
                 <ProductCard
-                    availableFoodSizes={availableFoodSizes}
+                    {availableFoodSizes}
                     bind:food={currentFood}
                     ingredient={ingredientFormatter(currentFood?.ingredients)}
                 />
@@ -285,9 +328,51 @@
                 {#if isFoodEdit}
                     <h1 class="font-bold text-2xl mt-5">Attach pictures:</h1>
                     <input type="file" bind:this={fileInput} />
-                    <Button disabled={isLoading} on:click={sendFiles}>Upload</Button>
+                    <Button disabled={isLoading} on:click={sendFiles}
+                        >Upload</Button
+                    >
                 {/if}
             </div>
         </div>
+        {#if isFoodEdit}
+            <div class="flex px-10 mt-5 mb-5">
+                <h1 class="font-bold text-3xl text-gray-900">
+                    Uploaded pictures
+                </h1>
+            </div>
+            <div class="md:flex w-full mt-5 justify-center">
+                <div class="md:flex w-full">
+                    <div class="w-full pb-10 px-5 md:px-10">
+                        <SortTable
+                            columns={["id", "src"]}
+                            formatters={[PictureFormatter]}
+                            ogArray={currentFood.foodPictures}
+                            editFunc={() => {}}
+                            deleteFunc={() => {}}
+                        >
+                            <th
+                                slot="actionButtons"
+                                scope="row"
+                                class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
+                            >
+                                <!-- svelte-ignore a11y-click-events-have-key-events -->
+                                <p
+                                    class="text-red-500 cursor-pointer hover:text-red-700 transition-colors"
+                                    on:click={(e) => {
+                                        const closestRow = e.currentTarget.closest('tr')
+                                        if(!closestRow) return
+                                        const id = closestRow.dataset.id
+                                        if(!id) return
+                                        deletePic(+id)
+                                    }}
+                                >
+                                    Delete picture
+                                </p>
+                            </th>
+                        </SortTable>
+                    </div>
+                </div>
+            </div>
+        {/if}
     </div>
 </div>
