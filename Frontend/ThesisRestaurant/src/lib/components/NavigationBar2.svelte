@@ -14,6 +14,7 @@
     import { page } from "$app/stores";
     import { enhance } from "$app/forms";
     import { fly } from "svelte/transition";
+    import cartStore from "$lib/stores/cartStore";
 </script>
 
 <Navbar
@@ -65,9 +66,10 @@
                     {$page.data.user.lastName}</Chevron
                 >
             </NavLi>
-            <Dropdown triggeredBy="#userMenu" class="w-44 z-20">
+            <Dropdown triggeredBy="#userMenu" class="z-20">
                 <DropdownItem href="/profile">Profile</DropdownItem>
                 <DropdownItem href="/customFood">My custom foods</DropdownItem>
+                <DropdownItem href="/cart">Shopping cart ({$cartStore.foods.length + $cartStore.customFoods.length} item(s) in cart)</DropdownItem>
             </Dropdown>
             <NavLi>
                 <form method="post" action="/login?/logout" use:enhance>

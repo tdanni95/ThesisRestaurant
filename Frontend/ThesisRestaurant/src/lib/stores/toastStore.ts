@@ -14,7 +14,7 @@ function createToastsStore() {
 		type,
 		message,
 		id,
-		timeout = 3000
+		timeout = 2000
 	}: {
 		type: Toast['type'];
 		message: string;

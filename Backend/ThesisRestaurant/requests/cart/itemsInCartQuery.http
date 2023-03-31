@@ -1,0 +1,17 @@
+POST https://localhost:7068/order/1/cart
+Content-Type: application/json
+
+{
+  "customFoodIds": [
+    1,2
+  ],
+  "orderItems": [
+    {
+      "foodId": 1,
+      "foodSizeId": 1,
+      "additionalIngredients": [
+        4
+      ]
+    }
+  ]
+}

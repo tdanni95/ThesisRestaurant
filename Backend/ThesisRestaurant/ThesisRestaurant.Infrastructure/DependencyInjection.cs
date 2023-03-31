@@ -6,6 +6,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using ThesisRestaurant.Application.Common.Interfaces.Authentication;
+using ThesisRestaurant.Application.Common.Interfaces.Orders;
 using ThesisRestaurant.Application.Common.Interfaces.Persistence;
 using ThesisRestaurant.Application.Common.Services;
 using ThesisRestaurant.Infrastructure.Authentication;
@@ -32,6 +33,8 @@ namespace ThesisRestaurant.Infrastructure
             services.AddScoped<ICustomFoodBuilder, CustomFoodBuilder>();
             services.AddScoped<IFoodBuilder, FoodBuilder>();
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IOrderItemBuilder, OrderItemBuilder>();
+            services.AddScoped<IOrderCustomItemBuilder, OrderCustomItemBuilder>();
             return services;
         }
 

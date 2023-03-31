@@ -1,10 +1,16 @@
 export interface Cart{
-    customFoods?: Array<number>;
-    foods? : Array<CartItem>;
+    customFoods: Array<CartCustomItem>;
+    foods : Array<CartItem>;
+}
+
+export type CartCustomItem = {
+    guid: number;
+    id: number;
 }
 
 export type CartItem = {
+    guid: number;
     id: number;
     foodSizeId: number;
-    additionalIngredients? : Array<number>;
+    additionalIngredients : Array<number>;
 }

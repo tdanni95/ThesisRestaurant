@@ -47,6 +47,17 @@ namespace ThesisRestaurant.Infrastructure.Persistence.Repositories
             return list!;
         }
 
+        public async Task<List<CustomFood>> GetWhereidIn(List<int> ids)
+        {
+            var list = await _context.CustomFoods
+                .Where(cf => ids.Contains(cf.Id))
+                .Include(cf => cf.FoodType)
+                .Include(cf => cf.Ingredients)
+                .ThenInclude(cfi => cfi.IngredientType)
+                .ToListAsync();
+            return list!;
+        }
+
         public async Task<ErrorOr<Updated>> UpdateCustomFood(CustomFood customFood, int userId)
         {
             var dbCf = await GetById(customFood.Id, userId);

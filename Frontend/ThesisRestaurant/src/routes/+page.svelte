@@ -5,6 +5,8 @@
     import ProductCard from "$lib/components/ProductCard.svelte";
     import IngredientForm from "$lib/components/stockForms/IngredientForm.svelte";
     import { ingredientFormatter } from "$lib/helpers/ingredientFormatter";
+    import cartStore from "$lib/stores/cartStore";
+    import toastStore from "$lib/stores/toastStore";
     import type { CartItem } from "$lib/types/cart";
     import type { Food, FoodSize, Ingredient } from "$lib/types/classData";
     import type { IngredientCheckboxes } from "$lib/types/ingredientCheckboxes";
@@ -86,14 +88,17 @@
         }
     };
 
-    const addCurrentFoodToCart = () => {
-        let cartItem: CartItem = {
-            id: foodToAdd!.id,
-            foodSizeId: foodSizeToAdd!.id,
-            additionalIngredients: selectedIngredients.map((i) => i.id),
-        };
+    $: console.log($cartStore.foods);
+    
 
-        console.log(cartItem);
+    const addCurrentFoodToCart = () => {
+        try {
+            cartStore.addItem(foodToAdd!.id, foodSizeToAdd!.id, selectedIngredients.map((i) => i.id))
+            toastStore.success("Item addedd successfully!")
+            modalVisible = false
+        } catch (error) {
+            toastStore.error("Unexpected error")
+        }
         //TODO push item to cart
     };
 </script>
