@@ -42,9 +42,9 @@
 
     let isFoodEdit = false;
 
-    $: ingredientTypes = data.ingredientTypes as Array<IngredientType>;
-    $: ingredients = data.ingredients as Array<Ingredient>;
-    $: foodTypes = data.foodTypes as Array<FoodType>;
+    let ingredientTypes = data.ingredientTypes as Array<IngredientType>;
+    let ingredients = data.ingredients as Array<Ingredient>;
+    let foodTypes = data.foodTypes as Array<FoodType>;
 
     $: availableFoodSizes = data.foodSizes.filter(
         (fs) => fs.foodType.id === currentFood.foodType.id

@@ -60,11 +60,13 @@ namespace ThesisRestaurant.Infrastructure.Services
 
                     oai.Ingredient = ingredient;
                     oai.Quantity = count;
+                    
 
                     oais.Add(oai);
                 }
 
                 orderItem.Food = food;
+                orderItem.Price = finalPrice;
                 orderItem.FoodSize = foodSize.Value;
                 orderItem.Quantity = 1;
                 orderItem.AdditionalIngredients = oais;

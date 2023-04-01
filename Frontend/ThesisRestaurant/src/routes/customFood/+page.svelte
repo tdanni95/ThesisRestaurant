@@ -15,6 +15,7 @@
     import type { SortTableFormatters } from "$lib/types/sortTableFormatters";
     import Button from "$lib/components/Button.svelte";
     import type { PageData } from "../$types";
+    import cartStore from "$lib/stores/cartStore";
 
     export let data: PageData;
 
@@ -117,6 +118,18 @@
                     >
                         <!-- svelte-ignore a11y-click-events-have-key-events -->
                         <p
+                            on:click={(e) => {
+                                const tr = e.currentTarget.closest('tr')
+                                if(!tr) return
+                                const id = tr.dataset.id
+                                if(!id) return
+                                try {
+                                    cartStore.addCustomitem(+id);
+                                    toastStore.success("Added to cart successfully!", 2000)
+                                } catch (error) {
+                                    toastStore.error("Unexpected error!", 2000)
+                                }
+                            }}
                             class="text-green-500 cursor-pointer hover:text-green-700"
                         >
                             Add to cart

@@ -1,16 +1,13 @@
 <script lang="ts">
     import type { CustomFood } from "$lib/types/classData";
     import { Card } from "flowbite-svelte";
-    import { onDestroy, onMount } from "svelte";
 
     export let food: CustomFood;
 
     $: name = food.name;
     export let ingredient: string;
     $: foodType = food.foodType.name;
-
-    let currentImage = 0;
-
+    
 </script>
 
 <Card padding="none" size="lg">
