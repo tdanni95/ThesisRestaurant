@@ -15,11 +15,6 @@ namespace ThesisRestaurant.Api.Common.Mapping
     {
         public void Register(TypeAdapterConfig config)
         {
-            config.NewConfig<(OrderRequest request, int userId, int addressId), CreateOrderCommand>()
-                .Map(dest => dest.addressId, src => src.addressId)
-                .Map(dest => dest.userId, src => src.userId)
-                .Map(dest => dest, src => src.request);
-
 
             config.NewConfig<GetItemsInCartQuery, OrderRequest>()
                 .Map(dest => dest.CustomFoodIds, src => src.CustomFoodIds)
@@ -60,6 +55,13 @@ namespace ThesisRestaurant.Api.Common.Mapping
             config.NewConfig<CartResult, CartResponse>()
                 .Map(dest => dest.CustomFoods, src => src.CustomFoods)
                 .Map(dest => dest.Foods, src => src.Foods);
+
+
+            config.NewConfig<(OrderRequest request, int userId, int addressId), CreateOrderCommand>()
+                .Map(dest => dest.AddressId, src => src.addressId)
+                .Map(dest => dest.UserId, src => src.userId)
+                .Map(dest => dest.CustomFoodIds, src => src.request.CustomFoodIds)
+                .Map(dest => dest.OrderItems, src => src.request.OrderItems);
         }
     }
 }

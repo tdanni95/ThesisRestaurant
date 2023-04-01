@@ -15,6 +15,8 @@
     import type { SortTableFormatters } from "$lib/types/sortTableFormatters";
     import type { CartItem } from "$lib/types/cart";
     import Button from "$lib/components/Button.svelte";
+    import toastStore from "$lib/stores/toastStore";
+    import { redirect } from "@sveltejs/kit";
 
     let userData = $page.data.userData as UserData;
 
@@ -22,9 +24,8 @@
 
     let foods: CartResponse | undefined = undefined;
 
-
     let totalPrice = 0;
-    let isLoading = false
+    let isLoading = false;
 
     onMount(async () => {
         await fetchCart();
@@ -57,9 +58,15 @@
             }
         }
 
-        totalPrice = 0
-        totalPrice += foods.foods.reduce((carry, current) => carry + current.price, 0)
-        totalPrice += foods.customFoods.reduce((carry, current) => carry + current.price, 0)
+        totalPrice = 0;
+        totalPrice += foods.foods.reduce(
+            (carry, current) => carry + current.price,
+            0
+        );
+        totalPrice += foods.customFoods.reduce(
+            (carry, current) => carry + current.price,
+            0
+        );
     };
 
     const deleteFoodFromCart = async (guid: number) => {
@@ -72,8 +79,6 @@
     };
 
     const deleteCustomFoodFromCart = async (guid: number) => {
-        console.log(guid);
-
         if (!foods) return;
         let myFood = foods.customFoods.find((f) => f.guid === guid);
         console.log(myFood);
@@ -146,6 +151,32 @@
     const PriceFormatter: SortTableFormatters<CartFood | CartCustomFood> = {
         name: "price",
         callBack: priceFormatter,
+    };
+
+    const placeOrder = async () => {
+        isLoading = true;
+        const body = {
+            addressId: selectedAddressId,
+            customFoods: $cartStore.customFoods.map((cf) => cf.id),
+            foods: $cartStore.foods,
+        };
+        const response = await fetch("api/order", {
+            body: JSON.stringify(body),
+            method: "POST",
+        }).then(async (res) => await res.json());
+
+        if (response.msg) {
+            //TODO clear cart
+            toastStore.success("Items ordered successfully", 2000);
+            cartStore.clear();
+            foods!.customFoods = [] as Array<CartCustomFood>;
+            foods!.foods = [] as Array<CartFood>;
+        } else {
+            toastStore.error(response.title);
+        }
+        console.log(response);
+
+        isLoading = false;
     };
 </script>
 
@@ -271,7 +302,11 @@
             {/each}
         </div>
         <div class="flex justify-center w-8/12 mx-auto mt-6">
-            <Button disabled={totalPrice == 0 || isLoading}>Place order - {totalPrice} Ft</Button>
+            <Button
+                on:click={placeOrder}
+                disabled={totalPrice == 0 || isLoading}
+                >Place order - {totalPrice} Ft</Button
+            >
         </div>
     </div>
 </div>
@@ -290,7 +325,7 @@
             color: #fff;
             // background-color: greenyellow;
         }
-        
+
         &:hover:not(.selected) {
             @apply bg-red-400;
             color: #fff;

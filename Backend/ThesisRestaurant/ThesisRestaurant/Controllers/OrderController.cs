@@ -46,6 +46,7 @@ namespace ThesisRestaurant.Api.Controllers
         public async Task<IActionResult> PlaceOrder(OrderRequest order, int userId, int addressId)
         {
             var command = _mapper.Map<CreateOrderCommand>((order, userId, addressId));
+            Console.WriteLine($"COMMAND: {command.UserId} - {userId}");
             var result = await _meaditor.Send(command);
 
             return result.Match(

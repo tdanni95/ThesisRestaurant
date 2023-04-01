@@ -50,19 +50,18 @@ function createCartStore() {
         }
     }
 
-    async function getCartValue(): Promise<Cart> {
-        return new Promise((resolve) => {
-            subscribe((cart) => {
-                resolve(cart);
-            })();
-        });
-      }
-
     if (typeof localStorage !== 'undefined') {
         // Save the latest value to local storage on every update
         subscribe((cart) => {
             localStorage.setItem(key, JSON.stringify(cart))
         })
+    }
+
+    function clearCart(){
+        update((cart) => ({
+            customFoods: [] as Array<CartCustomItem>,
+            foods: [] as Array<CartItem>
+        }))
     }
 
 
@@ -71,7 +70,7 @@ function createCartStore() {
         addItem: addItem,
         addCustomitem: addCustomitem,
         deleteItem: deleteItem,
-        get: getCartValue
+        clear: clearCart
     }
 }
 

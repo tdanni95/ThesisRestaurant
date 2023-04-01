@@ -31,13 +31,13 @@ namespace ThesisRestaurant.Application.Cart.Commands.Create
             var items = await _orderItemBuilder.BuildOrderItem(request.OrderItems);
             if (items.IsError) return items.Errors;
 
-            var user = await _userRepository.GetUserById(request.userId);
+            var user = await _userRepository.GetUserById(request.UserId);
             if (user is null) return Errors.Users.NotFound;
-            var address = user.UserAddresses.Where(ua => ua.Id == request.addressId).FirstOrDefault();
+            var address = user.UserAddresses.Where(ua => ua.Id == request.AddressId).FirstOrDefault();
             if (address is null) return Errors.Users.AddressNotFound;
 
             Order o = Order.Create(address.GetFullAddress(), items.Value, customitems.Value);
-            var result = await _orderRepository.PlaceOrder(o, request.userId);
+            var result = await _orderRepository.PlaceOrder(o, request.UserId);
             return result;
         }
     }

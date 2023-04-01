@@ -1,6 +1,7 @@
 ﻿using ErrorOr;
 using ThesisRestaurant.Application.Common.Interfaces.Orders;
 using ThesisRestaurant.Application.Common.Interfaces.Persistence;
+using ThesisRestaurant.Domain.Common.Errors;
 using ThesisRestaurant.Domain.CustomFoods;
 using ThesisRestaurant.Domain.Orders.OrderCustomItems;
 
@@ -26,6 +27,7 @@ namespace ThesisRestaurant.Infrastructure.Services
             foreach (var item in counts)
             {
                 var customFood = customfoods.Where(cf => cf.Id == item.Key).First();
+                if (customFood is null) return Errors.CustomFoods.NotFound;
                 OrderCustomItem oci = new()
                 {
                     CustumFood = customFood,
