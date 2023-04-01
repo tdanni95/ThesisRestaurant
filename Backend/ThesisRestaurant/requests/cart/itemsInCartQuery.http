@@ -3,7 +3,7 @@ Content-Type: application/json
 
 {
   "customFoodIds": [
-    1,2
+    1,2,1
   ],
   "orderItems": [
     {

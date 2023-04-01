@@ -21,7 +21,6 @@ namespace ThesisRestaurant.Infrastructure.Persistence.Repositories
             if (user is null) return Errors.Users.NotFound;
             user.Orders.Add(order);
 
-
             await _context.SaveChangesAsync();
             return Result.Created;
         }

@@ -29,6 +29,11 @@ namespace ThesisRestaurant.Domain.Orders
             CustomFoods = customFoods;
         }
 
+        public static Order Create(string address, List<OrderItem> foods, List<OrderCustomItem> customFoods, int id = 0)
+        {
+            return new(id, DateTime.UtcNow, address, foods, customFoods);
+        }
+
         public List<OrderItem> Foods { get; private set; } = new();
         public List<OrderCustomItem> CustomFoods { get; private set; } = new();
     }

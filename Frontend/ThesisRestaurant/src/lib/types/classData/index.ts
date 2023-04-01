@@ -12,3 +12,7 @@ export type { CustomFood } from './customFoods'
 
 
 export type { UserRole } from './userRole'
+
+export type {
+    CartResponse, CartFood, CartCustomFood, CartIngredient, CartAdditionalIngredient
+} from './cartResponse'

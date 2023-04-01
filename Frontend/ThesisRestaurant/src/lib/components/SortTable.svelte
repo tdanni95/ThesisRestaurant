@@ -8,10 +8,13 @@
         Food,
         CustomFood,
         FoodPrice,
-        FoodPicture
+        FoodPicture,
+        CartFood,
+        CartCustomFood
     } from "$lib/types/classData";
     import type { UserData } from "$lib/types/userData";
     import type { SortTableFormatters } from "$lib/types/sortTableFormatters";
+    import { flip } from "svelte/animate";
 
     type T = $$Generic<
         | Ingredient
@@ -23,12 +26,16 @@
         | FoodPrice
         | UserData
         | FoodPicture
+        | CartFood
+        | CartCustomFood
     >;
     export let columns: Array<string | Array<string>>;
     export let ogArray: Array<T>;
 
     export let formatters: Array<SortTableFormatters<T>> | undefined =
         undefined;
+
+    export let idKey:string = "id"
 
     $: rowData = ogArray as Array<T>;
 
@@ -164,8 +171,8 @@
                         >
                     </tr>
                 {:else}
-                    {#each rowData as data}
-                        <tr data-id={data.id} class="bg-white border-b ">
+                    {#each rowData as data (data[idKey])}
+                        <tr data-id={data[idKey]} class="bg-white border-b" animate:flip={{ duration: 300 }}>
                             {#if needEditAndDelete}
                                 <slot name="actionButtons">
                                     <th

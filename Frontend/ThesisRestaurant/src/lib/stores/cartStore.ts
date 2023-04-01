@@ -1,5 +1,5 @@
 import type { Cart, CartCustomItem, CartItem } from "$lib/types/cart";
-import { writable, type Writable } from "svelte/store";
+import { writable } from "svelte/store";
 
 
 function createCartStore() {
@@ -47,24 +47,31 @@ function createCartStore() {
                 customFoods: cart.customFoods.filter((cci) => cci.guid !== guid),
                 foods: [...cart.foods]
             }))
-            console.log("szosszer");
-            
         }
     }
+
+    async function getCartValue(): Promise<Cart> {
+        return new Promise((resolve) => {
+            subscribe((cart) => {
+                resolve(cart);
+            })();
+        });
+      }
 
     if (typeof localStorage !== 'undefined') {
         // Save the latest value to local storage on every update
         subscribe((cart) => {
-          localStorage.setItem(key, JSON.stringify(cart))
+            localStorage.setItem(key, JSON.stringify(cart))
         })
-      }
+    }
 
 
     return {
         subscribe,
         addItem: addItem,
         addCustomitem: addCustomitem,
-        deleteItem: deleteItem
+        deleteItem: deleteItem,
+        get: getCartValue
     }
 }
 

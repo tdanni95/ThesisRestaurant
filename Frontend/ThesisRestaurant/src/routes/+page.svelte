@@ -29,6 +29,7 @@
     let modalVisible = false;
     let foodToAdd: Food | undefined = undefined;
     let foodSizeToAdd: FoodSize | undefined = undefined;
+    let multiplier = 1.0
     let selectedIngredients: Array<Ingredient> = [];
     let additionalPrice = 0;
     let currentFoodPrice = 0;
@@ -37,6 +38,7 @@
         foodToAdd = foods.find((f) => f.id === foodId);
         foodSizeToAdd = data.foodSizes.find((fs) => fs.id === foodSizeId);
         if (!foodToAdd || !foodSizeToAdd) return;
+        multiplier = foodSizeToAdd.multiplier
         currentFoodPrice =
             foodToAdd.basePrice < foodToAdd.discountPrice
                 ? foodToAdd.basePrice
@@ -57,12 +59,12 @@
         if (!ingredient) return;
         if (checked) {
             selectedIngredients = [...selectedIngredients, ingredient];
-            additionalPrice += ingredient.price;
+            additionalPrice += ingredient.price * multiplier;
         } else {
             selectedIngredients = selectedIngredients.filter(
                 (i) => i.id !== id
             );
-            additionalPrice -= ingredient.price;
+            additionalPrice -= ingredient.price * multiplier;
         }
     };
 
@@ -138,7 +140,7 @@
                             <label
                                 for="check-{ingredient.id}"
                                 class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-                                >{ingredient.name} - {ingredient.price} Ft</label
+                                >{ingredient.name} - {ingredient.price * multiplier} Ft</label
                             >
                         </div>
                     {/each}

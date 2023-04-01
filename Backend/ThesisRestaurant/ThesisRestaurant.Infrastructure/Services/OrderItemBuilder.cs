@@ -26,12 +26,14 @@ namespace ThesisRestaurant.Infrastructure.Services
             var counts = OrderItemCounts(query);
             var orderItems = new List<OrderItem>();
 
+            List<string> savedKeys = new();
+
             foreach (var queryItem in query)
             {
                 int FoodId = queryItem.FoodId;
                 int FoodSizeId = queryItem.FoodSizeId;
                 List<int> AdditionalIngredients = queryItem.AdditionalIngredients;
-                
+
 
                 var orderItem = new OrderItem();
 
@@ -60,7 +62,7 @@ namespace ThesisRestaurant.Infrastructure.Services
 
                     oai.Ingredient = ingredient;
                     oai.Quantity = count;
-                    
+
 
                     oais.Add(oai);
                 }
@@ -68,7 +70,27 @@ namespace ThesisRestaurant.Infrastructure.Services
                 orderItem.Food = food;
                 orderItem.Price = finalPrice;
                 orderItem.FoodSize = foodSize.Value;
-                orderItem.Quantity = 1;
+
+                if (oais.Count == 0)
+                {
+                    string myKey = $"{food.Id}-{foodSize.Value.Id}";
+                    int foodCount = counts.GetValueOrDefault(myKey);
+                    if (foodCount > 0)
+                    {
+                        var isSaved = savedKeys.Where(sk => sk == myKey).FirstOrDefault();
+                        if (isSaved is not null) continue;
+                        savedKeys.Add(myKey);
+                        orderItem.Quantity = (uint)foodCount;
+                    }
+                    else
+                    {
+                        orderItem.Quantity = 1;
+                    }
+                }
+                else
+                {
+                    orderItem.Quantity = 1;
+                }
                 orderItem.AdditionalIngredients = oais;
 
                 orderItems.Add(orderItem);
@@ -88,8 +110,10 @@ namespace ThesisRestaurant.Infrastructure.Services
                 {
                     counts[key] = 1;
                 }
-
-                counts[key]++;
+                else
+                {
+                    counts[key]++;
+                }
             }
 
             return counts;

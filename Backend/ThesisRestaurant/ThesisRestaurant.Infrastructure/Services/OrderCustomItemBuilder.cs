@@ -17,17 +17,20 @@ namespace ThesisRestaurant.Infrastructure.Services
 
         public async Task<ErrorOr<List<OrderCustomItem>>> BuildCustomItems(List<int> ids)
         {
-            Dictionary<CustomFood, int> counts = await BuildCustomFoodCounts(ids);
+
+            var customfoods = await _customFoodRepository.GetWhereidIn(ids);
+            Dictionary<int, int> counts = BuildCustomFoodCounts(ids);
 
             List<OrderCustomItem> orderCustomItems = new List<OrderCustomItem>();
 
             foreach (var item in counts)
             {
+                var customFood = customfoods.Where(cf => cf.Id == item.Key).First();
                 OrderCustomItem oci = new()
                 {
-                    CustumFood = item.Key,
+                    CustumFood = customFood,
                     Quantity = (uint)item.Value,
-                    Price = item.Key.Price * item.Value
+                    Price = customFood.Price * item.Value
                 };
 
                 orderCustomItems.Add(oci);
@@ -36,12 +39,11 @@ namespace ThesisRestaurant.Infrastructure.Services
             return orderCustomItems;
         }
 
-        private async Task<Dictionary<CustomFood, int>> BuildCustomFoodCounts(List<int> ids)
+        private Dictionary<int, int> BuildCustomFoodCounts(List<int> ids)
         {
-            Dictionary<CustomFood, int> counts = new();
+            Dictionary<int, int> counts = new();
 
-            var customfoods = await _customFoodRepository.GetWhereidIn(ids);
-            foreach (var item in customfoods)
+            foreach (var item in ids)
             {
                 if (!counts.ContainsKey(item))
                 {
