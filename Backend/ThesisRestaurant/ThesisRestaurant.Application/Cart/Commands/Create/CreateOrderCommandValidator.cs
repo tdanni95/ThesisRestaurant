@@ -6,6 +6,7 @@ namespace ThesisRestaurant.Application.Cart.Commands.Create
     {
         public CreateOrderCommandValidator()
         {
+            RuleFor(x => x.AddressId).NotEmpty().GreaterThan(0);
 
             RuleFor(x => x.CustomFoodIds)
                 .Must(x => x != null && x.Count > 0)
