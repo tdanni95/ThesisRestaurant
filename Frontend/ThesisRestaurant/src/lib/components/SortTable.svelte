@@ -10,7 +10,8 @@
         FoodPrice,
         FoodPicture,
         CartFood,
-        CartCustomFood
+        CartCustomFood,
+        OrderResponse,
     } from "$lib/types/classData";
     import type { UserData } from "$lib/types/userData";
     import type { SortTableFormatters } from "$lib/types/sortTableFormatters";
@@ -28,6 +29,7 @@
         | FoodPicture
         | CartFood
         | CartCustomFood
+        | OrderResponse
     >;
     export let columns: Array<string | Array<string>>;
     export let ogArray: Array<T>;
@@ -35,7 +37,7 @@
     export let formatters: Array<SortTableFormatters<T>> | undefined =
         undefined;
 
-    export let idKey:string = "id"
+    export let idKey: string = "id";
 
     $: rowData = ogArray as Array<T>;
 
@@ -172,7 +174,11 @@
                     </tr>
                 {:else}
                     {#each rowData as data (data[idKey])}
-                        <tr data-id={data[idKey]} class="bg-white border-b" animate:flip={{ duration: 300 }}>
+                        <tr
+                            data-id={data[idKey]}
+                            class="bg-white border-b"
+                            animate:flip={{ duration: 300 }}
+                        >
                             {#if needEditAndDelete}
                                 <slot name="actionButtons">
                                     <th

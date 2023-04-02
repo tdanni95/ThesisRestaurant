@@ -17,4 +17,4 @@ export type {
     CartResponse, CartFood, CartCustomFood, CartIngredient, CartAdditionalIngredient
 } from './cartResponse'
 
-export type { Order } from './order'
+export type { Order, OrderResponse } from './order'

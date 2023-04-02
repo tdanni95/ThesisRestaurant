@@ -7,9 +7,9 @@ namespace ThesisRestaurant.Domain.Orders.OrderItems
     public class OrderItem
     {
         public int Id { get; set; }
-        public Order Order { get; set; }
-        public Food Food { get; set; }
-        public FoodSize FoodSize{ get; set; }
+        public Order? Order { get; set; }
+        public Food Food { get; set; } = null!;
+        public FoodSize FoodSize { get; set; } = null!;
         public uint Quantity { get; set; }
         public double Price { get; set; }
 

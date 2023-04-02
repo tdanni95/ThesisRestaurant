@@ -5,6 +5,7 @@ using ThesisRestaurant.Application.Cart.Queries;
 using ThesisRestaurant.Contracts.Ingredient;
 using ThesisRestaurant.Contracts.Orders;
 using ThesisRestaurant.Domain.Ingredients;
+using ThesisRestaurant.Domain.Orders;
 using ThesisRestaurant.Domain.Orders.OrderAdditionalIngredients;
 using ThesisRestaurant.Domain.Orders.OrderCustomItems;
 using ThesisRestaurant.Domain.Orders.OrderItems;
@@ -62,6 +63,16 @@ namespace ThesisRestaurant.Api.Common.Mapping
                 .Map(dest => dest.UserId, src => src.userId)
                 .Map(dest => dest.CustomFoodIds, src => src.request.CustomFoodIds)
                 .Map(dest => dest.OrderItems, src => src.request.OrderItems);
+
+            config.NewConfig<Order, ActualOrderResponse>()
+                .Map(dest => dest.Id, src => src.Id)
+                .Map(dest => dest.Created, src => src.Created)
+                .Map(dest => dest.Address, src => src.Address)
+                .Map(dest => dest.Items, src => src);
+
+            config.NewConfig<OrderResult, OrderResponse>()
+                .Map(dest => dest.User, src => src.User)
+                .Map(dest => dest.Items, src => src.Order);
         }
     }
 }

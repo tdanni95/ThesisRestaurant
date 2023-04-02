@@ -1,10 +1,15 @@
-﻿using MapsterMapper;
+﻿using ErrorOr;
+using Mapster;
+using MapsterMapper;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ThesisRestaurant.Application.Cart.Commands.Create;
+using ThesisRestaurant.Application.Cart.Common;
 using ThesisRestaurant.Application.Cart.Queries;
+using ThesisRestaurant.Application.Cart.Queries.GetAllOrders;
+using ThesisRestaurant.Application.Cart.Queries.UserOrders;
 using ThesisRestaurant.Application.Common.Interfaces.Persistence;
 using ThesisRestaurant.Contracts.Orders;
 using ThesisRestaurant.Domain.CustomFoods;
@@ -46,7 +51,6 @@ namespace ThesisRestaurant.Api.Controllers
         public async Task<IActionResult> PlaceOrder(OrderRequest order, int userId, int addressId)
         {
             var command = _mapper.Map<CreateOrderCommand>((order, userId, addressId));
-            Console.WriteLine($"COMMAND: {command.UserId} - {userId}");
             var result = await _meaditor.Send(command);
 
             return result.Match(
@@ -55,17 +59,28 @@ namespace ThesisRestaurant.Api.Controllers
                 );
         }
 
-        //[HttpGet]
-        //public async Task<IActionResult> GetUserOrders(int userId)
-        //{
+        [HttpGet]
+        public async Task<IActionResult> GetUserOrders(int userId)
+        {
+            var query = new GetUserOrdersQuery(userId);
+            var result = await _meaditor.Send(query);
+            return result.Match(
+                    order => Ok(_mapper.Map<OrderResponse>(order)),
+                    errors => Problem(errors)
+                );
+        }
 
-        //}
+        [HttpGet("all")]
+        [Authorize(Roles = "Admin, Employee")]
+        public async Task<IActionResult> GetAllOrders()
+        {
+            var query = new GetAllOrdersQuery();
+            var result = await _meaditor.Send(query);
+            return result.Match(
+                    order => Ok(order.Adapt<OrderResponse[]>()),
+                    errors => Problem(errors)
+                );
+        }
 
-        //[HttpGet("all")]
-        //public async Task<IActionResult> GetAllOrders()
-        //{
-
-        //}
-        
     }
 }

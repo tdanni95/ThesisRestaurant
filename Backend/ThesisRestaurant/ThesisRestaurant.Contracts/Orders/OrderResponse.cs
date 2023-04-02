@@ -1,4 +1,6 @@
 ﻿namespace ThesisRestaurant.Contracts.Orders
 {
-    public record OrderResponse(int Id, string Address, DateTime Created, CartResponse Items);
+    public record OrderResponse(string User, List<ActualOrderResponse> Items);
+
+    public record ActualOrderResponse(int Id, DateTime Created, string Address, CartResponse Items);
 }
