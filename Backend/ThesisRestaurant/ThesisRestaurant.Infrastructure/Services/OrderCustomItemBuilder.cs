@@ -20,13 +20,14 @@ namespace ThesisRestaurant.Infrastructure.Services
         {
 
             var customfoods = await _customFoodRepository.GetWhereidIn(ids);
+            if (customfoods is null) return Errors.CustomFoods.NotFound;
             Dictionary<int, int> counts = BuildCustomFoodCounts(ids);
 
             List<OrderCustomItem> orderCustomItems = new List<OrderCustomItem>();
 
             foreach (var item in counts)
             {
-                var customFood = customfoods.Where(cf => cf.Id == item.Key).First();
+                var customFood = customfoods.Where(cf => cf.Id == item.Key).FirstOrDefault();
                 if (customFood is null) return Errors.CustomFoods.NotFound;
                 OrderCustomItem oci = new()
                 {

@@ -48,6 +48,7 @@
                     >
                     <DropdownItem href="/stock">Stock</DropdownItem>
                     <DropdownItem href="/discount">Manage discounts</DropdownItem>
+                    <DropdownItem href="/orders">View orders</DropdownItem>
                 </Dropdown>
             {/if}
             {#if $page.data.user.role === "Admin"}
@@ -70,6 +71,7 @@
                 <DropdownItem href="/profile">Profile</DropdownItem>
                 <DropdownItem href="/customFood">My custom foods</DropdownItem>
                 <DropdownItem href="/cart">Shopping cart ({$cartStore.foods.length + $cartStore.customFoods.length} item(s) in cart)</DropdownItem>
+                <DropdownItem href="/previousOrders">Previous orders</DropdownItem>
             </Dropdown>
             <NavLi>
                 <form method="post" action="/login?/logout" use:enhance>
