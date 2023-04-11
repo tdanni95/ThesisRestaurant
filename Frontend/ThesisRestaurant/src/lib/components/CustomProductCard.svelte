@@ -39,7 +39,7 @@
 
             <div class="mt-3">
                 <span class="text-3xl font-bold text-gray-900">
-                    {food.price} Ft
+                    {food.price || 0} Ft
                 </span>
                 <div class="flex justify-between items-center">
                     <slot name="buttons" />

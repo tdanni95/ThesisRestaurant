@@ -220,6 +220,8 @@
         <h1 class="font-bold text-3xl text-center text-gray-900">Food types</h1>
         <div class="md:flex w-full">
             <div class="w-full md:w-6/12 pb-10 px-5 md:px-10">
+
+                
                 <SortTable
                     columns={["name", "price"]}
                     ogArray={foodTypes}

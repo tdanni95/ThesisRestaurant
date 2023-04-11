@@ -1,5 +1,4 @@
 ﻿using ErrorOr;
-using System.Diagnostics;
 
 namespace ThesisRestaurant.Domain.Common.Errors
 {

@@ -18,12 +18,12 @@ namespace ThesisRestaurant.Api.Common.Errors
         }
 
         public override ProblemDetails CreateProblemDetails(
-    HttpContext httpContext,
-    int? statusCode = null,
-    string? title = null,
-    string? type = null,
-    string? detail = null,
-    string? instance = null)
+        HttpContext httpContext,
+        int? statusCode = null,
+        string? title = null,
+        string? type = null,
+        string? detail = null,
+        string? instance = null)
         {
             statusCode ??= 500;
 
@@ -91,11 +91,11 @@ namespace ThesisRestaurant.Api.Common.Errors
             {
                 problemDetails.Extensions["traceId"] = traceId;
             }
+
             var errors = httpContext?.Items[HttpContextItemKeys.Errors] as List<Error>;
             if (errors is not null)
             {
                 problemDetails.Extensions.Add("errorCodes", errors.Select(e => e.Code));
-
             }
         }
     }

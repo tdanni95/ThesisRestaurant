@@ -9,9 +9,6 @@ export const POST: RequestHandler = async ({ request, cookies, url }) => {
     const data = await request.json()
     const fetchUrl = `${API_ROUTE}food/discount/${url.searchParams.get('id')}`
 
-
-
-
     const response = await customFetch(fetchUrl, cookies, {
         method: 'PUT', body: JSON.stringify(data), headers: {
             Accept: "application/json",
@@ -19,10 +16,7 @@ export const POST: RequestHandler = async ({ request, cookies, url }) => {
         },
     })
 
-
     const res = await response.json()
-
-    // const response = await customFetch();
     return json(res)
 }
 

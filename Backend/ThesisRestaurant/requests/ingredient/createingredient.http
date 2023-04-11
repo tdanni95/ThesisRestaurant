@@ -1,11 +1,13 @@
 @host=https://localhost:7068
+@token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwiZ2l2ZW5fbmFtZSI6IlTDtnLDtmsiLCJmYW1pbHlfbmFtZSI6IkTDoW5pZWwiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJBZG1pbiIsImp0aSI6ImI5NzJiZGM3LWM4NWMtNGExMy04N2EzLTRlNDliODA0Nzk0YSIsImV4cCI6MTY4MTA0MTE3MywiaXNzIjoiVGhlc2lzUmVzdGF1cmFudCIsImF1ZCI6IlRoZXNpc1Jlc3RhdXJhbnQifQ.4bXIP6hizB2jlDDO4CQnKCINsToNXL1eJNy_Ag7e4Zg
 
 POST {{host}}/ingredient
 Content-Type: application/json
+Authorization: Bearer {{token}}
 
 
 {
-  "name": "axa",
+  "name": "",
   "price": 150,
-  "ingredientTypeId": 13
+  "ingredientTypeId": 1
 }

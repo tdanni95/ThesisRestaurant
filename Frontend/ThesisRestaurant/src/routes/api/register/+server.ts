@@ -7,6 +7,7 @@ import type { RequestHandler } from "./$types"
 export const POST: RequestHandler = async ({ request, cookies, locals }) => {
     const fd = await request.formData()
     const dataToSend = ConvertRegisterDataToJson(fd)
+    
 
     const url = `${API_ROUTE}authentication/register`;
     const response = await fetch(url, {
@@ -18,6 +19,8 @@ export const POST: RequestHandler = async ({ request, cookies, locals }) => {
         },
     });
     const res = await response.json()
+
+
     if (res.id) {
         const plusOneMonth = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
         cookies.set('token', res.token, { httpOnly: true, path: "/" })

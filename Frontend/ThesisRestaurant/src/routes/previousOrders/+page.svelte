@@ -5,14 +5,17 @@
         CartFood,
         OrderResponse,
     } from "$lib/types/classData";
-    import type { PageData } from "./$types";
     import type { SortTableFormatters } from "$lib/types/sortTableFormatters";
     import Button from "$lib/components/Button.svelte";
     import Modal from "$lib/components/Modal.svelte";
+    
+
+    
+    import type { PageData } from "./$types";
     export let data: PageData;
     let orderData = data.orderData;
 
-    console.log(orderData);
+
 
     let currentOrder: OrderResponse = {} as OrderResponse;
     let currentFoods: Array<CartFood> = [] as Array<CartFood>;

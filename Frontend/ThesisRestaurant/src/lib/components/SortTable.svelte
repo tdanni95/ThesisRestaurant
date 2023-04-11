@@ -31,6 +31,7 @@
         | CartCustomFood
         | OrderResponse
     >;
+    
     export let columns: Array<string | Array<string>>;
     export let ogArray: Array<T>;
 

@@ -180,8 +180,6 @@
     };
 </script>
 
-<br />
-
 {#if foods}
     <div class="min-w-screen flex items-center justify-center px-5 py-5">
         <div
@@ -333,3 +331,12 @@
         }
     }
 </style>
+
+
+
+
+
+
+
+
+

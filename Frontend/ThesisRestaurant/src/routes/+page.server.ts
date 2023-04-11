@@ -6,8 +6,6 @@ import type { PageServerLoad } from "./$types";
 
 export const load: PageServerLoad = async ({ parent, cookies, locals, depends }) => {
     depends('app:productManagement')
-    // food/GetAllFoods
-
     const foods = await customFetch(`${API_ROUTE}food`, cookies, { method: "GET" })
         .then(async (res) => await res.json())
 
@@ -28,9 +26,6 @@ export const load: PageServerLoad = async ({ parent, cookies, locals, depends })
             ChangeFoodSources(food)
         }
     }
-
-    
-
     return {
         user: locals.user,
         foods: foods as Array<Food>,

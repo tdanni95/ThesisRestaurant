@@ -12,3 +12,5 @@ export const load: PageServerLoad = async ({ parent, cookies, locals}) => {
         user: locals.user
     }
 }
+
+
